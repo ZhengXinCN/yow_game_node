@@ -9,7 +9,7 @@
     "express": "3.0.0rc5",
     "jade": "*",
     "nodemon": "*"
-  }
+  },
   "engines": {
     "node": "0.8.4",
     "npm": "1.1.41"
