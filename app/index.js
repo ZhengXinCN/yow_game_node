@@ -16,7 +16,9 @@ app.use(express["static"](process.cwd() + '/public'));
 app.set('view engine', 'jade');
 
 app.get('/', function(req, resp) {
-  return resp.render('index');
+  return resp.render('index', {
+    technologies: ['Mobile', 'Node', 'HTML5']
+  });
 });
 
 port = process.env.PORT || process.env.VMC_APP_PORT || 3000;
