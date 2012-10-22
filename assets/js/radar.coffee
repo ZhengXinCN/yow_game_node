@@ -46,6 +46,7 @@ class @Radar
     context.stroke()
 
   draw_main_layer: ->
+    @layer = new Kinetic.Layer()
     circle = new Kinetic.Circle
           radius: 15,
           stroke: 'black',
