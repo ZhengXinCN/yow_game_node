@@ -46,4 +46,20 @@ class @Radar
     context.stroke()
 
   draw_main_layer: ->
+    circle = new Kinetic.Circle
+          radius: 10,
+          stroke: 'black',
+          fill: 'lightBlue',
+          strokeWidth: 1,
+          x: 15,
+          y: 15,
+          draggable: true
+    circle.on "dragend", (e) =>
+      console.log e
+      x = e.x - @x
+      y = e.y - @y
+      console.log (x)
+      console.log (y)
+      console.log "Radius #{Math.sqrt(x*x + y*y)}"
+    @layer.add(circle)
     @stage.add @layer
