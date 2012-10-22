@@ -26,20 +26,24 @@ block content
     #container {
       background: lightGray;
     }
+    .foreground {
+      z-index: 100
+    }
   div#container
 
 block javascript_content
   != js('radar')
   script
     $(function() { 
-      circle = new Radar();
-      circle.add_circle(205);
-      circle.add_circle(300);
-      circle.add_circle(250);
-      circle.add_circle(255);
-      circle.add_circle(110);
+      radar = new Radar();
+      radar.add_circle(205, "TRIAL");
+      radar.add_circle(300, "HOLD");
+      radar.add_circle(250, "ACCESS");
+      radar.add_circle(255);
+      radar.add_circle(110, "ADOPT");
 
-      circle.draw_horizontal_line(20);
-      circle.draw_vertical_line(20);
-      circle.draw_main_layer()
+      radar.draw_horizontal_line(20);
+      radar.draw_vertical_line(20);
+      radar.generate_technologies()
+      radar.draw_main_layer()
     });
