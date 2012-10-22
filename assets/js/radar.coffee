@@ -47,12 +47,12 @@ class @Radar
 
   draw_main_layer: ->
     circle = new Kinetic.Circle
-          radius: 10,
+          radius: 15,
           stroke: 'black',
           fill: 'lightBlue',
           strokeWidth: 1,
-          x: 15,
-          y: 15,
+          x: 25,
+          y: 25,
           draggable: true
     circle.on "dragend", (e) =>
       console.log e
