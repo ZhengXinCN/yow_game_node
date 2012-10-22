@@ -6,7 +6,7 @@ class @Radar
           height: window.innerHeight
     @layer = new Kinetic.Layer()
     @backgroundLayer = new Kinetic.Layer()
-    @stage.add @backgroundLayer
+    #@stage.add @backgroundLayer
     @x = @stage.getWidth() / 2
     @y = @stage.getHeight() / 2
 
