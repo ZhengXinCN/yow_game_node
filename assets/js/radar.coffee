@@ -6,7 +6,7 @@ class @Radar
           height: window.innerHeight
     @layer = new Kinetic.Layer()
     @backgroundLayer = new Kinetic.Layer()
-    #@stage.add @backgroundLayer
+    @stage.add @backgroundLayer
     @x = @stage.getWidth() / 2
     @y = @stage.getHeight() / 2
 
@@ -46,21 +46,24 @@ class @Radar
     context.stroke()
 
   draw_main_layer: ->
-    @layer = new Kinetic.Layer()
-    circle = new Kinetic.Circle
-          radius: 15,
-          stroke: 'black',
-          fill: 'lightBlue',
-          strokeWidth: 1,
-          x: 25,
-          y: 25,
-          draggable: true
-    circle.on "dragend", (e) =>
-      console.log e
-      x = e.x - @x
-      y = e.y - @y
-      console.log (x)
-      console.log (y)
-      console.log "Radius #{Math.sqrt(x*x + y*y)}"
-    @layer.add(circle)
+    circle_layer = new Kinetic.Layer()
+    for num in [1..10]
+      circle = new Kinetic.Circle
+            radius: 15,
+            stroke: 'black',
+            fill: 'lightBlue',
+            strokeWidth: 1,
+            x: 25 * num * 1.5,
+            y: 25,
+            draggable: true
+      circle.on "dragend", (e) =>
+        console.log e
+        x = e.x - @x
+        y = e.y - @y
+        console.log (x)
+        console.log (y)
+        console.log "Radius #{Math.sqrt(x*x + y*y)}"
+      circle_layer.add(circle)
+
     @stage.add @layer
+    @stage.add circle_layer
