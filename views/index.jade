@@ -23,20 +23,23 @@ block content
       height: 90%;
       padding-top: 20px;
     }
-  div.container
-    canvas#myCanvas
+    #container {
+      background: lightGray;
+    }
+  div#container
 
 block javascript_content
   != js('radar')
   script
     $(function() { 
       circle = new Radar();
-      circle.draw_circle(205);
-      circle.draw_circle(275);
-      circle.draw_circle(240);
-      circle.draw_circle(245);
-      circle.draw_circle(110);
+      circle.add_circle(205);
+      circle.add_circle(275);
+      circle.add_circle(240);
+      circle.add_circle(245);
+      circle.add_circle(110);
 
       circle.draw_horizontal_line(20);
       circle.draw_vertical_line(20);
+      circle.draw_main_layer()
     });
