@@ -6,16 +6,18 @@ class Circle
     @y = y
 
   draw_circle: (x,y) ->
-    circle = new Kinetic.Circle
-          radius: @radius,
-          stroke: 'white',
-          strokeWidth: 1,
-          x: x,
-          y: y
+    opts =
+      radius: @radius
+      stroke: 'white'
+      strokeWidth: 1
+      x: x
+      y: y
+    circle = new Kinetic.Circle opts
 
   draw_label: (x,y, labelLayer) ->
     if @label
       @draw_text_along_arc(labelLayer.getContext(), @label, x, y, @radius - 5, 50 * (Math.PI / 180))
+
   draw_text_along_arc: (context, str, centerX, centerY, radius, angle) ->
     context.save()
 
