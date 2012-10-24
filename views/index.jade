@@ -39,11 +39,11 @@ block javascript_content
       radar = new Radar();
       x = radar.x
       y = radar.y
-      trial_circle = new Circle(205, "TRIAL", x, y);
-      hold_circle = new Circle(300, "HOLD", x, y);
-      assess_circle = new Circle(250, "ASSESS", x ,y);
-      assess_circle_2 = new Circle(255, x, y);
-      adopt_circle = new Circle(110, "ADOPT", x, y);
+      trial_circle = new Circle({radius:205, label:"TRIAL", x:x, y:y});
+      hold_circle = new Circle({radius:300, label:"HOLD", x:x, y:y});
+      assess_circle = new Circle({radius:250, label:"ASSESS", x:x ,y:y});
+      assess_circle_2 = new Circle({radius:255, x:x, y:y});
+      adopt_circle = new Circle({radius:110, label:"ADOPT", x:x, y:y});
 
       radar.add_circle(trial_circle)
       radar.add_circle(hold_circle)

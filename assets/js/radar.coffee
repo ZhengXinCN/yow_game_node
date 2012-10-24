@@ -60,11 +60,8 @@ class @Radar
             y: 25,
             draggable: true
       circle.on "dragend", (e) =>
-        console.log e
-        x = e.x - @x
-        y = e.y - @y
-        console.log (x)
-        console.log (y)
-        console.log "Radius #{Math.sqrt(x*x + y*y)}"
+        _.any @circles, (circle) ->
+          if circle.is_inside_circle(e.x,e.y)
+            console.log "Dragged to #{circle.label}"
       circle_layer.add(circle)
     @stage.add circle_layer

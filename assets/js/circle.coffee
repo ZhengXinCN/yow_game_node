@@ -5,13 +5,13 @@ class Circle
     @x = x
     @y = y
 
-  draw_circle: (x,y) ->
+  draw_circle: () =>
     opts =
       radius: @radius
       stroke: 'white'
       strokeWidth: 1
-      x: x
-      y: y
+      x: @x
+      y: @y
     circle = new Kinetic.Circle opts
 
   draw_label: (x,y, labelLayer) ->
@@ -39,7 +39,7 @@ class Circle
     context.restore()
   is_inside_circle: (x,y) ->
       xFromCenter = x - @x
-      yFromCenter = y - @x
+      yFromCenter = y - @y
       radiusFromCenterToObject = Math.sqrt(Math.pow(xFromCenter, 2) + Math.pow(yFromCenter, 2))
       @radius > radiusFromCenterToObject
 
