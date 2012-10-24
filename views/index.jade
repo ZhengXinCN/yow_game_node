@@ -36,17 +36,20 @@ block javascript_content
   != js('circle')
   script
     $(function() { 
-      trial_circle = new Circle(205, "TRIAL");
-      hold_circle = new Circle(300, "HOLD");
-      assess_circle = new Circle(250, "ACCESS");
-      assess_circle_2 = new Circle(255);
-      adopt_circle = new Circle(110, "ADOPT");
-
       radar = new Radar();
+      x = radar.x
+      y = radar.y
+      trial_circle = new Circle(205, "TRIAL", x, y);
+      hold_circle = new Circle(300, "HOLD", x, y);
+      assess_circle = new Circle(250, "ASSESS", x ,y);
+      assess_circle_2 = new Circle(255, x, y);
+      adopt_circle = new Circle(110, "ADOPT", x, y);
+
       radar.add_circle(trial_circle)
       radar.add_circle(hold_circle)
       radar.add_circle(assess_circle)
       radar.add_circle(adopt_circle)
+
       radar.draw_horizontal_line(20)
       radar.draw_vertical_line(20)
       radar.generate_technologies()

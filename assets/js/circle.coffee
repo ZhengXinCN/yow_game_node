@@ -1,7 +1,9 @@
-class @Circle
-  constructor: (radius, label) ->
+class Circle
+  constructor: ({ radius, label, x, y}) ->
     @radius = radius
     @label = label
+    @x = x
+    @y = y
 
   draw_circle: (x,y) ->
     circle = new Kinetic.Circle
@@ -33,3 +35,12 @@ class @Circle
         context.restore()
         n++
     context.restore()
+  is_inside_circle: (x,y) ->
+      xFromCenter = x - @x
+      yFromCenter = y - @x
+      radiusFromCenterToObject = Math.sqrt(Math.pow(xFromCenter, 2) + Math.pow(yFromCenter, 2))
+      @radius > radiusFromCenterToObject
+
+if module? and module.exports?
+  module.exports.Circle = Circle
+else window.Circle = Circle
