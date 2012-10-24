@@ -17,21 +17,13 @@ class @Radar
     @y = @stage.getHeight() / 2
 
     @max_radius = 0
-  add_circle: (radius, circle_name) ->
-    @max_radius = radius if @max_radius < radius
-    circle = new Kinetic.Circle
-          radius: radius,
-          stroke: 'white',
-          strokeWidth: 1,
-          x: @x,
-          y: @y
-    @layer.add(circle)
-    startAngle = 0
-    endAngle = 2 * Math.PI
-    counterClockwise = false
-    if circle_name
-      @draw_text_along_arc(@foregroundLayer.getContext(), circle_name, @x, @y, radius - 5, 50 * (Math.PI / 180))
+  add_circle: (circle) ->
+    @max_radius = circle.radius if @max_radius < circle.radius
 
+    drawn_circle = circle.draw_circle(@x,@y)
+    @layer.add(drawn_circle)
+
+    circle.draw_label(@x, @y, @foregroundLayer)
 
   draw_horizontal_line: (extends_over_circle) ->
     context = @backgroundLayer.getContext()
@@ -76,22 +68,3 @@ class @Radar
         console.log "Radius #{Math.sqrt(x*x + y*y)}"
       circle_layer.add(circle)
     @stage.add circle_layer
-  draw_text_along_arc: (context, str, centerX, centerY, radius, angle) ->
-    context.save()
-
-    context.translate(centerX, centerY)
-    context.rotate(-1 * angle / 2)
-    context.rotate(-1 * (angle / str.length) / 2)
-    n = 0
-    while n < str.length
-        context.rotate(angle / str.length)
-        context.save()
-        context.translate(0, -1 * radius)
-        char = str[n]
-        #context.fillText(char, 0, 0)
-        context.font = "15pt Calibri"
-        context.lineWidth = 2
-        context.strokeText(char, 0, 0)
-        context.restore()
-        n++
-    context.restore()

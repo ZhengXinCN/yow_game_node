@@ -33,17 +33,22 @@ block content
 
 block javascript_content
   != js('radar')
+  != js('circle')
   script
     $(function() { 
-      radar = new Radar();
-      radar.add_circle(205, "TRIAL");
-      radar.add_circle(300, "HOLD");
-      radar.add_circle(250, "ACCESS");
-      radar.add_circle(255);
-      radar.add_circle(110, "ADOPT");
+      trial_circle = new Circle(205, "TRIAL");
+      hold_circle = new Circle(300, "HOLD");
+      assess_circle = new Circle(250, "ACCESS");
+      assess_circle_2 = new Circle(255);
+      adopt_circle = new Circle(110, "ADOPT");
 
-      radar.draw_horizontal_line(20);
-      radar.draw_vertical_line(20);
+      radar = new Radar();
+      radar.add_circle(trial_circle)
+      radar.add_circle(hold_circle)
+      radar.add_circle(assess_circle)
+      radar.add_circle(adopt_circle)
+      radar.draw_horizontal_line(20)
+      radar.draw_vertical_line(20)
       radar.generate_technologies()
       radar.draw_main_layer()
     });
