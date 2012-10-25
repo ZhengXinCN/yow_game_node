@@ -52,13 +52,16 @@ class @Radar
     @stage.add @layer
 
   message_for_hit: (e) =>
-    hitted_circle = @circles_collection.hit_circle(e.changedTouches[0].screenX, e.changedTouches[0].screenY)
+    if e.x
+      hitted_circle = @circles_collection.hit_circle(e.x, e.y)
+    else
+      hitted_circle = @circles_collection.hit_circle(e.changedTouches[0].screenX, e.changedTouches[0].screenY)
     @textLayer.removeChildren()
     if hitted_circle
       textOps =
         x: 0,
         y: 40
-        text: "You drag technology to #{hitted_circle.label}",
+        text: "Technology is in #{hitted_circle.label}",
         fontSize: 14,
         fontFamily: "Calibri",
         textFill: "green"
