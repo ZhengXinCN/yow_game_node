@@ -1,4 +1,8 @@
 class @Radar
+  kBoardWidth = window.innerWidth
+  kBoardHeight = window.innerHeight
+  kCircleRadius = 15
+  kAccelerationSensitivity = 1.5
   constructor: ->
     @stage = new Kinetic.Stage
           container: 'container',
@@ -15,6 +19,29 @@ class @Radar
     
     @textLayer = new Kinetic.Layer()
     @stage.add @textLayer
+    
+    @boardLayer = new Kinetic.Layer()
+    @stage.add @boardLayer
+
+    piece =
+      center:
+        x: kBoardWidth / 2
+        y: kBoardHeight / 2
+        xShift: 0
+        yShift: 0
+      ,
+      color: 'lightBlue'
+
+    
+    window.addEventListener "devicemotion", (event) =>
+       accel = event.accelerationIncludingGravity
+       piece.center = @computeCenter(piece.center, accel)
+       console.log piece
+       if piece.center.x > 330 - 25 && piece.center.x < 330 + 25 && piece.center.y < 600 + 25 && piece.center.y > 600 - 25
+         piece.color = 'red'
+       else
+         piece.color = 'lightBlue'
+       @drawPiece(@boardLayer.getContext(), piece)
 
     @x = @stage.getWidth() / 2
     @y = @stage.getHeight() / 2
@@ -72,15 +99,45 @@ class @Radar
 
   generate_technologies: (technologies)->
     technology_layer = new Kinetic.Layer()
-    for num in [1..10]
-      technology = new Kinetic.Circle
-            radius: 15,
-            stroke: 'black',
-            fill: 'lightBlue',
-            strokeWidth: 1,
-            x: 25 * num * 1.5,
-            y: 25,
-            draggable: true
-      technology.on "dragend", @message_for_hit
+    technology = new Kinetic.Circle
+          radius: 25,
+          stroke: 'black',
+          fill: 'black',
+          strokeWidth: 1,
+          x: 330
+          y: 600,
       technology_layer.add(technology)
-    @stage.add technology_layer
+      @stage.add technology_layer
+
+  computeCenter: (oldCenter, acceleration) ->
+    newCenter = {}
+    newCenter.xShift = oldCenter.xShift * 0.8 + acceleration.x * kAccelerationSensitivity
+    newCenter.yShift = oldCenter.yShift * 0.8 + acceleration.y * kAccelerationSensitivity
+    newCenter.x = oldCenter.x + oldCenter.xShift
+    
+    # use *minus* to compute the center's new y
+    newCenter.y = oldCenter.y - oldCenter.yShift
+    
+    # do not go outside the boundaries of the canvas
+    newCenter.x = kCircleRadius  if newCenter.x < kCircleRadius
+    newCenter.x = kBoardWidth - kCircleRadius  if newCenter.x > kBoardWidth - kCircleRadius
+    newCenter.y = kCircleRadius  if newCenter.y < kCircleRadius
+    newCenter.y = kBoardHeight - kCircleRadius  if newCenter.y > kBoardHeight - kCircleRadius
+    newCenter
+
+  drawPiece: (context, piece) ->
+
+    #Store the current transformation matrix
+    context.save()
+
+    #Use the identity matrix while clearing the canvas
+    context.setTransform(1, 0, 0, 1, 0, 0)
+    context.clearRect(0, 0, kBoardWidth, kBoardHeight)
+
+    #Restore the transform
+    context.restore()
+    context.fillStyle = piece.color
+    context.beginPath()
+    context.arc piece.center.x, piece.center.y, kCircleRadius, 0, Math.PI * 2, false
+    context.closePath()
+    context.fill()
