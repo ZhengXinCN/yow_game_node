@@ -1,11 +1,12 @@
 class Circle
-  constructor: ({ radius, label, x, y}) ->
+  constructor: ({ radius, label, x, y, double}) ->
     @radius = radius
     @label = label
     @x = x
     @y = y
+    @double = double
 
-  draw_circle: () =>
+  draw_circle: (layer) =>
     opts =
       radius: @radius
       stroke: 'white'
@@ -13,6 +14,11 @@ class Circle
       x: @x
       y: @y
     circle = new Kinetic.Circle opts
+    layer.add(circle)
+    if @double
+      opts['radius']  = opts['radius'] + 5
+      circle = new Kinetic.Circle opts
+      layer.add(circle)
 
   draw_label: (x,y, labelLayer) ->
     if @label

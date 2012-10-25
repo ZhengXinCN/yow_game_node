@@ -12,18 +12,21 @@ class @Radar
 
     @backgroundLayer = new Kinetic.Layer()
     @stage.add @backgroundLayer
+    
+    @textLayer = new Kinetic.Layer()
+    @stage.add @textLayer
 
     @x = @stage.getWidth() / 2
     @y = @stage.getHeight() / 2
 
     @max_radius = 0
-  add_circle: (circle) ->
-    @max_radius = circle.radius if @max_radius < circle.radius
 
-    drawn_circle = circle.draw_circle(@x,@y)
-    @layer.add(drawn_circle)
-
-    circle.draw_label(@x, @y, @foregroundLayer)
+  add_circles: (circles_collection) ->
+    @circles_collection = circles_collection
+    circles_collection.circles.forEach (circle) =>
+      @max_radius = circle.radius if @max_radius < circle.radius
+      circle.draw_circle(@layer)
+      circle.draw_label(@x, @y, @foregroundLayer)
 
   draw_horizontal_line: (extends_over_circle) ->
     context = @backgroundLayer.getContext()
