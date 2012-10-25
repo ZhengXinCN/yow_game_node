@@ -51,10 +51,26 @@ class @Radar
   draw_main_layer: ->
     @stage.add @layer
 
-  generate_technologies: ->
-    circle_layer = new Kinetic.Layer()
+  message_for_hit: (e) =>
+    hitted_circle = @circles_collection.hit_circle(e.changedTouches[0].screenX, e.changedTouches[0].screenY)
+    @textLayer.removeChildren()
+    if hitted_circle
+      textOps =
+        x: 0,
+        y: 40
+        text: "You drag technology to #{hitted_circle.label}",
+        fontSize: 14,
+        fontFamily: "Calibri",
+        textFill: "green"
+
+      simpleText = new Kinetic.Text textOps
+      @textLayer.add(simpleText)
+      @textLayer.draw()
+
+  generate_technologies: (technologies)->
+    technology_layer = new Kinetic.Layer()
     for num in [1..10]
-      circle = new Kinetic.Circle
+      technology = new Kinetic.Circle
             radius: 15,
             stroke: 'black',
             fill: 'lightBlue',
@@ -62,9 +78,6 @@ class @Radar
             x: 25 * num * 1.5,
             y: 25,
             draggable: true
-      circle.on "dragend", (e) =>
-        _.any @circles, (circle) ->
-          if circle.is_inside_circle(e.x,e.y)
-            console.log "Dragged to #{circle.label}"
-      circle_layer.add(circle)
-    @stage.add circle_layer
+      technology.on "dragend", @message_for_hit
+      technology_layer.add(technology)
+    @stage.add technology_layer
