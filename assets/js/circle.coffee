@@ -52,3 +52,4 @@ class Circle
 if module? and module.exports?
   module.exports.Circle = Circle
 else window.Circle = Circle
+

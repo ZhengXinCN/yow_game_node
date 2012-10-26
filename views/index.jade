@@ -43,6 +43,8 @@ block javascript_content
   != js('radar')
   != js('circle')
   != js('circles_collection')
+  != js('marble')
+
   script
     $(function() { 
       radar = new Radar();
@@ -53,6 +55,6 @@ block javascript_content
 
       radar.draw_horizontal_line(20)
       radar.draw_vertical_line(20)
-      radar.generate_technologies()
       radar.draw_main_layer()
+      radar.draw_marble()
     });
