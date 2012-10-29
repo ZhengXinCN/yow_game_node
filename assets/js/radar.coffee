@@ -54,6 +54,16 @@ class @Radar
     context.lineTo(@x, @y + @max_radius + extends_over_circle)
     context.stroke()
 
+  draw_quadrant_lables: ->
+    context = @backgroundLayer.getContext()
+    context.font = "15pt Calibri"
+    context.strokeStyle="black"
+    context.textAlign="center"
+    context.strokeText("Techniques",@x-400,@y-300)
+    context.strokeText("Tools",@x+400,@y-300)
+    context.strokeText("Platforms",@x-400,@y+300)
+    context.strokeText("Languages & Frameworks",@x+400,@y+300)
+
   draw_main_layer: ->
     @stage.add @layer
 

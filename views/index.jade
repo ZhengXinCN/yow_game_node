@@ -56,5 +56,11 @@ block javascript_content
       radar.draw_horizontal_line(20)
       radar.draw_vertical_line(20)
       radar.draw_main_layer()
-      radar.draw_marble()
+      radar.draw_quadrant_lables()
+
+      $.getJSON('/data', function(data) {
+        var generator = new TechnologyGenerator(data);
+        var technology = generator.get_random_technology();
+        radar.draw_marble(technology)
+      });
     });
