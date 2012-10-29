@@ -1,0 +1,19 @@
+{
+    "technologies":[
+        {
+            "label":"Health check pages",
+            "ring":"Adopt",
+            "quadrant":"Techniques"
+        },
+        {
+            "label":"Vagrant",
+            "ring":"Trial",
+            "quadrant":"Tools"
+        },
+        {
+            "label":"Calatrava",
+            "ring":"Assess",
+            "quadrant":"Platforms"
+        }
+    ]
+}
