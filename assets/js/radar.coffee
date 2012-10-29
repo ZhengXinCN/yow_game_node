@@ -59,10 +59,10 @@ class @Radar
     context.font = "15pt Calibri"
     context.strokeStyle="black"
     context.textAlign="center"
-    context.strokeText("Techniques",@x-400,@y-300)
-    context.strokeText("Tools",@x+400,@y-300)
-    context.strokeText("Platforms",@x-400,@y+300)
-    context.strokeText("Languages & Frameworks",@x+400,@y+300)
+    context.strokeText("Techniques",@x-250,@y-300)
+    context.strokeText("Tools",@x+250,@y-300)
+    context.strokeText("Platforms",@x-250,@y+300)
+    context.strokeText("Languages & Frameworks",@x+250,@y+300)
 
   draw_main_layer: ->
     @stage.add @layer
