@@ -10,10 +10,17 @@ app.use express.static(process.cwd() + '/public')
 # Set View Engine
 app.set 'view engine', 'jade'
 # Get root_path return index view
-app.get '/', (req, resp) -> 
-  resp.render 'index', technologies:
-    ['Mobile', 'Node', 'HTML5']
-# Define Port
+app.get '/', (req, resp) ->
+  resp.render 'index'
+app.get '/data', (req,resp) ->
+  json = require '../data/techradar.json'
+  resp.set
+    'Content-Type': 'text/json'
+  resp.send json
+
+app.get '/result', (req,resp) ->
+  resp.render 'result'
+
 port = process.env.PORT or process.env.VMC_APP_PORT or 3000
 # Start Server
 app.listen port, -> console.log "Listening on #{port}\nPress CTRL-C to stop server."

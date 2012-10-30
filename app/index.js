@@ -16,9 +16,20 @@ app.use(express["static"](process.cwd() + '/public'));
 app.set('view engine', 'jade');
 
 app.get('/', function(req, resp) {
-  return resp.render('index', {
-    technologies: ['Mobile', 'Node', 'HTML5']
+  return resp.render('index');
+});
+
+app.get('/data', function(req, resp) {
+  var json;
+  json = require('../data/techradar.json');
+  resp.set({
+    'Content-Type': 'text/json'
   });
+  return resp.send(json);
+});
+
+app.get('/result', function(req, resp) {
+  return resp.render('result');
 });
 
 port = process.env.PORT || process.env.VMC_APP_PORT || 3000;
