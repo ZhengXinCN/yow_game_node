@@ -1,30 +1,32 @@
 extends layout
 
+block head_content
+    != css('result')
+
 block content
-    div#description
+    div#description.lead
         h1 Congratulations: You have placed x items!
         p
-            Please approach a ThoughtWorker to collect your Tech Radar T-shirt.
-            If you wish to sign up to ThoughtWorks Technology Radar Publication (released twice a year) and get into the draw to win a macbook air, please enter your details below:
+            | Please approach a ThoughtWorker to collect your Tech Radar T-shirt.
+        p
+            | If you wish to sign up to ThoughtWorks Technology Radar Publication (released twice a year) and get into the draw to win a macbook air, please enter your details below:
     div#form
         form
             div.field
-                label(for="full-name") Full Name:
-                input#full-name
+                input#full-name(placeholder="Full Name", type="text")
             div.field
-                label(for="company") Company:
-                input#company
+                input#company(placeholder="Company", type="text")
             div.field
-                label(for="email") Email:
-                input#email
-            input(type="submit",value="Sign up")
+                input#email(placeholder="Email", type="text")
+            button.btn.btn-success.btn-large(type="submit")
+                | Sign up
         form
-            input(type="submit", value="I don't want to sign up")
+            button.btn.btn-warning.btn-large(type="submit")
+                | I don't want to sign up
 
 
 block javascript_content
     != js('idle_timer')
-
     script
         $(function() {
             var idle_timer = new IdleTimer();
