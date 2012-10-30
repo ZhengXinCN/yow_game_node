@@ -3,7 +3,6 @@ class @IdleTimer
     @amount_of_secs = amount_of_secs
 
   start_timer: ->
-      console.log "timer started"
       @timer = window.setInterval ->
         console.log "timer fired"
       ,10000

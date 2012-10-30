@@ -45,6 +45,7 @@ block javascript_content
   != js('circles_collection')
   != js('marble')
   != js('technology_generator')
+  != js('game_timer')
 
   script
     $(function() { 
@@ -64,4 +65,5 @@ block javascript_content
         var technology = generator.get_random_technology();
         radar.draw_marble(technology)
       });
+      new GameTimer().start_timer(10);
     });
