@@ -13,6 +13,9 @@ class Marble
     ,
     color: 'lightBlue'
 
+  constructor: (label)->
+    @label = label
+
   detect_motion:(boardLayer) ->
     window.addEventListener "devicemotion", (event) =>
       accel = event.accelerationIncludingGravity
@@ -49,6 +52,8 @@ class Marble
 
     #Restore the transform
     context.restore()
+    width_of_text = context.measureText(@label).width
+    context.strokeText(@label, piece.center.x - width_of_text / 2, piece.center.y - kCircleRadius - 5);
     context.fillStyle = piece.color
     context.beginPath()
     context.arc piece.center.x, piece.center.y, kCircleRadius, 0, Math.PI * 2, false

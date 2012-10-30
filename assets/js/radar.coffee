@@ -69,6 +69,6 @@ class @Radar
 
 
   draw_marble: ->
-    marble = new Marble()
+    marble = new Marble(technology.label)
     marble.detect_motion(@boardLayer)
 
