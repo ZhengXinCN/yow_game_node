@@ -1,9 +1,6 @@
 extends layout
 
 block content
-  script(src="http://www.html5canvastutorials.com/libraries/kinetic-v4.0.3.js")
-  script(src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js")
-  script(src="http://remote-tilt.com/js/device-motion-polyfill.js?key=tw_yow_game")
   style
     html, body {
       width:  100%;
@@ -29,16 +26,33 @@ block content
         
         .nav-collapse.collapse
           ul.nav
+            li.dropdown 
+              a.dropdown-toggle(href="#",data-toggle="dropdown") How to play 
+                b.caret
+                ul.dropdown-menu
+                  li
+                    a(href="#") Press "Play!"
+                  li
+                    a(href="#") Tilt the iPad
+                  li
+                    a(href="#") Roll the tech into the hole
+                  li
+                    a(href="#") Repeat (you have 30 seconds!)
+                  li
+                    a(href="#") Winners can enter the draw for some goodies...
             li 
-              a How to Play!
-            li 
-              a Play
+              a Play!
             li 
               a High Scores
 
   #container
 
 block javascript_content
+  script(src="/bootstrap/js/bootstrap.js")
+  script(src="http://www.html5canvastutorials.com/libraries/kinetic-v4.0.3.js")
+  script(src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js")
+  script(src="http://remote-tilt.com/js/device-motion-polyfill.js?key=tw_yow_game")
+
   != js('radar')
   != js('circle')
   != js('circles_collection')
