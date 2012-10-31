@@ -1,10 +1,11 @@
 class @Radar
 
-  constructor: ->
+  constructor: (options)->
+    console.log(options)
     @stage = new Kinetic.Stage
           container: 'container',
-          width: window.innerWidth,
-          height: window.innerHeight
+          width: options.width
+          height: options.height
     @layer = new Kinetic.Layer()
 
     @foregroundLayer = new Kinetic.Layer()
