@@ -9,7 +9,7 @@ class Circle
   draw_circle: (layer) =>
     opts =
       radius: @radius
-      stroke: 'white'
+      stroke: '#A2A5A4'
       strokeWidth: 1
       x: @x
       y: @y
@@ -38,6 +38,7 @@ class Circle
         char = str[n]
         #context.fillText(char, 0, 0)
         context.font = "15pt Calibri"
+        context.strokeStyle= "#A2A5A4"
         context.lineWidth = 2
         context.strokeText(char, 0, 0)
         context.restore()
