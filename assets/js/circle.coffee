@@ -26,10 +26,10 @@ class Circle
 
   draw_text_along_arc: (context, str, centerX, centerY, radius, angle) ->
     context.save()
-    angle = angle - radius * 0.0001
+    angle = angle - radius* 0.001 + 0.8
     context.translate(centerX, centerY)
-    context.rotate(-0.1 * angle / 2)
-    context.rotate(-0.1 * (angle / str.length) / 2)
+    context.rotate(-0.2 * angle / 2)
+    context.rotate(-0.2 * (angle / str.length) / 2)
     n = 0
     while n < str.length
         context.rotate( angle / str.length)
