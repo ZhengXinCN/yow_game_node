@@ -11,7 +11,7 @@ class Marble
       xShift: 0
       yShift: 0
     ,
-    color: 'lightBlue'
+    color: '#298EC3'
 
   constructor: (label)->
     @label = label
@@ -20,7 +20,7 @@ class Marble
     window.addEventListener "devicemotion", (event) =>
       accel = event.accelerationIncludingGravity
       piece.center = @computeCenter(piece.center, accel)
-      piece.color = 'lightBlue'
+      piece.color = '#298EC3'
       @drawPiece(boardLayer.getContext(), piece)
 
 
@@ -53,6 +53,8 @@ class Marble
     #Restore the transform
     context.restore()
     width_of_text = context.measureText(@label).width
+    context.lineWidth = 1
+    context.font="13pt Helvetica"
     context.strokeText(@label, piece.center.x - width_of_text / 2, piece.center.y - kCircleRadius - 5);
     context.fillStyle = piece.color
     context.beginPath()

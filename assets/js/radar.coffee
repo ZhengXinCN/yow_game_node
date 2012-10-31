@@ -41,7 +41,7 @@ class @Radar
 
     context.beginPath()
     context.lineWidth = 1
-    context.strokeStyle = "white"
+    context.strokeStyle = "#A2A5A4"
     context.moveTo(@x - @max_radius - extends_over_circle, @y)
     context.lineTo(@x + @max_radius + extends_over_circle, @y)
     context.stroke()
@@ -49,7 +49,7 @@ class @Radar
   draw_vertical_line: (extends_over_circle) ->
     context = @backgroundLayer.getContext()
     context.beginPath()
-    context.strokeStyle = "white"
+    context.strokeStyle = "#A2A5A4"
     context.lineWidth = 1
     context.moveTo(@x, @y - @max_radius - extends_over_circle)
     context.lineTo(@x, @y + @max_radius + extends_over_circle)
