@@ -12,24 +12,30 @@ block content
     }
     #container {
       background: white;
-      width: 100%;
-      height: 100%
+      position:fixed;
+      width: 864px;
+      heigh: 694px;
+      top: 40px;
+      left: 50%;
+      margin-left: -432px;
     }
     .foreground {
       z-index: 100
     }
 
-  #container
+
+  //- canvas#background
+  #container.foreground
 
 block javascript_content
   script(src="/bootstrap/js/bootstrap.js")
   script(src="http://www.html5canvastutorials.com/libraries/kinetic-v4.0.3.js")
   script(src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js")
-  script(src="http://remote-tilt.com/js/device-motion-polyfill.js?key=tw_yow_game")
+  //- script(src="http://remote-tilt.com/js/device-motion-polyfill.js?key=tw_yow_game")
+  script(src="canvg-1.2/rgbcolor.js")
+  script(src="canvg-1.2/canvg.js")
 
   != js('radar')
-  != js('circle')
-  != js('circles_collection')
   != js('marble')
   != js('technology_generator')
   != js('game_timer')
@@ -38,19 +44,12 @@ block javascript_content
     $(function() { 
       container = $('#container')
       radar = new Radar({ 
-        width: container.innerWidth(), 
-        height: container.innerHeight()
+        width: 864, 
+        height: 694
       });
 
-      x = radar.x
-      y = radar.y
-      circles_collection = new CirclesCollection(x,y)
-      radar.add_circles(circles_collection);
-
-      radar.draw_horizontal_line(20)
-      radar.draw_vertical_line(20)
-      radar.draw_main_layer()
-      radar.draw_quadrant_lables()
+      $(radar.backgroundLayer.getCanvas().element).attr('id', 'backgroundLayer');
+      canvg('backgroundLayer', 'radar.svg', { ignoreMouse: true, ignoreAnimation: true }) 
 
       $.getJSON('/data', function(data) {
         var generator = new TechnologyGenerator(data);
@@ -58,4 +57,6 @@ block javascript_content
         radar.draw_marble(technology)
       });
       new GameTimer().start_timer(10);
+
+      window.radar = radar;
     });
