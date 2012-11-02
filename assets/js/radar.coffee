@@ -35,6 +35,7 @@ class @Radar
       remainingSeconds: options.duration || 10
 
 
+
     $(@backgroundLayer.getCanvas().element).attr('id', 'backgroundLayer');
     canvg('backgroundLayer', options.background_svg, { ignoreMouse: true, ignoreAnimation: true });
 
