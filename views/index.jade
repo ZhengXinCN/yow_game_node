@@ -23,37 +23,45 @@ block content
       margin-top: 40px;
     }
     #result {
-      display: none;
 
     }
     #game{
     }
+
+
+    .hidden{
+      display: none;
+    }
   //- canvas#background
-  ul.content
-    li#game
+  ul.content.unstyled
+    li#game.hidden
       #radar
 
-    li#result
+    li#result.hidden
       #description.lead
         h1 Congratulations: You have placed x items!
         p
-            | Please approach a ThoughtWorker to collect your Tech Radar T-shirt.
+          | Please approach a ThoughtWorker to collect your Tech Radar T-shirt.
         p
-            | If you wish to sign up to ThoughtWorks Technology Radar Publication (released twice a year) and get into the draw to win a macbook air, please enter your details below:
+          | If you wish to sign up to ThoughtWorks Technology Radar Publication (released twice a year) and get into the draw to win a macbook air, please enter your details below:
       #form
         form
           div.field
-              input#full-name(placeholder="Full Name", type="text")
+            input#full-name(placeholder="Full Name", type="text")
           div.field
-              input#company(placeholder="Company", type="text")
+            input#company(placeholder="Company", type="text")
           div.field
-              input#email(placeholder="Email", type="text")
+            input#email(placeholder="Email", type="text")
           button.btn.btn-success.btn-large(type="submit")
-              | Sign up
+            | Sign up
         form
           button.btn.btn-warning.btn-large(type="submit")
-              | I don't want to sign up
-
+            | I don't want to sign up
+    li#intro
+      #description
+        | click to play
+      button#play.btn.btn-success(type="submit")
+        | Play
 
 
 block javascript_content
@@ -71,16 +79,24 @@ block javascript_content
 
   script
     $(function() { 
+      $('#play').click(function(){
+        $('#game').toggleClass('hidden')
+        $('#intro').toggleClass('hidden')
 
-      $.getJSON('/data', function(data) {
-          new Radar({
-            width: 864,
-            height: 694,
-            data: data,
-            containerId: 'radar',
-            background_svg : 'radar.svg'
-          }).play()
+        $.getJSON('/data', function(data) {
+                 new Radar({
+                   width: 864,
+                   height: 694,
+                   data: data,
+                   containerId: 'radar',
+                   background_svg : 'radar.svg',
+                   duration: 5
+                 }).play().then(function(){
+                   $('#game').toggleClass('hidden')
+                   $('#result').toggleClass('hidden')
+                 })
+         });
 
-      });
+      })
 
     });

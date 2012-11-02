@@ -32,17 +32,20 @@ class @Radar
     @game_timer = new GameTimer
       layer: @timerLayer
       board: @board
-      remainingSeconds: 10
+      remainingSeconds: options.duration || 10
+
 
     $(@backgroundLayer.getCanvas().element).attr('id', 'backgroundLayer');
     canvg('backgroundLayer', options.background_svg, { ignoreMouse: true, ignoreAnimation: true });
 
 
   play: ->
+    endGamePromise = $.Deferred()
     @game_timer.startTimer().then ->
       console.log("Game Over!")
+      endGamePromise.resolve()
     @draw_marble(@generator.get_random_technology())
-
+    endGamePromise
   draw_marble: (technology) ->
 
     @marble = new Marble

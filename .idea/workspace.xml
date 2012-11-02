@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3a2e7746-5197-4e4a-b502-546f8e8af773" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/game_timer.coffee" afterPath="$PROJECT_DIR$/assets/js/game_timer.coffee" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/marble.coffee" afterPath="$PROJECT_DIR$/assets/js/marble.coffee" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/radar.coffee" afterPath="$PROJECT_DIR$/assets/js/radar.coffee" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.jade" afterPath="$PROJECT_DIR$/views/index.jade" />
     </list>
@@ -83,7 +81,7 @@
       <file leaf-file-name="index.jade" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/index.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="11" selection-start="401" selection-end="401" vertical-scroll-proportion="0.4568528">
+            <state line="35" column="21" selection-start="501" selection-end="501" vertical-scroll-proportion="0.5177665">
               <folding />
             </state>
           </provider>
@@ -92,7 +90,7 @@
       <file leaf-file-name="radar.coffee" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/js/radar.coffee">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="40" selection-start="168" selection-end="168" vertical-scroll-proportion="0.0">
+            <state line="8" column="32" selection-start="232" selection-end="232" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -480,16 +478,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/assets/js/radar.coffee">
+    <entry file="file://$PROJECT_DIR$/assets/css/app.styl">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="40" selection-start="168" selection-end="168" vertical-scroll-proportion="0.0">
+        <state line="5" column="16" selection-start="65" selection-end="65" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/assets/css/app.styl">
+    <entry file="file://$PROJECT_DIR$/assets/js/radar.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="16" selection-start="65" selection-end="65" vertical-scroll-proportion="0.0">
+        <state line="8" column="32" selection-start="232" selection-end="232" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -503,7 +501,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/views/index.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="11" selection-start="401" selection-end="401" vertical-scroll-proportion="0.4568528">
+        <state line="35" column="21" selection-start="501" selection-end="501" vertical-scroll-proportion="0.5177665">
           <folding />
         </state>
       </provider>
