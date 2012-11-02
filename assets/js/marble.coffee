@@ -40,7 +40,7 @@ class Marble
 
     @layer.add @label
 
-  detect_motion:(boardLayer) ->
+  detect_motion: ->
     eventID = 0
     window.addEventListener "devicemotion", (event) =>
       accel = event.accelerationIncludingGravity

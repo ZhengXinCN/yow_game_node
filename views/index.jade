@@ -10,22 +10,51 @@ block content
       margin: 0px;
       padding: 0px;
     }
-    #container {
+    #radar {
       background: white;
       position:fixed;
       width: 864px;
       heigh: 694px;
-      top: 40px;
       left: 50%;
       margin-left: -432px;
+      margin-top: -20px;
     }
-    .foreground {
-      z-index: 100
+    .content{
+      margin-top: 40px;
     }
+    #result {
+      display: none;
 
-
+    }
+    #game{
+    }
   //- canvas#background
-  #container.foreground
+  ul.content
+    li#game
+      #radar
+
+    li#result
+      #description.lead
+        h1 Congratulations: You have placed x items!
+        p
+            | Please approach a ThoughtWorker to collect your Tech Radar T-shirt.
+        p
+            | If you wish to sign up to ThoughtWorks Technology Radar Publication (released twice a year) and get into the draw to win a macbook air, please enter your details below:
+      #form
+        form
+          div.field
+              input#full-name(placeholder="Full Name", type="text")
+          div.field
+              input#company(placeholder="Company", type="text")
+          div.field
+              input#email(placeholder="Email", type="text")
+          button.btn.btn-success.btn-large(type="submit")
+              | Sign up
+        form
+          button.btn.btn-warning.btn-large(type="submit")
+              | I don't want to sign up
+
+
 
 block javascript_content
   script(src="/bootstrap/js/bootstrap.js")
@@ -48,6 +77,7 @@ block javascript_content
             width: 864,
             height: 694,
             data: data,
+            containerId: 'radar',
             background_svg : 'radar.svg'
           }).play()
 

@@ -4,7 +4,7 @@ class @Radar
     @generator = new TechnologyGenerator(options.data)
 
     @stage = new Kinetic.Stage
-          container: 'container'
+          container: options.containerId
           width: options.width
           height: options.height
 
@@ -39,7 +39,8 @@ class @Radar
 
 
   play: ->
-    @game_timer.startTimer()
+    @game_timer.startTimer().then ->
+      console.log("Game Over!")
     @draw_marble(@generator.get_random_technology())
 
   draw_marble: (technology) ->
@@ -49,5 +50,5 @@ class @Radar
       label: technology.label
       board: @board
 
-    @marble.detect_motion(@boardLayer)
+    @marble.detect_motion()
 

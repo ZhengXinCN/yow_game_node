@@ -15,18 +15,20 @@ class @GameTimer
     @remainingSeconds = options.remainingSeconds
 
   startTimer: ->
-    @tick()
-
-  tick:->
-    if @remainingSeconds == 0
-      @layer.remove @text
-      @draw
-    else
-      @draw()
-      @timer = window.setTimeout =>
-        @remainingSeconds = @remainingSeconds-1
-        @tick()
-      ,1000
+    endGamePromise = $.Deferred()
+    tick = =>
+      if @remainingSeconds == 0
+        @layer.remove @text
+        @draw()
+        endGamePromise.resolve()
+      else
+        @draw()
+        @timer = window.setTimeout =>
+          @remainingSeconds = @remainingSeconds-1
+          tick()
+        ,1000
+    tick()
+    endGamePromise
 
   draw: ->
     @text.setText(@remainingSeconds)
