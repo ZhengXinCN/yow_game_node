@@ -42,21 +42,15 @@ block javascript_content
 
   script
     $(function() { 
-      container = $('#container')
-      radar = new Radar({ 
-        width: 864, 
-        height: 694
-      });
-
-      $(radar.backgroundLayer.getCanvas().element).attr('id', 'backgroundLayer');
-      canvg('backgroundLayer', 'radar.svg', { ignoreMouse: true, ignoreAnimation: true }) 
 
       $.getJSON('/data', function(data) {
-        var generator = new TechnologyGenerator(data);
-        var technology = generator.get_random_technology();
-        radar.draw_marble(technology)
-      });
-      new GameTimer().start_timer(10);
+          new Radar({
+            width: 864,
+            height: 694,
+            data: data,
+            background_svg : 'radar.svg'
+          }).play()
 
-      window.radar = radar;
+      });
+
     });
