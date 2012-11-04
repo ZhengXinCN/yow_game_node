@@ -45,8 +45,11 @@ block content
         h1 Congratulations: You have placed x items!
         p
           | Please approach a ThoughtWorker to collect your Tech Radar T-shirt.
+          img(src="tshirt.jpg")
         p
           | If you wish to sign up to ThoughtWorks Technology Radar Publication (released twice a year) and get into the draw to win a macbook air, please enter your details below:
+          img(src="macbookair.png", width="160", height="90")
+
       #form
         form
           div.field
@@ -92,7 +95,7 @@ block javascript_content
                data: data,
                containerId: 'radar',
                background_svg : 'radar.svg',
-               duration: 20
+               duration: 5
              }).play().then(function(){
                $('#game').toggleClass('hidden')
                $('#result').toggleClass('hidden')
