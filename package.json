@@ -12,6 +12,7 @@
     , "markdown": "0.3.1"
     , "which": "*"
     , "mongoose": "3.3.1" 
+    , "express-mongoose": "0.1.0"
   }, "scripts": {
     "install": "node_modules/coffee-script/bin/cake build",
     "start": "node server.js",

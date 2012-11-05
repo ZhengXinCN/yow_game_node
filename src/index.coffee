@@ -34,10 +34,7 @@ PunterSchema = new Schema
 PunterModel = db.model "punters", PunterSchema
 
 app.get '/punters/:id', (req, resp)->
-	PunterModel.find
-	  	_id: req.param('id')
-	,(err, punter) -> 
-		resp.send 200, punter
+	resp.send 200, PunterModel.findById(req.param 'id')
 
 app.post '/punters', (req, resp) ->
 	punter = new PunterModel
