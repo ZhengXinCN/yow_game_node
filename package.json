@@ -11,6 +11,7 @@
     , "nib": "0.4.1"
     , "markdown": "0.3.1"
     , "which": "*"
+    , "mongoose": "3.3.1" 
   }, "scripts": {
     "install": "node_modules/coffee-script/bin/cake build",
     "start": "node server.js",
@@ -22,6 +23,7 @@
     , "request": "*"
     , "supervisor": "*"
     , "docco": "*"
+    , "node-inspector": "*"
   }, 
   "engines": {
     "node": "~0.8.x",

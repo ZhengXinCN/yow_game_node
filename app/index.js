@@ -28,6 +28,34 @@ app.get('/data', function(req, resp) {
   return resp.send(json);
 });
 
+var mongoose = require('mongoose'),
+	  db_url = process.env.MONGOLAB_URL || "mongodb://localhost//yow_game",
+	  db = mongoose.connect(db_url)
+	  Schema = mongoose.Schema;
+
+var PunterSchema = new Schema({
+	fullName: String,
+	company: String,
+	emailAddress: String
+});
+var PunterModel = db.model("punters", PunterSchema);
+
+app.get('/punters/:id', function(req, resp){
+	return PunterModel.find({_id: req.param('id')}, function(err, punter){
+		return resp.send(200, punter);
+	})
+});
+
+app.post('/punters', function(req, resp){
+	var punter = new PunterModel();
+	punter.fullName = "Mr Unknowable";
+	punter.company = "ThoughtWorks";
+	punter.emailAddress = "someone@somewhere";
+	punter.save();
+
+	return resp.redirect('punters/' + punter._id);
+});
+
 app.get('/result', function(req, resp) {
   return resp.render('result');
 });
