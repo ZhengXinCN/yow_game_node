@@ -7,11 +7,15 @@ stylus = require('stylus');
 
 assets = require('connect-assets');
 
+require('express-mongoose');
+
 app = express();
 
 app.use(assets());
 
 app.use(express["static"](process.cwd() + '/public'));
+
+app.use(express.bodyParser());
 
 app.set('view engine', 'jade');
 
@@ -41,27 +45,44 @@ db = mongoose.connect(db_url);
 Schema = mongoose.Schema;
 
 PunterSchema = new Schema({
-  fullName: String,
-  company: String,
+  fullName: {
+    type: String,
+    required: true
+  },
+  company: {
+    type: String,
+    required: true
+  },
   emailAddress: String
 });
 
 PunterModel = db.model("punters", PunterSchema);
 
 app.get('/punters/:id', function(req, resp) {
-  return PunterModel.where('_id', req.param('id')).exec(function(err, punter) {
-    return resp.send(200, punter);
-  });
+  return resp.send(PunterModel.find({
+    _id: req.param('id')
+  }));
 });
 
 app.post('/punters', function(req, resp) {
   var punter;
-  punter = new PunterModel;
-  punter.fullName = "Mr Unknowable";
-  punter.company = "ThoughtWorks";
-  punter.emailAddress = "someone@somewhere";
-  punter.save();
-  return resp.redirect("punters/" + punter._id);
+  if (!/application\/json/.test(req.headers['content-type'])) {
+    return resp.send(400, 'Unsupported content-type');
+  }
+  if (!req.body) {
+    return resp.status(400, 'No content');
+  }
+  punter = new PunterModel();
+  punter.fullName = req.body.fullName;
+  punter.company = req.body.company;
+  punter.emailAddress = req.body.emailAddress;
+  return punter.save(function(err, punter) {
+    if (err) {
+      return resp.send(400, err);
+    } else {
+      return resp.redirect("punters/" + punter._id);
+    }
+  });
 });
 
 port = process.env.PORT || process.env.VMC_APP_PORT || 3000;

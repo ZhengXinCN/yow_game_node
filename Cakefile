@@ -73,13 +73,13 @@ task 'test', 'Run Mocha tests', ->
 task 'dev', 'start dev env', ->
   # watch_coffee
   options = ['-c', '-b', '-w', '-o', 'app', 'src']
-  cmd = which.sync 'coffee'  
+  cmd = 'node_modules/coffee-script/bin/coffee'  
   coffee = spawn cmd, options
   coffee.stdout.pipe process.stdout
   coffee.stderr.pipe process.stderr
   log 'Watching coffee files', green
   # watch_js
-  supervisor = spawn 'node', ['./node_modules/supervisor/lib/cli-wrapper.js','-w','app,views,data', '-e', 'js|jade|json', 'server']
+  supervisor = spawn 'node', ['./node_modules/supervisor/lib/cli-wrapper.js','-w','app,views,data', '-e', 'js|jade|json', '--debug', 'server']
   supervisor.stdout.pipe process.stdout
   supervisor.stderr.pipe process.stderr
   log 'Watching js files and running server', green
