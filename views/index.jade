@@ -26,17 +26,20 @@ block content
     .hidden{
       display: none;
     }
-    #intro{
+    #intro, #replay{
       margin-left: 300px;
       padding-top: 20px;
     }
     #play{
       padding: 100px;
       font-size: 100pt;
-
     }
   //- canvas#background
   ul.content.unstyled
+    li#intro
+      button#play.btn.btn-info.btn-large(type="submit")
+        | Play
+
     li#game.hidden
       #radar
 
@@ -51,28 +54,33 @@ block content
           img(src="macbookair.png", width="160", height="90")
 
       #form
-        form
+        form#signup(action="/punters", method="POST")
           div.field
-            input#full-name(placeholder="Full Name", type="text")
+            input#full-name(placeholder="Full Name", type="text",name="fullName")
           div.field
-            input#company(placeholder="Company", type="text")
+            input#company(placeholder="Company", type="text", name="company")
           div.field
-            input#email(placeholder="Email", type="text")
+            input#email(placeholder="Email", type="text", name="emailAddress")
           button.btn.btn-success.btn-large(type="submit")
             | Sign up
-        form
+        form#skip
           button.btn.btn-warning.btn-large(type="submit")
             | I don't want to sign up
-    li#intro
 
-      button#play.btn.btn-info.btn-large(type="submit")
-        | Play
+    li#replay.hidden
+      h1 Thanks for playing! 
+      p This page will self-destruct in 
+        span.countdown ... 
+        |  seconds...
+
+
 
 
 block javascript_content
   script(src="/bootstrap/js/bootstrap.js")
   script(src="http://www.html5canvastutorials.com/libraries/kinetic-v4.0.3.js")
   script(src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js")
+  script(src="/jquery-timeout-read-only/jquery.timeout.js")
   //- script(src="http://remote-tilt.com/js/device-motion-polyfill.js?key=tw_yow_game")
   script(src="canvg-1.2/rgbcolor.js")
   script(src="canvg-1.2/canvg.js")
@@ -82,27 +90,51 @@ block javascript_content
   != js('technology_generator')
   != js('game_timer')
   != js('hole')
+  != js('signup')
 
   script
     $(function() { 
-      $('#play').click(function(){
-        $('#game').toggleClass('hidden')
-        $('#intro').toggleClass('hidden')
+      var game_countdown = 5;
+      var replay_countdown = 5;
 
-        $.getJSON('/data', function(data) {
-             new Radar({
-               width: 864,
-               height: 694,
-               data: data,
-               containerId: 'radar',
-               background_svg : 'radar.svg',
-               duration: 5
-             }).play().then(function(){
-               $('#game').toggleClass('hidden')
-               $('#result').toggleClass('hidden')
-             })
-         });
+      var play_phase = function(data) {
+        defer = new $.Deferred
+        $('#play').click(function(){
+          $('#game,#intro').toggleClass('hidden')
+           new Radar({
+             width: 864,
+             height: 694,
+             data: data,
+             containerId: 'radar',
+             background_svg : 'radar.svg',
+             duration: game_countdown
+           }).play().
+            done( function(){ defer.resolve() } ).
+            fail( function(){ defer.reject() } );
+        });
+        return defer;
+      };
 
-      })
+      var signup_phase = function(){
+        $('#game,#result').toggleClass('hidden')
+        return new Signup({containerId: 'form'}).capture()      
+      };
 
+      var replay_phase = function(){
+        $('#result, #replay').toggleClass('hidden')
+        var tick = function(delay){
+          return $.timeout(1000, delay-1).pipe(function(remaining){
+            $('#replay .countdown').text(remaining + ' ');
+            return tick(remaining);
+          })
+        }
+        tick(replay_countdown);
+        return $.timeout(replay_countdown*1000);
+      };
+
+      $.getJSON('/data')
+        .pipe( play_phase )
+        .pipe( signup_phase )
+        .pipe( replay_phase )
+        .pipe( function(){ location.reload(); });
     });
