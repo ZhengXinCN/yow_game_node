@@ -18,11 +18,13 @@ class @Radar
     @boardLayer = new Kinetic.Layer
     @stage.add @boardLayer
 
-    @foregroundLayer = new Kinetic.Layer
-    @stage.add @foregroundLayer
 
     @x = @stage.getWidth() / 2
     @y = @stage.getHeight() / 2
+
+    @foregroundLayer = new Kinetic.Layer
+    @stage.add @foregroundLayer
+
 
     @board = 
       layer: @boardLayer
@@ -34,25 +36,61 @@ class @Radar
       board: @board
       remainingSeconds: options.duration || 10
 
-
-
     $(@backgroundLayer.getCanvas().element).attr('id', 'backgroundLayer');
     canvg('backgroundLayer', options.background_svg, { ignoreMouse: true, ignoreAnimation: true });
 
+    @rings =
+      "Adopt":
+        inner:15
+        outer:90
+      "Trial":
+        inner:90
+        outer:160
+      "Assess":
+        inner:160
+        outer:230
+      "Hold":
+        inner:230
+        outer:300
+    @quadrants =
+      "Languages & Frameworks":
+        quadrant: 0.0
+      "Tools":
+        quadrant: 0.5
+      "Techniques":
+        quadrant: 1.0
+      "Platforms":
+        quadrant: 1.5
 
   play: ->
     endGamePromise = $.Deferred()
     @game_timer.startTimer().then ->
       console.log("Game Over!")
       endGamePromise.resolve()
-    @draw_marble(@generator.get_random_technology())
+    technology = @generator.get_random_technology()
+    @draw_marble(technology)
+    @draw_hole(technology)
     endGamePromise
-  draw_marble: (technology) ->
 
+  draw_marble: (technology) ->
+    console.log technology.quadrant + technology.ring
     @marble = new Marble
       layer: @boardLayer
       label: technology.label
       board: @board
 
+
     @marble.detect_motion()
+
+  draw_hole: (technology) ->
+    @hole = new Hole
+      layer: @foregroundLayer
+      quadrant: @quadrants[technology.quadrant].quadrant
+      ring: @rings[technology.ring]
+      center_x: @x-12
+      center_y: @y
+      hole_radius: 15
+
+    @hole.draw_hole()
+
 
