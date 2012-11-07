@@ -19,8 +19,8 @@ log = (message, color, explanation) ->
 
 # Compiles app.coffee and src directory to the app directory
 build = (callback) ->
-  options = ['-c','-b', '-o', 'app', 'src']
-  cmd = which.sync 'coffee'
+  options = [ '-c', '-b', '-o', 'app', 'src']
+  cmd = 'node_modules/coffee-script/bin/coffee'  
   coffee = spawn cmd, options
   coffee.stdout.pipe process.stdout
   coffee.stderr.pipe process.stderr
@@ -32,13 +32,9 @@ test = (callback) ->
     '--compilers'
     'coffee:coffee-script'
     '--colors'
-    '--require'
-    'should'
-    '--require'
-    './server'
   ]
   try
-    cmd = which.sync 'mocha' 
+    cmd = 'node_modules/.bin/mocha'
     spec = spawn cmd, options
     spec.stdout.pipe process.stdout 
     spec.stderr.pipe process.stderr
@@ -73,13 +69,13 @@ task 'test', 'Run Mocha tests', ->
 task 'dev', 'start dev env', ->
   # watch_coffee
   options = ['-c', '-b', '-w', '-o', 'app', 'src']
-  cmd = 'node_modules/coffee-script/bin/coffee'  
+  cmd = 'node_modules/./bin/coffee'  
   coffee = spawn cmd, options
   coffee.stdout.pipe process.stdout
   coffee.stderr.pipe process.stderr
   log 'Watching coffee files', green
   # watch_js
-  supervisor = spawn 'node', ['./node_modules/supervisor/lib/cli-wrapper.js','-w','app,views,data', '-e', 'js|jade|json', '--debug', 'server']
+  supervisor = spawn 'node', ['./node_modules/.bin/node-supervisor','-w','app,views,data', '-e', 'js|jade|json', '--debug', 'server']
   supervisor.stdout.pipe process.stdout
   supervisor.stderr.pipe process.stderr
   log 'Watching js files and running server', green
