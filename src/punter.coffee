@@ -2,6 +2,10 @@ mongoose = require 'mongoose'
 require 'express-mongoose'
 {Promise} = mongoose
 require './mongoose-pipe'
+_ = require('underscore')
+
+RegExp::bindMember = (name) -> 
+  @[name].bind @
 
 
 db_url = process.env.MONGOLAB_URL || "mongodb://localhost//yow_game"
@@ -25,6 +29,14 @@ NoModelFound = new Promise().error('No model found')
 firstModel = (arr) -> 
   arr?[0] || NoModelFound
 
+invalidModelKey = /^_/.bindMember 'test'
+
+hasInvalidModelKey = (body) ->
+  _.chain(body)
+  .keys()
+  .any(invalidModelKey)
+  .value()
+
 load = (id, next)->
   PunterModel
   .find
@@ -42,11 +54,11 @@ show = (req, resp) ->
 create = (req, resp) ->
   unless req.body
     return resp.send 400, 'No content'
+  
+  if hasInvalidModelKey req.body
+    return resp.send 400, 'Invalid model'
 
-  punter = new PunterModel()
-  punter.fullName = req.body.fullName
-  punter.company = req.body.company
-  punter.emailAddress = req.body.emailAddress
+  punter = new PunterModel req.body
 
   promise = new Promise()
 

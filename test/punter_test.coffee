@@ -9,6 +9,7 @@ describe 'punters API', ->
     fullName: 'Full Name'
     emailAddress: 'jim@test'
     company: 'Company'
+
   
   describe  'POST /punters', ->
 
@@ -46,6 +47,26 @@ describe 'punters API', ->
         .send(wellFormedPunter)
         .expect('Location', /punters\/[a-f0-9]+$/)
         .expect(302, done)
+
+      describe 'that has unsafe fields', ->
+        it 'should not allow id information', (done) ->
+          unsafePunter = _.extend {}, wellFormedPunter, 
+            _id: 1
+          
+          @req
+          .send(unsafePunter)
+          .expect(400, done)
+
+        it 'should not allow version information', (done) ->
+          unsafePunter = _.extend {}, wellFormedPunter, 
+            __v:10
+          
+          @req
+          .send(unsafePunter)
+          .expect(400, done)
+
+
+
 
   describe 'GET /punters/:id', -> 
     describe 'with an existing punter', ->
