@@ -32,6 +32,10 @@ test = (callback) ->
     '--compilers'
     'coffee:coffee-script'
     '--colors'
+    '--growl'
+    '--watch'
+    '--globals'
+    'css,js,img'
   ]
   try
     cmd = 'node_modules/.bin/mocha'

@@ -1,5 +1,8 @@
 {Promise} = require 'mongoose'
 
+bindMember = (object, methodName)->
+  object[methodName].bind(object)
+
 Promise::pipe = (success, failure) ->
   nextPromise = new Promise()
   identity = (i) -> i
@@ -13,8 +16,8 @@ Promise::pipe = (success, failure) ->
       [nextPromise.complete, success(value)]
 
     if processed instanceof Promise
-      processed.addErrback nextPromise.error.bind(nextPromise)
-      processed.addCallback nextPromise.complete.bind(nextPromise)
+      processed.addErrback bindMember(nextPromise, "error")
+      processed.addCallback bindMember(nextPromise, "complete")
     else
       trigger.bind(nextPromise)(processed)
   

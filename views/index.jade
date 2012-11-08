@@ -56,11 +56,11 @@ block content
       #form
         form#signup(action="/punters", method="POST")
           div.field
-            input#full-name(placeholder="Full Name", type="text",name="fullName")
+            input#full-name(placeholder="Full Name", type="text",name="fullName", required="true")
           div.field
-            input#company(placeholder="Company", type="text", name="company")
+            input#company(placeholder="Company", type="text", name="company", required="true")
           div.field
-            input#email(placeholder="Email", type="text", name="emailAddress")
+            input#email(placeholder="Email", type="email", name="emailAddress", required="true")
           button.btn.btn-success.btn-large(type="submit")
             | Sign up
         form#skip
