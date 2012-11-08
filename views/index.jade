@@ -14,7 +14,7 @@ block content
       background: white;
       position:fixed;
       width: 864px;
-      heigh: 694px;
+      height: 694px;
       left: 50%;
       margin-left: -432px;
       margin-top: -20px;
@@ -26,52 +26,99 @@ block content
     .hidden{
       display: none;
     }
-    #intro, #replay{
+    #intro {
+      padding-top: 50px;
+    }
+    #intro #play {
+      padding: 30px;
+      font-size: 100pt;
+    }
+    #intro #instructions {
+      padding-top: 50px;
+    }
+
+    .retro {
+      font-family: delusion;
+      text-transform: uppercase;
+    }
+    #replay{
       margin-left: 300px;
       padding-top: 20px;
-    }
-    #play{
-      padding: 100px;
-      font-size: 100pt;
     }
   //- canvas#background
   ul.content.unstyled
     li#intro
-      button#play.btn.btn-info.btn-large(type="submit")
-        | Play
+      .row
+        .span4.offset1
+          p The Thoughtworks Technology Radar is published every six months.  
+          p To celebrate this summer's edition we invite you to show your grasp on current trends of technology adoption.
+
+      .row
+        .span4.offset1
+          ul#instructions
+            li
+              a(href="#") Get the technology into it's right place on the radar
+            li
+              a(href="#") Tilt the ipad to move
+            li
+              a(href="#") Avoid the obstacles
+            li
+              a(href="#") Winners can enter the draw for some goodies.
+            li
+              a(href="#") You have 30 seconds to do as many as you can.
+            li
+              a(href="#") Press "Play!" to start
+        .span4.offset1
+          button#play.btn.btn-info.btn-large(type="submit")
+            | Play
 
     li#game.hidden
       #radar
 
     li#result.hidden
-      #description.lead
-        h1 Congratulations: You have won!
-        p
-          | Please approach a ThoughtWorker to collect your Tech Radar T-shirt.
-          img(src="tshirt.jpg")
-        p
-          | If you wish to sign up to ThoughtWorks Technology Radar Publication (released twice a year) and get into the draw to win a macbook air, please enter your details below:
-          img(src="macbookair.png", width="160", height="90")
+      .offset2
+        .row.retro
+          h1 Game Over!
+        .row.retro
+          p.span2 Your Score: 
+          p.span1.score 0
+        .row.retro
+          p.span2 Your Rating: 
+          p.span1 Novice
+        .row.retro
+          p.span2 You win: 
+          p.span1 
+            img(src="tshirt.jpg")
+        .row
+          p 
+            | To claim your prize, and a 
+            b free 
+            | subscription to the ThoughtWorks Technology Radar publication:
 
-      #form
-        form#signup(action="/punters", method="POST")
-          div.field
-            input#full-name(placeholder="Full Name", type="text",name="fullName", required="true")
-          div.field
-            input#company(placeholder="Company", type="text", name="company", required="true")
-          div.field
-            input#email(placeholder="Email", type="email", name="emailAddress", required="true")
-          button.btn.btn-success.btn-large(type="submit")
-            | Sign up
-        form#skip
-          button.btn.btn-warning.btn-large(type="submit")
-            | I don't want to sign up
+        .row
+          p.span2 Find Natalie
+          p.span2 Scan your QR code
+          p.span2 Tweet your score on #twradargame
+        .row
+          p.retro This page will self-destruct in 
+            span.countdown ... 
+            |  seconds...
+
+      //- #form
+      //-   form#signup(action="/punters", method="POST")
+      //-     div.field
+      //-       input#full-name(placeholder="Full Name", type="text",name="fullName", required="true")
+      //-     div.field
+      //-       input#company(placeholder="Company", type="text", name="company", required="true")
+      //-     div.field
+      //-       input#email(placeholder="Email", type="email", name="emailAddress", required="true")
+      //-     button.btn.btn-success.btn-large(type="submit")
+      //-       | Sign up
+      //-   form#skip
+      //-     button.btn.btn-warning.btn-large(type="submit")
+      //-       | I don't want to sign up
 
     li#replay.hidden
-      h1 Thanks for playing! 
-      p This page will self-destruct in 
-        span.countdown ... 
-        |  seconds...
 
 
 
@@ -97,44 +144,59 @@ block javascript_content
       var game_countdown = 5;
       var replay_countdown = 5;
 
-      var play_phase = function(data) {
+      var intro_phase = function(data){
         defer = new $.Deferred
         $('#play').click(function(){
-          $('#game,#intro').toggleClass('hidden')
-           new Radar({
-             width: 864,
-             height: 694,
-             data: data,
-             containerId: 'radar',
-             background_svg : 'radar.svg',
-             duration: game_countdown
-           }).play().
-            done( function(){ defer.resolve() } ).
-            fail( function(){ defer.reject() } );
+          defer.resolve(data);
         });
         return defer;
-      };
+      }
+
+      var play_phase = function(data){
+        return new Radar({
+           width: 864,
+           height: 694,
+           data: data,
+           containerId: 'radar',
+           background_svg : 'radar.svg',
+           duration: game_countdown
+         }).play();
+      }
+
+      var transition = function(selectors){
+        return function(data){
+          $(selectors).toggleClass('hidden')
+          return data;
+        }
+      }
 
       var signup_phase = function(){
-        $('#game,#result').toggleClass('hidden')
         return new Signup({containerId: 'form'}).capture()      
       };
 
-      var replay_phase = function(){
-        $('#result, #replay').toggleClass('hidden')
+      var replay_phase = function(options){
         var tick = function(delay){
           return $.timeout(1000, delay-1).pipe(function(remaining){
-            $('#replay .countdown').text(remaining + ' ');
+            $( options.countdownSelector || '.countdown').text(remaining + ' ');
             return tick(remaining);
           })
         }
-        tick(replay_countdown);
-        return $.timeout(replay_countdown*1000);
+
+        var duration = options.replay_countdown || 15;
+        tick(duration);
+        return $.timeout(duration*1000);
       };
 
       $.getJSON('/data')
+        .pipe( intro_phase )
+        .pipe( transition('#intro,#game') )
         .pipe( play_phase )
-        .pipe( signup_phase )
-        .pipe( replay_phase )
+        .pipe( transition('#game,#result'))
+        //- .pipe( signup_phase )
+        //- .pipe( transition('#result,#replay'))
+        .pipe( replay_phase.bind(this,{
+            duration: replay_countdown
+          , countdownSelector:'#result .countdown'
+        }))
         .pipe( function(){ location.reload(); });
     });

@@ -1,0 +1,45 @@
+
+                                 Delusion
+                   --------------------------------------
+                    Released as shareware in May 1997.
+
+     Delusion is a hand-drawn novelty font based on a typeface called
+     Illusion. All I have seen of Illusion are the words "European
+     design" shown in The Solotype Catalogue of 4,147 Display
+     Typefaces (Dover Press, 1992).
+
+     Delusion has only the uppercase alphabet, numbers and basic
+     punctuation.
+
+     I am releasing this font as shareware and asking for a
+     registration fee of $10 (Canadian dollars for Canadian users;
+     U.S. dollars or the equivalent of US$10 in local currency for
+     users outside Canada).
+
+     Registered users will receive a receipt and notice of any new
+     versions or fonts that I release. For Canadian users, the price
+     includes GST and, in Quebec, QST.
+
+     Please send your registration fee in the form of a Canadian
+     cheque or an international money order, with your name and return
+     address, to:
+
+          Jonathan Paterson
+          3534 de Lorimier
+          Montreal, Quebec
+          Canada   H2K 3X6
+
+          E-Mail: paterson@mlink.net
+
+     This font may not be sold or modified without my written consent.
+     Delusion may not be distributed without this text file.
+
+     To avoid loss of quality, please do not convert this font to other 
+     formats without checking with me first. Delusion is currently 
+     available in four formats (PostScript and TrueType for both 
+     Macintosh and Windows) and has been tested in all four formats. 
+     If you have received the wrong version, please download the version 
+     you need from:
+
+          http://www.mlink.net/~paterson/jpfonts.htm
+
