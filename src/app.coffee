@@ -5,7 +5,7 @@ server = (options)->
   assets = require 'connect-assets'
   resource = require 'express-resource'
 
-  {db} = options
+  # {db} = options
 
   app = express()
   
@@ -29,7 +29,7 @@ server = (options)->
       'Content-Type': 'text/json'
     resp.send json
 
-  app.resource('punters', require('./punter').resource({db:db}))
+  # app.resource('punters', require('./punter').resource({db:db}))
   app
 
 exports.server = server

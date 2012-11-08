@@ -7,7 +7,7 @@ server = function(options) {
   stylus = require('stylus');
   assets = require('connect-assets');
   resource = require('express-resource');
-  db = options.db;
+  // db = options.db;
   app = express();
   app.use(assets());
   app.use(express["static"](process.cwd() + '/public'));
@@ -24,9 +24,9 @@ server = function(options) {
     });
     return resp.send(json);
   });
-  app.resource('punters', require('./punter').resource({
-    db: db
-  }));
+  // app.resource('punters', require('./punter').resource({
+  //   db: db
+  // }));
   return app;
 };
 
