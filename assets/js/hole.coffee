@@ -18,6 +18,14 @@ class Hole
       strokeWidth: 1
       fill: "black"
 
+    @obstacle =  new Kinetic.Circle
+      radius: 20
+      fill: "yellow"
+      x: @hole.getX()
+      y: @hole.getY()
+
+    @layer.add @obstacle
+
 
   draw_hole: ->
     @random_radius = @compute_random_radius()
@@ -40,14 +48,6 @@ class Hole
     min_radius + @random_var * max_distance
 
   generate_obstacle: ->
-
-    @obstacle =  new Kinetic.Circle
-      radius: 20
-      fill: "yellow"
-      x: @hole.getX()
-      y: @hole.getY()
-
-    @layer.add @obstacle
 
     @amplitude = 50
     @period = 2000

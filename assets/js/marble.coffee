@@ -14,21 +14,23 @@ class Marble
         xShift: 0
         yShift: 0
       color: '#298EC3'
-
+    @marble_radius = 15
     @shape = new Kinetic.Group
       x: @piece.center.x
       y: @piece.center.y
     @shape.add new Kinetic.Circle
-      radius: 15
+      radius: @marble_radius
       fill: "red"
     @shape.add new Kinetic.Circle
-      radius: 15
+      radius: @marble_radius
       stroke: "white"
       strokeWidth: 2
 
     @layer.add @shape
 
-    @hole = opts.hole
+    @hole = opts.hole.hole
+    @obstacle = opts.hole.obstacle
+
     @label = new Kinetic.Text
       x: @piece.center.x
       y: @piece.center.y
@@ -47,11 +49,24 @@ class Marble
 
       @piece.center = @computeCenter(@piece.center, accel)
       @piece.color = '#298EC3'
-      if @detect_collision()
+      if @detect_hole_collision()
         console.log "collision"
+
+      if @detect_obstacle_collision()
+        @obstacle.setFill("green")
+        console.log "obstacle collision"
       @drawPiece()
 
-  detect_collision: ->
+  detect_obstacle_collision: ->
+
+    console.log @obstacle
+    x_diff = @piece.center.x - @obstacle.getX()
+    y_diff = @piece.center.y - @obstacle.getY()
+    actual_distance = Math.sqrt(x_diff * x_diff + y_diff * y_diff)
+    sum_of_radius = @marble_radius + @obstacle.getRadius()
+    actual_distance < sum_of_radius
+
+  detect_hole_collision: ->
     x_diff = @piece.center.x - @hole.getX()
     y_diff = @piece.center.y - @hole.getY()
     actual_distance = Math.sqrt(x_diff * x_diff + y_diff * y_diff)

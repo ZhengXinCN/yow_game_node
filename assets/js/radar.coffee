@@ -77,7 +77,7 @@ class @Radar
       layer: @boardLayer
       label: technology.label
       board: @board
-      hole : @hole.hole
+      hole : @hole
 
 
     @marble.detect_motion()
