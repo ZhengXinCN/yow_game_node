@@ -26,9 +26,15 @@ block content
     .hidden{
       display: none;
     }
-    #intro {
-      padding-top: 50px;
+
+    .hero-unit {
+      color: white;
+      background-color: #49AFCD;
     }
+
+    //- #intro {
+    //-   padding-top: 50px;
+    //- }
     #intro #play {
       padding: 30px;
       font-size: 100pt;
@@ -46,16 +52,19 @@ block content
       padding-top: 20px;
     }
   //- canvas#background
-  ul.content.unstyled
+  ul.tw.content.unstyled
     li#intro
       .row
-        .span4.offset1
-          p The Thoughtworks Technology Radar is published every six months.  
+        .hero-unit
+          h1 Technology Radar Game
+          p The 
+            strong Thoughtworks 
+            | Technology Radar is published every six months.  
           p To celebrate this summer's edition we invite you to show your grasp on current trends of technology adoption.
 
       .row
-        .span4.offset1
-          ul#instructions
+        .span4.offset2
+          ul#instructions.unstyled
             li
               a(href="#") Get the technology into it's right place on the radar
             li
@@ -96,9 +105,15 @@ block content
             | subscription to the ThoughtWorks Technology Radar publication:
 
         .row
-          p.span2 Find Natalie
-          p.span2 Scan your QR code
-          p.span2 Tweet your score on #twradargame
+          p.span2 
+            i.icon-eye-open
+            | Find Natalie
+          p.span2 
+            i.icon-qrcode
+            | Scan your QR code
+          p.span2 
+            i.icon-retweet
+            | Tweet your score on #twradargame
         .row
           p.retro This page will self-destruct in 
             span.countdown ... 
