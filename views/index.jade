@@ -50,8 +50,13 @@ block content
       padding: 30px;
       font-size: 100pt;
     }
-    #intro #instructions {
-      padding-top: 50px;
+    //- #intro #instructions {
+    //-   padding-top: 50px;
+    //- }
+
+    #intro #instructions i {
+      margin-left: -5px;
+      margin-right: 5px;
     }
 
     .retro {
@@ -75,22 +80,29 @@ block content
 
       .row
         .span4.offset1
+          h2 Read this first!
           ul#instructions.unstyled
             li
-              a(href="#") Get the technology into it's right place on the radar
+              i.icon-star
+              a(href="#") Move the technology to the hole on the radar
             li
+              i.icon-move
               a(href="#") Tilt the ipad to move
             li
+              i.icon-asterisk
               a(href="#") Avoid the obstacles
             li
+              i.icon-headphones
               a(href="#") Winners can enter the draw for some goodies.
             li
-              a(href="#") You have 30 seconds to do as many as you can.
+              i.icon-time
+              a(href="#") You have 30 seconds!
             li
+              i.icon-play
               a(href="#") Press "Play!" to start
-        .span3.offset2
+        .span4.offset1
           button#play.btn.btn-info.btn-large(type="submit")
-            | Play
+            | Play!
 
     li#game.hidden
       #radar
