@@ -12,6 +12,9 @@ Schema = mongoose.Schema
 resource = ( options ) ->
   {db} = options
 
+  unless db 
+    return {}
+    
   PunterSchema = new Schema
     fullName: 
       type: String

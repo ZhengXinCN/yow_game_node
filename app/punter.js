@@ -20,6 +20,9 @@ Schema = mongoose.Schema;
 resource = function(options) {
   var NoModelFound, PunterModel, PunterSchema, create, db, firstModel, hasInvalidModelKey, invalidModelKey, load, show;
   db = options.db;
+  if (!db) {
+    return {};
+  }
   PunterSchema = new Schema({
     fullName: {
       type: String,

@@ -29,7 +29,7 @@ server = (options)->
       'Content-Type': 'text/json'
     resp.send json
 
-  # app.resource('punters', require('./punter').resource({db:db}))
+  app.resource('punters', require('./punter').resource(options))
   app
 
 exports.server = server
