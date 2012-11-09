@@ -20,7 +20,7 @@ class Marble
       y: @piece.center.y
     @shape.add new Kinetic.Circle
       radius: 15
-      fill: "#298EC3"
+      fill: "red"
     @shape.add new Kinetic.Circle
       radius: 15
       stroke: "white"
@@ -28,6 +28,7 @@ class Marble
 
     @layer.add @shape
 
+    @hole = opts.hole
     @label = new Kinetic.Text
       x: @piece.center.x
       y: @piece.center.y
@@ -41,17 +42,21 @@ class Marble
     @layer.add @label
 
   detect_motion: ->
-    eventID = 0
     window.addEventListener "devicemotion", (event) =>
       accel = event.accelerationIncludingGravity
-      eventID = eventID + 1
-      if( eventID %100 == 0)
-        console.log(event)
 
       @piece.center = @computeCenter(@piece.center, accel)
       @piece.color = '#298EC3'
+      if @detect_collision()
+        console.log "collision"
       @drawPiece()
 
+  detect_collision: ->
+    x_diff = @piece.center.x - @hole.getX()
+    y_diff = @piece.center.y - @hole.getY()
+    actual_distance = Math.sqrt(x_diff * x_diff + y_diff * y_diff)
+    sum_of_radius = 15 + @hole.getRadius()
+    actual_distance < sum_of_radius
 
   computeCenter: (oldCenter, acceleration) ->
     newCenter = {}

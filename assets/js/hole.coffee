@@ -25,6 +25,7 @@ class Hole
     @hole.setX  @center_x + @random_radius * Math.sin(@angle)
     @hole.setY  @center_y + @random_radius * Math.cos(@angle)
     @layer.add @hole
+    @generate_obstacle()
     @layer.draw()
 
   compute_angle: ->
@@ -37,5 +38,24 @@ class Hole
     min_radius = @hole_radius + @inner_ring
     max_distance = @ring - @inner_ring - 2 * @hole_radius
     min_radius + @random_var * max_distance
+
+  generate_obstacle: ->
+
+    @obstacle =  new Kinetic.Circle
+      radius: 20
+      fill: "yellow"
+      x: @hole.getX()
+      y: @hole.getY()
+
+    @layer.add @obstacle
+
+    @amplitude = 50
+    @period = 2000
+    @anim = new Kinetic.Animation
+      func: (frame) =>
+        @obstacle.setX @amplitude * Math.sin(frame.time * 2 * Math.PI / @period) + @hole.getX()
+        @obstacle.setY @amplitude * Math.cos(frame.time * 2 * Math.PI / @period) + @hole.getY()
+      node: @layer
+    @anim.start()
 
 ((module?.exports?) || window).Hole = Hole

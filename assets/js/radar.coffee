@@ -68,16 +68,16 @@ class @Radar
       console.log("Game Over!")
       endGamePromise.resolve()
     technology = @generator.get_random_technology()
-    @draw_marble(technology)
     @draw_hole(technology)
+    @draw_marble(technology)
     endGamePromise
 
   draw_marble: (technology) ->
-    console.log technology.quadrant + technology.ring
     @marble = new Marble
       layer: @boardLayer
       label: technology.label
       board: @board
+      hole : @hole.hole
 
 
     @marble.detect_motion()
