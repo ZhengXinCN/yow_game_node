@@ -47,7 +47,7 @@ class Marble
     window.addEventListener "devicemotion", (event) =>
       accel = event.accelerationIncludingGravity
 
-      @piece.center = @computeCenter(@piece.center, accel)
+      @piece.center = @computeCenter(@piece.center, accel,"forward")
       @piece.color = '#298EC3'
       if @detect_hole_collision()
         console.log "collision"
@@ -55,6 +55,9 @@ class Marble
       if @detect_obstacle_collision()
         @obstacle.setFill("green")
         console.log "obstacle collision"
+        @piece.center = @computeCenter(@piece.center, accel,"backward")
+
+
       @drawPiece()
 
   detect_obstacle_collision: ->
@@ -73,14 +76,18 @@ class Marble
     sum_of_radius = 15 + @hole.getRadius()
     actual_distance < sum_of_radius
 
-  computeCenter: (oldCenter, acceleration) ->
+  computeCenter: (oldCenter, acceleration, direction) ->
     newCenter = {}
     newCenter.xShift = oldCenter.xShift * 0.8 + (acceleration.y * kAccelerationSensitivity)
     newCenter.yShift = oldCenter.yShift * 0.8 - (acceleration.x * kAccelerationSensitivity)
-    newCenter.x = oldCenter.x + oldCenter.xShift
 
-    # use *minus* to compute the center's new y
-    newCenter.y = oldCenter.y - oldCenter.yShift
+    if direction == "forward"
+      newCenter.x = oldCenter.x + oldCenter.xShift
+      # use *minus* to compute the center's new y
+      newCenter.y = oldCenter.y - oldCenter.yShift
+    else
+      newCenter.x = oldCenter.x - oldCenter.xShift * 5
+      newCenter.y = oldCenter.y + oldCenter.yShift * 5
 
     # do not go outside the boundaries of the canvas
     newCenter.x = kCircleRadius  if newCenter.x < kCircleRadius
