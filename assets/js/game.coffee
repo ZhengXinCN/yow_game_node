@@ -53,6 +53,7 @@ define [
 
 
       $.getJSON('/data')
+      .pipe( transition('#intro #play'))
       .pipe( intro_phase )
       .pipe( transition('#intro,#game') )
       .pipe( play_phase )
