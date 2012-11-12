@@ -141,6 +141,8 @@ block content
           p.retro This page will self-destruct in 
             span.countdown ... 
             |  seconds...
+            button#restart.btn.btn-info.btn-large(type="submit") Restart Now!
+
 
       //- #form
       //-   form#signup(action="/punters", method="POST")
@@ -162,79 +164,11 @@ block content
 
 
 block javascript_content
-  script(src="/bootstrap/js/bootstrap.js")
-  script(src="http://www.html5canvastutorials.com/libraries/kinetic-v4.0.3.js")
-  script(src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js")
-  script(src="/jquery-timeout-read-only/jquery.timeout.js")
-  //- script(src="http://remote-tilt.com/js/device-motion-polyfill.js?key=tw_yow_game")
-  script(src="canvg-1.2/rgbcolor.js")
-  script(src="canvg-1.2/canvg.js")
-
-  != js('radar')
-  != js('marble')
-  != js('technology_generator')
-  != js('game_timer')
-  != js('hole')
-  != js('signup')
-
+  script(type="text/javascript",src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.1/require.min.js")
+  script(type="text/javascript",src="/js/main.js")  
   script
-    $(function() { 
-      var game_countdown = 100;
-      var replay_countdown = 5;
+    require(['jquery.bootstrap']);
 
-      var intro_phase = function(data){
-        defer = new $.Deferred
-        $('#play').click(function(){
-          defer.resolve(data);
-        });
-        return defer;
-      }
-
-      var play_phase = function(data){
-        return new Radar({
-           width: 864,
-           height: 694,
-           data: data,
-           containerId: 'radar',
-           background_svg : 'radar.svg',
-           duration: game_countdown
-         }).play();
-      }
-
-      var transition = function(selectors){
-        return function(data){
-          $(selectors).toggleClass('hidden')
-          return data;
-        }
-      }
-
-      var signup_phase = function(){
-        return new Signup({containerId: 'form'}).capture()      
-      };
-
-      var replay_phase = function(options){
-        var tick = function(delay){
-          return $.timeout(1000, delay-1).pipe(function(remaining){
-            $( options.countdownSelector || '.countdown').text(remaining + ' ');
-            return tick(remaining);
-          })
-        }
-
-        var duration = options.replay_countdown || 15;
-        tick(duration);
-        return $.timeout(duration*1000);
-      };
-
-      $.getJSON('/data')
-        .pipe( intro_phase )
-        .pipe( transition('#intro,#game') )
-        .pipe( play_phase )
-        .pipe( transition('#game,#result'))
-        //- .pipe( signup_phase )
-        //- .pipe( transition('#result,#replay'))
-        .pipe( replay_phase.bind(this,{
-            duration: replay_countdown
-          , countdownSelector:'#result .countdown'
-        }))
-        .pipe( function(){ location.reload(); });
+    require(['jquery', 'game'], function($, Game){
+      $(Game);
     });
