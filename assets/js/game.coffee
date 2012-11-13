@@ -4,9 +4,32 @@ define [
   ,'signup']
   , ($, Radar, Signup) -> 
     game = -> 
-      game_countdown = 10;
+      game_countdown = 5;
       replay_countdown = 5;
 
+
+      normalise_for_radar = (data) ->
+        data.technologies = data.radar_data.map (input) ->
+          tech = 
+            label: input.name
+            pc: input.pc
+            quadrant: if input.pc.t < 90
+              "Tools"
+            else if input.pc.t < 180
+              "Techniques"
+            else if input.pc.t < 270
+              "Platforms"
+            else
+              "Languages & Frameworks"
+            ring: if input.pc.r < 150
+              "Adopt"
+            else if input.pc.r < 270
+              "Trial"
+            else if input.pc.r < 340
+              "Assess"
+            else 
+              "Hold"
+        data
 
       intro_phase = (data) ->
         defer = new $.Deferred
@@ -50,6 +73,7 @@ define [
 
 
       $.getJSON('/data')
+      .pipe( normalise_for_radar)
       .pipe( transition('#intro #play'))
       .pipe( intro_phase )
       .pipe( transition('#intro,#game') )

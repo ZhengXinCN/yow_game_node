@@ -1,8 +1,16 @@
-stripExt = (filePath) ->
-  if (lastDotIndex = filePath.lastIndexOf '.') >= 0
-    filePath[0...lastDotIndex]
-  else
-    filePath
+
+assetize_javascript_for_requirejs = (assets)-> 
+  stripExt = (filePath) ->
+    if (lastDotIndex = filePath.lastIndexOf '.') >= 0
+      filePath[0...lastDotIndex]
+    else
+      filePath
+
+  asset_js_path = "#{process.cwd()}/assets/js/"
+
+  file.walkSync asset_js_path, (dirPath,dirs,files) ->
+    files?.map _.compose(assets.instance.options.helperContext.js,stripExt)
+    true
 
 server = (options)->
   express = require 'express'
@@ -18,11 +26,7 @@ server = (options)->
   # Add Connect Assets
   app.use assets()
 
-  asset_js_path = "#{process.cwd()}/assets/js/"
-
-  file.walkSync asset_js_path, (dirPath,dirs,files) ->
-    files?.map _.compose(assets.instance.options.helperContext.js,stripExt)
-    true
+  assetize_javascript_for_requirejs assets
 
    # Set the public folder as static assets
   app.use express.static(process.cwd() + '/public')

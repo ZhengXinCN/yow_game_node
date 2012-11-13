@@ -36,12 +36,17 @@ define [
               width: options.width
               height: options.height
 
+        @techLayer = new Kinetic.Layer
+        @stage.add @techLayer
+
         @timerLayer = new Kinetic.Layer
         @stage.add @timerLayer
+
 
         @backgroundLayer = new Kinetic.Layer
         @stage.add @backgroundLayer
             
+
         @boardLayer = new Kinetic.Layer
         @stage.add @boardLayer
 
@@ -52,7 +57,6 @@ define [
         @foregroundLayer = new Kinetic.Layer
         @stage.add @foregroundLayer
 
-
         @board = 
           layer: @boardLayer
           width: options.width
@@ -62,6 +66,7 @@ define [
           layer: @timerLayer
           board: @board
           remainingSeconds: options.duration || 10
+
 
         $(@backgroundLayer.getCanvas().element).attr('id', 'backgroundLayer');
         canvg('backgroundLayer', options.background_svg, { ignoreMouse: true, ignoreAnimation: true });
@@ -89,12 +94,31 @@ define [
           "Platforms":
             quadrant: 1.5
 
+        @radar_centre = 
+          x: @x-12
+          y: @y
+
+      decorateWithRealRadarPositions: ->
+        @generator.randomSequence().map (tech)=>
+          theta = -Math.PI * tech.pc.t/180.0
+          new Kinetic.Circle
+            x: @radar_centre.x + (0.75 * tech.pc.r * Math.cos(theta))
+            y: @radar_centre.y + (0.75 * tech.pc.r * Math.sin(theta))
+            radius: 5
+            fill: "00b7db"
+        .map (circle) =>
+          @techLayer.add circle
+
+        @techLayer.draw()
+
       play: ->
         endGamePromise = $.Deferred()
         @game_timer.startTimer().then ->
           console.log("Game Over!")
           endGamePromise.resolve()
         
+        # @decorateWithRealRadarPositions()
+
         chainPromises = (memo,fn) -> 
           memo.pipe(fn)
 
@@ -114,8 +138,8 @@ define [
           layer: @foregroundLayer
           quadrant: @quadrants[technology.quadrant].quadrant
           ring: @rings[technology.ring]
-          center_x: @x-12
-          center_y: @y
+          center_x: @radar_centre.x
+          center_y: @radar_centre.y
           hole_radius: 15
 
         marble = new Marble
