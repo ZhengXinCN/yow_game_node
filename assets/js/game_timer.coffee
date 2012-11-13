@@ -1,5 +1,5 @@
 define ['jquery', 'kinetic'], ($, Kinetic) ->
-  class @GameTimer
+  class GameTimer
 
     constructor: (options) ->
       @layer = options.layer

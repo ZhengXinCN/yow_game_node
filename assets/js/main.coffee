@@ -15,6 +15,8 @@ require.config
     canvg: 
       deps: ["../canvg-1.2/rgbcolor"]
       exports: "canvg"
+    underscore:
+      exports: "_"
     'jquery.timeout': 
       deps: ["jquery"]
       exports: "$"

@@ -16,6 +16,7 @@
     , "express-mongoose": "0.1.0"
     , "express-resource": "1.0.0"
     , "underscore": "*"
+    , "lazy": "1.0.8"
 
   }, "scripts": {
     "install": "node_modules/coffee-script/bin/cake build",

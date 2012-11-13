@@ -1,14 +1,33 @@
 define [
   'jquery'
+  ,'underscore'
   , 'kinetic'
   , 'canvg'
   , 'technology_generator'
   , 'game_timer'
   , 'marble'
   , 'hole']
-  , ($, Kinetic, canvg, TechnologyGenerator, GameTimer, Marble, Hole) ->
-    class Radar
+  , ($, _, Kinetic, canvg, TechnologyGenerator, GameTimer, Marble, Hole) ->
 
+    class Round
+      constructor: (options) ->
+        @cast = options.cast || []
+      
+      play:(score)->
+        roundOver = new $.Deferred
+        # wake up all the actors - 
+        @cast.map (c)-> 
+          c.play().done ->
+            roundOver.resolve(score+1)
+        # put all the actors back to sleep (propogate sleep)
+        roundOver.promise().pipe (score) => 
+          @.complete().pipe -> 
+            score
+
+      complete: ->
+        $.when.apply $, @cast.map (c)-> c.complete()
+
+    class Radar
       constructor: (options)->
         @generator = new TechnologyGenerator(options.data)
 
@@ -16,7 +35,6 @@ define [
               container: options.containerId
               width: options.width
               height: options.height
-
 
         @timerLayer = new Kinetic.Layer
         @stage.add @timerLayer
@@ -76,23 +94,23 @@ define [
         @game_timer.startTimer().then ->
           console.log("Game Over!")
           endGamePromise.resolve()
-        technology = @generator.get_random_technology()
-        @draw_hole(technology)
-        @draw_marble(technology)
+        
+        chainPromises = (memo,fn) -> 
+          memo.pipe(fn)
+
+        allRoundsPromise = _.chain(@generator.randomSequence())
+        .map (tech) =>
+          new Round
+            cast: @create_cast_for_round(tech)
+        .map (round) -> 
+          round.play.bind(round)
+        .reduce(chainPromises, $.when(0))
+        .value()
+
         endGamePromise
 
-      draw_marble: (technology) ->
-        @marble = new Marble
-          layer: @boardLayer
-          label: technology.label
-          board: @board
-          hole : @hole
-
-
-        @marble.detect_motion()
-
-      draw_hole: (technology) ->
-        @hole = new Hole
+      create_cast_for_round: (technology) ->
+        hole = new Hole
           layer: @foregroundLayer
           quadrant: @quadrants[technology.quadrant].quadrant
           ring: @rings[technology.ring]
@@ -100,5 +118,11 @@ define [
           center_y: @y
           hole_radius: 15
 
-        @hole.draw_hole()
+        marble = new Marble
+          layer: @boardLayer
+          label: technology.label
+          board: @board
+          hole : hole
+
+        [marble, hole]
 

@@ -3,9 +3,6 @@ define [
   ,'radar'
   ,'signup']
   , ($, Radar, Signup) -> 
-  
-    
-
     game = -> 
       game_countdown = 10;
       replay_countdown = 5;

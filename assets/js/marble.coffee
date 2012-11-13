@@ -27,8 +27,6 @@ define ['jquery', 'kinetic'], ($, Kinetic)->
         stroke: "white"
         strokeWidth: 2
 
-      @layer.add @shape
-
       @hole = opts.hole.hole
       @obstacle = opts.hole.obstacle
 
@@ -42,28 +40,39 @@ define ['jquery', 'kinetic'], ($, Kinetic)->
         textStrokeWidth: 1
         text: @text
 
+    play: ->
+      @layer.add @shape
       @layer.add @label
+      @detect_motion()
+
+    complete: ->
+      window.removeEventListener "devicemotion", @handler if @handler
+      @handler = null
+      @shape.remove()
+      @label.remove()
+      true
 
     detect_motion: ->
-      window.addEventListener "devicemotion", (event) =>
+      hitHole = new $.Deferred
+
+      @handler = (event) =>
         accel = event.accelerationIncludingGravity
 
         @piece.center = @computeCenter(@piece.center, accel,"forward")
         @piece.color = '#298EC3'
         if @detect_hole_collision()
-          console.log "collision"
+          hitHole.resolve()
 
         if @detect_obstacle_collision()
           @obstacle.setFill("green")
-          console.log "obstacle collision"
           @piece.center = @computeCenter(@piece.center, accel,"backward")
-
 
         @drawPiece()
 
-    detect_obstacle_collision: ->
+      window.addEventListener "devicemotion", @handler
+      hitHole
 
-      console.log @obstacle
+    detect_obstacle_collision: ->
       x_diff = @piece.center.x - @obstacle.getX()
       y_diff = @piece.center.y - @obstacle.getY()
       actual_distance = Math.sqrt(x_diff * x_diff + y_diff * y_diff)

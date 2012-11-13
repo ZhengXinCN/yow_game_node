@@ -1,8 +1,6 @@
 define ['kinetic'], (Kinetic)->
   class Hole
-
     constructor: (opts)->
-
       @layer = opts.layer
       @quadrant = opts.quadrant
       @ring = opts.ring.outer
@@ -25,7 +23,17 @@ define ['kinetic'], (Kinetic)->
         x: @hole.getX()
         y: @hole.getY()
 
+
+    play: ->
       @layer.add @obstacle
+      @draw_hole()
+      new $.Deferred
+
+    complete: ->
+      @hole.remove()
+      @obstacle.remove()
+      @layer.draw()
+      true
 
 
     draw_hole: ->

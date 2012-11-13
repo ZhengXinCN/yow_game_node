@@ -1,5 +1,5 @@
 define [], ()->
-  class @IdleTimer
+  class IdleTimer
     constructor:(amount_of_secs) ->
       @amount_of_secs = amount_of_secs
 
