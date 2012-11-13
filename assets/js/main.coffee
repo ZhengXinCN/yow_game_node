@@ -2,7 +2,6 @@ require.config
   baseUrl: '/js'
   paths:
     "jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min"
-    "jquery.timeout": "/jquery-timeout-read-only/jquery.timeout"
     "underscore": "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min"
     "kinetic": "//www.html5canvastutorials.com/libraries/kinetic-v4.0.3"
     "jquery.bootstrap": "/bootstrap/js/bootstrap"

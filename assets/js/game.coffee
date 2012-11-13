@@ -1,5 +1,5 @@
 define [
-  'jquery.timeout'
+  'jquery'
   ,'q'
   ,'radar'
   ,'signup']
