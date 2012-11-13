@@ -7,6 +7,7 @@ require.config
     "kinetic": "//www.html5canvastutorials.com/libraries/kinetic-v4.0.3"
     "jquery.bootstrap": "/bootstrap/js/bootstrap"
     "canvg": "/canvg-1.2/canvg"
+    "q": "/q-0.8.10/q.min"
   shim:
     jquery:
       exports: "$"

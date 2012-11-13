@@ -1,4 +1,4 @@
-define ['jquery', 'kinetic'], ($, Kinetic)->
+define ['q', 'kinetic'], (Q, Kinetic)->
   class Marble
     kCircleRadius = 15
     kAccelerationSensitivity = 1.5
@@ -50,10 +50,10 @@ define ['jquery', 'kinetic'], ($, Kinetic)->
       @handler = null
       @shape.remove()
       @label.remove()
-      true
+      this
 
     detect_motion: ->
-      hitHole = new $.Deferred
+      hitHole = Q.defer()
 
       @handler = (event) =>
         accel = event.accelerationIncludingGravity
@@ -61,16 +61,16 @@ define ['jquery', 'kinetic'], ($, Kinetic)->
         @piece.center = @computeCenter(@piece.center, accel,"forward")
         @piece.color = '#298EC3'
         if @detect_hole_collision()
-          hitHole.resolve()
+          hitHole.resolve this
 
         if @detect_obstacle_collision()
-          @obstacle.setFill("green")
+          @obstacle.setFill "green"
           @piece.center = @computeCenter(@piece.center, accel,"backward")
 
         @drawPiece()
 
       window.addEventListener "devicemotion", @handler
-      hitHole
+      hitHole.promise
 
     detect_obstacle_collision: ->
       x_diff = @piece.center.x - @obstacle.getX()

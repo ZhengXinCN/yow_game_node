@@ -1,4 +1,4 @@
-define ['kinetic'], (Kinetic)->
+define ['q','kinetic'], (Q,Kinetic)->
   class Hole
     constructor: (opts)->
       @layer = opts.layer
@@ -27,13 +27,13 @@ define ['kinetic'], (Kinetic)->
     play: ->
       @layer.add @obstacle
       @draw_hole()
-      new $.Deferred
+      Q.defer().promise
 
     complete: ->
       @hole.remove()
       @obstacle.remove()
       @layer.draw()
-      true
+      this
 
 
     draw_hole: ->

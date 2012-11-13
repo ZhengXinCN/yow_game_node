@@ -1,10 +1,11 @@
 define [
   'jquery.timeout'
+  ,'q'
   ,'radar'
   ,'signup']
-  , ($, Radar, Signup) -> 
+  , ($, Q, Radar, Signup) -> 
     game = -> 
-      game_countdown = 5;
+      game_countdown = 25;
       replay_countdown = 5;
 
 
@@ -32,10 +33,10 @@ define [
         data
 
       intro_phase = (data) ->
-        defer = new $.Deferred
+        defer = Q.defer()
         $('#play').click -> 
           defer.resolve(data);
-        defer
+        defer.promise
 
       play_phase = (data)-> 
         radar = new Radar
@@ -56,31 +57,42 @@ define [
 
       replay_phase = (options) ->
         tick = (delay)->
-          $.timeout(1000, delay-1)
-          .pipe (remaining)->
+          Q.delay(delay-1, 1000)
+          .then (remaining)->
             $( options.countdownSelector || '.countdown').text(remaining + ' ')
             tick(remaining)
 
         duration = options.replay_countdown || 15
         tick(duration)
         
-        restart = new $.Deferred
-        restartDone = restart.resolve.bind restart
+        restart = Q.defer()
+        restartDone = restart.resolve.bind restart, true
         
         $(options.restartSelector).click restartDone
-        $.timeout(duration*1000).then restartDone
-        restart 
+        Q.delay(duration*1000).then restartDone
+        restart.promise 
+
+      update_score = (score) ->
+        $("#score").text(score)
+
+      abort_game = (message)->
+        window.location.reload()
 
 
-      $.getJSON('/data')
-      .pipe( normalise_for_radar)
-      .pipe( transition('#intro #play'))
-      .pipe( intro_phase )
-      .pipe( transition('#intro,#game') )
-      .pipe( play_phase )
-      .pipe( transition('#game,#result'))
-      .pipe( replay_phase.bind(this,
+      trace = (message) =>
+        debug_message = (message, err)->
+          err
+        debug_message.bind(this, message)
+
+      Q.when($.getJSON('/data'))
+      .then( normalise_for_radar,trace(1) )
+      .then( transition('#intro #play'), trace(2))
+      .then( intro_phase, trace(3) )
+      .then( transition('#intro,#game'), trace(4))
+      .then( play_phase, trace(5))
+      .then( transition('#game,#result'), abort_game.bind(this), update_score)
+      .then( replay_phase.bind(this,
         duration: replay_countdown
         countdownSelector:'#result .countdown'
         restartSelector: '#result #restart'
-      )).pipe -> location.reload()
+      )).then( abort_game.bind(this) )

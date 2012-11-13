@@ -1,5 +1,6 @@
 define [
   'jquery'
+  ,'q'
   ,'underscore'
   , 'kinetic'
   , 'canvg'
@@ -7,25 +8,25 @@ define [
   , 'game_timer'
   , 'marble'
   , 'hole']
-  , ($, _, Kinetic, canvg, TechnologyGenerator, GameTimer, Marble, Hole) ->
+  , ($, Q, _, Kinetic, canvg, TechnologyGenerator, GameTimer, Marble, Hole) ->
+
+    Q.union = (promises)->
+      union = Q.defer()
+      promises.map (arg) -> 
+        Q.when arg, (value)-> 
+          union.resolve(value)
+      union.promise
 
     class Round
       constructor: (options) ->
         @cast = options.cast || []
       
       play:(score)->
-        roundOver = new $.Deferred
         # wake up all the actors - 
-        @cast.map (c)-> 
-          c.play().done ->
-            roundOver.resolve(score+1)
-        # put all the actors back to sleep (propogate sleep)
-        roundOver.promise().pipe (score) => 
-          @.complete().pipe -> 
-            score
-
-      complete: ->
-        $.when.apply $, @cast.map (c)-> c.complete()
+        Q.union(@cast.map (c)-> c.play())
+        .then (value)=> 
+          Q.all(@cast.map (c)-> c.complete())
+        .then -> score+1
 
     class Radar
       constructor: (options)->
@@ -112,15 +113,17 @@ define [
         @techLayer.draw()
 
       play: ->
-        endGamePromise = $.Deferred()
+        endGamePromise = Q.defer()
         @game_timer.startTimer().then ->
           console.log("Game Over!")
-          endGamePromise.resolve()
+          endGamePromise.resolve(0)
         
         # @decorateWithRealRadarPositions()
 
-        chainPromises = (memo,fn) -> 
-          memo.pipe(fn)
+        chainPromises =(memo,fn) -> 
+          memo.then(fn).then (score) -> 
+            endGamePromise.notify score
+            score
 
         allRoundsPromise = _.chain(@generator.randomSequence())
         .map (tech) =>
@@ -128,10 +131,10 @@ define [
             cast: @create_cast_for_round(tech)
         .map (round) -> 
           round.play.bind(round)
-        .reduce(chainPromises, $.when(0))
+        .reduce(chainPromises, Q.resolve(0))
         .value()
 
-        endGamePromise
+        endGamePromise.promise
 
       create_cast_for_round: (technology) ->
         hole = new Hole

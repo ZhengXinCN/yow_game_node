@@ -1,5 +1,8 @@
 
 assetize_javascript_for_requirejs = (assets)-> 
+  file = require "file"
+  _ = require "underscore"
+
   stripExt = (filePath) ->
     if (lastDotIndex = filePath.lastIndexOf '.') >= 0
       filePath[0...lastDotIndex]
@@ -17,8 +20,6 @@ server = (options)->
   stylus = require 'stylus'
   assets = require 'connect-assets'
   resource = require 'express-resource'
-  file = require "file"
-  _ = require "underscore"
   # {db} = options
 
   app = express()

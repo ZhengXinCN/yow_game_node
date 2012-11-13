@@ -1,4 +1,4 @@
-define ['jquery', 'kinetic'], ($, Kinetic) ->
+define ['q', 'kinetic'], (Q, Kinetic) ->
   class GameTimer
 
     constructor: (options) ->
@@ -28,7 +28,7 @@ define ['jquery', 'kinetic'], ($, Kinetic) ->
       @timer_bar_decrement_unit = @timer_bar.getHeight() / options.remainingSeconds
 
     startTimer: ->
-      endGamePromise = $.Deferred()
+      endGamePromise = Q.defer()
       tick = =>
         if @remainingSeconds == 0
           @layer.remove @text
@@ -42,7 +42,7 @@ define ['jquery', 'kinetic'], ($, Kinetic) ->
             tick()
           ,1000
       tick()
-      endGamePromise
+      endGamePromise.promise
 
     draw: ->
       if @remainingSeconds <= 5
