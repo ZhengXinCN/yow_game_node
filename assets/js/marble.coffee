@@ -57,7 +57,6 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
         textFile: "silver"
         textStrokeWidth: 1
         text: "SCORE: +1"
-      @state = "off"
 
     play: ->
       @layer.add @shape

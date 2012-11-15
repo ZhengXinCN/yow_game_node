@@ -31,25 +31,44 @@ define ['q.interval', 'kinetic'], (Q, Kinetic) ->
 
     startTimer: ->
       @layer.add @timer_bar
-      @layer.draw()
+      
+      remainingSeconds = @duration
+      progress = 0
+
+      stopAnimation = ->
+        animation.stop()
+        ->
+      
+      draw = =>
+        if remainingSeconds <= 0
+          @timer_bar.remove()
+          @text.remove()
+          stopAnimation
+        else 
+          if remainingSeconds <= 5
+            @text.setText(remainingSeconds)
+            @text.setPosition (@board.width - @text.getTextWidth()) / 2, (@board.height - @text.getTextHeight()) / 2
+
+          @timer_bar.setHeight(@startingHeight * (1-progress))
+          draw
+
+      animFunc = draw
+      draw()
+      animation = new Kinetic.Animation
+        func: (frame)->
+          animFunc = animFunc(frame)
+        node: @layer  
 
       endGamePromise = Q.defer()
 
       Q.interval(100, @duration).progress (timer) =>
-        @draw(Math.ceil(timer.remaining/1000), timer.progress)
+        progress = timer.progress
+        remainingSeconds = Math.ceil(timer.remaining/1000)
       .then =>
-        @text.remove()
-        @timer_bar.remove()
         endGamePromise.resolve(true)
 
       endGamePromise.promise
 
-    draw: (remainingSeconds, progress)->
-      if remainingSeconds <= 5
-        @text.setText(remainingSeconds)
-        @text.setPosition (@board.width - @text.getTextWidth()) / 2, (@board.height - @text.getTextHeight()) / 2
       
-      @timer_bar.setHeight(@startingHeight * (1-progress))
-      @layer.draw()
 
 
