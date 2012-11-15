@@ -1,4 +1,4 @@
-define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
+define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, audio)->
 
   class Marble
     kCircleRadius = 15
@@ -17,22 +17,21 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
       @board = opts.board
       @piece =
         center:
-          x: @board.width / 2
+          x: if( Math.random() < 0.5) then @board.width / 8 else @board.width * 7 / 8
           y: @board.height / 2
           delta:
             x:0
             y:0
-        color: '#298EC3'
       @marble_radius = 15
       @shape = new Kinetic.Group
         x: @piece.center.x
         y: @piece.center.y
       @shape.add new Kinetic.Circle
         radius: @marble_radius
-        fill: "red"
+        fill: "green"
       @shape.add new Kinetic.Circle
         radius: @marble_radius
-        stroke: "white"
+        stroke: "#00FF00"
         strokeWidth: 2
 
       @hole = opts.hole.hole
@@ -53,8 +52,8 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
         y: @piece.center.y
         fontSize: 20
         fontFamily: "Helvetica"
-        fontStroke: "silver"
-        textFile: "silver"
+        fontStroke: "orange"
+        textFill: "yellow"
         textStrokeWidth: 1
         text: "SCORE: +1"
 
@@ -87,15 +86,11 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
         accel = event.accelerationIncludingGravity
 
         @piece.center = @computeCenter(@piece.center, accel)
-        @piece.color = '#298EC3'
         if @detect_hole_collision()
           @scoring_feedback()
           hitHole.resolve this
 
-        if @handle_obstacle_collision()
-          @obstacle.setFill "green"
-        else
-          @obstacle.setFill "yellow"
+        @handle_obstacle_collision()
 
         @piece.center = @limitBounds(@piece.center)
 
@@ -134,6 +129,7 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
         node: @layer
       
       animation.start()
+      audio.ping.then (sound) -> sound.play()
 
 
     handle_obstacle_collision: ->

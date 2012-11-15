@@ -19,7 +19,7 @@ define ['q','kinetic'], (Q,Kinetic)->
 
       @obstacle =  new Kinetic.Circle
         radius: 20
-        fill: "yellow"
+        fill: "red"
         x: @hole.getX()
         y: @hole.getY()
       @obstacle.delta = 
