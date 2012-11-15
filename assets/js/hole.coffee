@@ -28,15 +28,32 @@ define ['q','kinetic'], (Q,Kinetic)->
 
 
     play: ->
-      @layer.add @obstacle
       @draw_hole()
+      @layer.add @obstacle
+      @anim = new Kinetic.Animation
+        func: (frame) => 
+          @update(frame)
+        node: @layer
+      .start()
       Q.defer().promise
 
     complete: ->
       @hole.remove()
       @obstacle.remove()
-      @layer.draw()
+      @anim?.stop()
       this
+
+    update: (frame) ->
+      start = 
+        x: @obstacle.getX()
+        y: @obstacle.getY()
+
+      @obstacle.setX @amplitude * Math.sin(frame.time * 2 * Math.PI / @period) + @hole.getX()
+      @obstacle.setY @amplitude * Math.cos(frame.time * 2 * Math.PI / @period) + @hole.getY()
+
+      @obstacle.delta = 
+        x: @obstacle.getX() - start.x
+        y: @obstacle.getY() - start.y
 
 
     draw_hole: ->
@@ -46,7 +63,6 @@ define ['q','kinetic'], (Q,Kinetic)->
       @hole.setY  @center_y + @random_radius * Math.cos(@angle)
       @layer.add @hole
       @generate_obstacle()
-      @layer.draw()
 
     compute_angle: ->
       pi = Math.PI
@@ -62,18 +78,3 @@ define ['q','kinetic'], (Q,Kinetic)->
     generate_obstacle: ->
       @amplitude = 50
       @period = 2000
-      @anim = new Kinetic.Animation
-        func: (frame) =>
-          start = 
-            x: @obstacle.getX()
-            y: @obstacle.getY()
-
-          @obstacle.setX @amplitude * Math.sin(frame.time * 2 * Math.PI / @period) + @hole.getX()
-          @obstacle.setY @amplitude * Math.cos(frame.time * 2 * Math.PI / @period) + @hole.getY()
-
-          @obstacle.delta = 
-            x: @obstacle.getX() - start.x
-            y: @obstacle.getY() - start.y
-
-        node: @layer
-      @anim.start()

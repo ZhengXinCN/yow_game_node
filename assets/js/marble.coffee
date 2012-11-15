@@ -77,6 +77,8 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
       @handler = null
       @shape.remove()
       @label.remove()
+      @layer.draw()
+      @mainAnimation?.stop()
       this
 
     detect_motion: ->
@@ -96,6 +98,8 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
         else
           @obstacle.setFill "yellow"
 
+        @piece.center = @limitBounds(@piece.center)
+
       window.addEventListener "devicemotion", @handler
       hitHole.promise
 
@@ -105,8 +109,6 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
         y: @piece.center.y - 15 - 10
       @score.setX mid_point.x
       @score.setY mid_point.y
-
-      
 
       fontSize = @score.getFontSize()
       @layer.add @score
@@ -119,7 +121,6 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
         @score.setFontSize fontSize
         @score.setX mid_point.x - (@score.getTextWidth() / 2)
         @score.setY mid_point.y - (@score.getTextHeight() / 2)
-        console.log @score.getTextStroke()
 
         if( fontSize > 25)
           @score.remove()
@@ -208,6 +209,7 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
         x: oldCenter.x + delta.x
         y: oldCenter.y + delta.y
 
+    limitBounds: (newCenter)->
       bound = (x,min,max) -> 
         if min < x < max
           [false,x]
@@ -222,6 +224,7 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
       newCenter.delta.y = 0 if bounded
 
       newCenter
+
 
     drawPiece: ->
       @shape.setPosition(@piece.center.x, @piece.center.y)
