@@ -58,6 +58,7 @@ define ['q.interval', 'kinetic'], (Q, Kinetic) ->
         func: (frame)->
           animFunc = animFunc(frame)
         node: @layer  
+      animation.start()
 
       endGamePromise = Q.defer()
 
