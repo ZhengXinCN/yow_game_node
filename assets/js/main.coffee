@@ -7,6 +7,7 @@ require.config
     "jquery.bootstrap": "/bootstrap/js/bootstrap"
     "canvg": "/canvg-1.2/canvg"
     "q": "/q-0.8.10/q.min"
+    "sylvester": "/sylvester-0-1-3/sylvester"
   shim:
     jquery:
       exports: "$"
@@ -21,4 +22,4 @@ require.config
       deps: ["jquery"]
       exports: "$"
     'jquery.bootstrap': 
-      deps: ['jquery']
+      deps: ['jquery']        

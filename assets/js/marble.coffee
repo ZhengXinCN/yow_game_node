@@ -1,19 +1,27 @@
-define ['q', 'kinetic'], (Q, Kinetic)->
+define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
+
   class Marble
     kCircleRadius = 15
     kAccelerationSensitivity = 1.5
 
+    toVector: (xy)->
+      $V([xy.x ? xy.getX?(), xy.y ? xy.getY?()])
+    toXY: (v) ->
+      x: v.e 1
+      y: v.e 2
 
     constructor: (opts)->
       @text = opts.label
       @layer = opts.layer
+      @debugLayer = opts.debugLayer
       @board = opts.board
       @piece =
         center:
           x: @board.width / 2
           y: @board.height / 2
-          xShift: 0
-          yShift: 0
+          delta:
+            x:0
+            y:0
         color: '#298EC3'
       @marble_radius = 15
       @shape = new Kinetic.Group
@@ -40,10 +48,25 @@ define ['q', 'kinetic'], (Q, Kinetic)->
         textStrokeWidth: 1
         text: @text
 
+      @score = new Kinetic.Text
+        x: @piece.center.x
+        y: @piece.center.y
+        fontSize: 20
+        fontFamily: "Helvetica"
+        fontStroke: "silver"
+        textFile: "silver"
+        textStrokeWidth: 1
+        text: "SCORE: +1"
+      @state = "off"
+
     play: ->
       @layer.add @shape
       @layer.add @label
+      Q.interval(1000,20000).progress => 
+        @debugLayer.draw()
       @detect_motion()
+
+    update: (frame)->
 
     complete: ->
       window.removeEventListener "devicemotion", @handler if @handler
@@ -58,54 +81,124 @@ define ['q', 'kinetic'], (Q, Kinetic)->
       @handler = (event) =>
         accel = event.accelerationIncludingGravity
 
-        @piece.center = @computeCenter(@piece.center, accel,"forward")
+        @piece.center = @computeCenter(@piece.center, accel)
         @piece.color = '#298EC3'
         if @detect_hole_collision()
           hitHole.resolve this
 
-        if @detect_obstacle_collision()
+        if @handle_obstacle_collision()
           @obstacle.setFill "green"
-          @piece.center = @computeCenter(@piece.center, accel,"backward")
+        else
+          @obstacle.setFill "yellow"
 
         @drawPiece()
 
       window.addEventListener "devicemotion", @handler
       hitHole.promise
 
-    detect_obstacle_collision: ->
-      x_diff = @piece.center.x - @obstacle.getX()
-      y_diff = @piece.center.y - @obstacle.getY()
-      actual_distance = Math.sqrt(x_diff * x_diff + y_diff * y_diff)
-      sum_of_radius = @marble_radius + @obstacle.getRadius()
-      actual_distance < sum_of_radius
+    scoring_feedback: -> 
+      @score.setX @piece.center.x
+      @score.setY @piece.center.y - 100
+      fontSize = @score.getFontSize()
+      @layer.add @score
+      animation = new Kinetic.Animation
+        func: (frame) =>
+          fontSize += (frame.time/500)
+          @score.setFontSize fontSize
+          if fontSize>30
+            animation.stop
+            @score.remove
+        node: @score
+      
+      animation.start()
+
+
+    handle_obstacle_collision: ->
+      #algorithm from http://www.gamasutra.com/view/feature/131424/pool_hall_lessons_fast_accurate_.php
+      delta = @toVector @piece.center.delta
+      centerA = @toVector @piece.center
+      centerB = @toVector @obstacle
+
+      moveVec = delta
+      centerDistance = centerA.distanceFrom(centerB)
+      sumRadii = @obstacle.getRadius() + 15
+      centerDistance -= sumRadii
+      modMove = moveVec.modulus()
+
+      return false if modMove < centerDistance
+
+      n = moveVec.toUnitVector()
+      centerLine = centerB.subtract centerA
+      dot = n.dot centerLine
+      return false if dot <= 0 #A is moving away from B
+
+      centerLineLength = centerLine.modulus()
+      f = (centerLineLength * centerLineLength) - (dot * dot)
+      sumRadiiSquared = sumRadii * sumRadii
+      #No colliion if their centers won't overlap
+      return false if f > sumRadiiSquared
+
+      t = sumRadiiSquared - f
+      return false if t < 0
+
+      distanceToMove = dot-Math.sqrt(t)
+
+      # return false if distanceToMove < modMove
+
+      # Now calculate new deltas for collision
+      moveToEdge = moveVec.toUnitVector().x(distanceToMove)
+
+      movedCenterA = @toVector(@piece.center).add(moveToEdge)
+      centerLine = centerB.subtract movedCenterA
+
+      nCenter = centerLine.toUnitVector()
+
+      v1 = moveVec
+      v2 = @toVector @obstacle.delta
+      a1 = v1.dot nCenter
+      a2 = v2.dot nCenter
+      optimisedP = (2.0*(a1-a2))/(1 + 100)
+      v1_ = v1.subtract( nCenter.x(optimisedP).x(100))
+      # v2_ = v2.add( nCenter.x(optimisedP).x(1))
+
+      @piece.center.delta = @toXY v1_.x(5)
+      newCenterA = movedCenterA.add v1_.x(5)
+      @piece.center.x = newCenterA.e 1
+      @piece.center.y = newCenterA.e 2
+
+      true
 
     detect_hole_collision: ->
-      x_diff = @piece.center.x - @hole.getX()
-      y_diff = @piece.center.y - @hole.getY()
-      actual_distance = Math.sqrt(x_diff * x_diff + y_diff * y_diff)
-      sum_of_radius = 15 + @hole.getRadius()
-      actual_distance < sum_of_radius
+      actualDistance = @toVector(@piece.center).distanceFrom @toVector(@hole)
+      sumOfRadii = 15 + @hole.getRadius()
+      actualDistance < sumOfRadii
 
     computeCenter: (oldCenter, acceleration, direction) ->
-      newCenter = {}
-      newCenter.xShift = oldCenter.xShift * 0.8 + (acceleration.y * kAccelerationSensitivity)
-      newCenter.yShift = oldCenter.yShift * 0.8 - (acceleration.x * kAccelerationSensitivity)
+      accel =
+        x:0.8 + (acceleration.y * kAccelerationSensitivity)
+        y:0.8 + (acceleration.x * kAccelerationSensitivity)
+      delta =
+        x:(accel.x + oldCenter.delta.x) / 1.5
+        y:(accel.y + oldCenter.delta.y) / 1.5
+      newCenter = 
+        delta: delta
+        x: oldCenter.x + delta.x
+        y: oldCenter.y + delta.y
 
-      if direction == "forward"
-        newCenter.x = oldCenter.x + oldCenter.xShift
-        # use *minus* to compute the center's new y
-        newCenter.y = oldCenter.y - oldCenter.yShift
-      else
-        newCenter.x = oldCenter.x - oldCenter.xShift * 5
-        newCenter.y = oldCenter.y + oldCenter.yShift * 5
+      bound = (x,min,max) -> 
+        if min < x < max
+          [false,x]
+        else
+          [true, Math.max(min, Math.min(max, x))]
 
       # do not go outside the boundaries of the canvas
-      newCenter.x = kCircleRadius  if newCenter.x < kCircleRadius
-      newCenter.x = @board.width - kCircleRadius  if newCenter.x > @board.width - kCircleRadius
-      newCenter.y = kCircleRadius  if newCenter.y < kCircleRadius
-      newCenter.y = @board.height - kCircleRadius  if newCenter.y > @board.height - kCircleRadius
-      newCenter
+      [bounded, newCenter.x] = bound(newCenter.x, kCircleRadius, @board.width - kCircleRadius)
+      newCenter.delta.x = 0 if bounded
 
+      [bounded, newCenter.y] = bound(newCenter.y, kCircleRadius, @board.height - kCircleRadius)
+      newCenter.delta.y = 0 if bounded
+
+      newCenter
 
     drawPiece: ->
       @shape.setPosition(@piece.center.x, @piece.center.y)

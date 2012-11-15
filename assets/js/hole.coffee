@@ -22,6 +22,9 @@ define ['q','kinetic'], (Q,Kinetic)->
         fill: "yellow"
         x: @hole.getX()
         y: @hole.getY()
+      @obstacle.delta = 
+        x: 0
+        y: 0
 
 
     play: ->
@@ -62,7 +65,16 @@ define ['q','kinetic'], (Q,Kinetic)->
       @period = 2000
       @anim = new Kinetic.Animation
         func: (frame) =>
+          start = 
+            x: @obstacle.getX()
+            y: @obstacle.getY()
+
           @obstacle.setX @amplitude * Math.sin(frame.time * 2 * Math.PI / @period) + @hole.getX()
           @obstacle.setY @amplitude * Math.cos(frame.time * 2 * Math.PI / @period) + @hole.getY()
+
+          @obstacle.delta = 
+            x: @obstacle.getX() - start.x
+            y: @obstacle.getY() - start.y
+
         node: @layer
       @anim.start()

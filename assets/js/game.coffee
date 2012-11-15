@@ -1,6 +1,6 @@
 define [
   'jquery'
-  ,'q'
+  ,'q.interval'
   ,'radar'
   ,'signup']
   , ($, Q, Radar, Signup) -> 
@@ -56,20 +56,20 @@ define [
         new Signup({containerId: 'form'}).capture()      
 
       replay_phase = (options) ->
-        tick = (delay)->
-          Q.delay(delay-1, 1000)
-          .then (remaining)->
-            $( options.countdownSelector || '.countdown').text(remaining + ' ')
-            tick(remaining)
+        restart = Q.defer()
+        restartDone = -> restart.resolve true
 
         duration = options.replay_countdown || 15
-        tick(duration)
-        
-        restart = Q.defer()
-        restartDone = restart.resolve.bind restart, true
-        
+
+        updateCountdown = (seconds) ->
+          $(options.countdownSelector || '.countdown').text( seconds + ' ')
+
+        Q.interval(1000, duration * 1000).progress (timer) ->
+          updateCountdown Math.ceil(timer.remaining/1000)
+        .then restartDone
         $(options.restartSelector).click restartDone
-        Q.delay(duration*1000).then restartDone
+
+        updateCountdown duration
         restart.promise 
 
       update_score = (score) ->
@@ -78,11 +78,8 @@ define [
       abort_game = (message)->
         window.location.reload()
 
-
       trace = (message) =>
-        debug_message = (message, err)->
-          err
-        debug_message.bind(this, message)
+        (err) -> err
 
       Q.when($.getJSON('/data'))
       .then( normalise_for_radar,trace(1) )
@@ -90,9 +87,9 @@ define [
       .then( intro_phase, trace(3) )
       .then( transition('#intro,#game'), trace(4))
       .then( play_phase, trace(5))
-      .then( transition('#game,#result'), abort_game.bind(this), update_score)
-      .then( replay_phase.bind(this,
+      .then( transition('#game,#result'), (=> abort_game(arguments...)), update_score)
+      .then( => replay_phase
         duration: replay_countdown
         countdownSelector:'#result .countdown'
         restartSelector: '#result #restart'
-      )).then( abort_game.bind(this) )
+      ).then( => abort_game(arguments...) )

@@ -51,12 +51,14 @@ define [
         @boardLayer = new Kinetic.Layer
         @stage.add @boardLayer
 
-
         @x = @stage.getWidth() / 2
         @y = @stage.getHeight() / 2
 
         @foregroundLayer = new Kinetic.Layer
         @stage.add @foregroundLayer
+
+        @debugLayer = new Kinetic.Layer
+        @stage.add @debugLayer
 
         @board = 
           layer: @boardLayer
@@ -147,6 +149,7 @@ define [
 
         marble = new Marble
           layer: @boardLayer
+          debugLayer: @debugLayer
           label: technology.label
           board: @board
           hole : hole
