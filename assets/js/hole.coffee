@@ -60,7 +60,6 @@ define ['q','kinetic'], (Q,Kinetic)->
       min_radius + @random_var * max_distance
 
     generate_obstacle: ->
-
       @amplitude = 50
       @period = 2000
       @anim = new Kinetic.Animation

@@ -62,11 +62,15 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
     play: ->
       @layer.add @shape
       @layer.add @label
-      Q.interval(1000,20000).progress => 
-        @debugLayer.draw()
+      @mainAnimation = new Kinetic.Animation
+        func: (frame)=>
+          @update(frame)
+        node: @layer
+      .start()
       @detect_motion()
 
     update: (frame)->
+      @drawPiece()
 
     complete: ->
       window.removeEventListener "devicemotion", @handler if @handler
@@ -84,6 +88,7 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
         @piece.center = @computeCenter(@piece.center, accel)
         @piece.color = '#298EC3'
         if @detect_hole_collision()
+          @scoring_feedback()
           hitHole.resolve this
 
         if @handle_obstacle_collision()
@@ -91,24 +96,42 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
         else
           @obstacle.setFill "yellow"
 
-        @drawPiece()
-
       window.addEventListener "devicemotion", @handler
       hitHole.promise
 
     scoring_feedback: -> 
-      @score.setX @piece.center.x
-      @score.setY @piece.center.y - 100
+      mid_point = 
+        x: @piece.center.x
+        y: @piece.center.y - 15 - 10
+      @score.setX mid_point.x
+      @score.setY mid_point.y
+
+      
+
       fontSize = @score.getFontSize()
       @layer.add @score
+
+      stopAnimation = -> 
+        animation.stop()
+
+      expandScore = (frame)=> 
+        fontSize += (frame.timeDiff/200)
+        @score.setFontSize fontSize
+        @score.setX mid_point.x - (@score.getTextWidth() / 2)
+        @score.setY mid_point.y - (@score.getTextHeight() / 2)
+        console.log @score.getTextStroke()
+
+        if( fontSize > 25)
+          @score.remove()
+          stopAnimation
+        else
+          expandScore
+
+      nextFunc = expandScore
       animation = new Kinetic.Animation
         func: (frame) =>
-          fontSize += (frame.time/500)
-          @score.setFontSize fontSize
-          if fontSize>30
-            animation.stop
-            @score.remove
-        node: @score
+          nextFunc = nextFunc(frame)
+        node: @layer
       
       animation.start()
 
@@ -203,4 +226,3 @@ define ['q', 'kinetic', 'underscore', 'sylvester'], (Q, Kinetic, _)->
     drawPiece: ->
       @shape.setPosition(@piece.center.x, @piece.center.y)
       @label.setPosition(@piece.center.x - @label.getTextWidth() / 2, @piece.center.y - kCircleRadius - @label.getTextHeight() - 5);
-      @layer.draw()
