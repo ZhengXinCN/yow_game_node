@@ -2,7 +2,7 @@
 var assetize_javascript_for_requirejs, server;
 
 assetize_javascript_for_requirejs = function(assets) {
-  var asset_js_path, file, stripExt, _;
+  var asset_css_path, asset_js_path, file, stripExt, _;
   file = require("file");
   _ = require("underscore");
   stripExt = function(filePath) {
@@ -14,20 +14,28 @@ assetize_javascript_for_requirejs = function(assets) {
     }
   };
   asset_js_path = "" + (process.cwd()) + "/assets/js/";
-  return file.walkSync(asset_js_path, function(dirPath, dirs, files) {
+  asset_css_path = "" + (process.cwd()) + "/assets/css/";
+  file.walkSync(asset_js_path, function(dirPath, dirs, files) {
     if (files != null) {
       files.map(_.compose(assets.instance.options.helperContext.js, stripExt));
+    }
+    return true;
+  });
+  return file.walkSync(asset_css_path, function(dirPath, dirs, files) {
+    if (files != null) {
+      files.map(_.compose(assets.instance.options.helperContext.css, stripExt));
     }
     return true;
   });
 };
 
 server = function(options) {
-  var app, assets, express, resource, stylus;
+  var app, assets, express, resource, stylus, timestamp;
   express = require('express');
   stylus = require('stylus');
   assets = require('connect-assets');
   resource = require('express-resource');
+  timestamp = Date.now();
   app = express();
   app.use(assets());
   assetize_javascript_for_requirejs(assets);
@@ -44,6 +52,11 @@ server = function(options) {
       'Content-Type': 'text/json'
     });
     return resp.send(json);
+  });
+  app.get('/game.appcache', function(req, resp) {
+    return resp.render('appcache', {
+      now: timestamp
+    });
   });
   app.resource('punters', require('./punter').resource(options));
   return app;

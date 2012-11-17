@@ -62,21 +62,31 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
       hitHole = Q.defer()
       @layer.add @shape
       @layer.add @label
-      @mainAnimation = new Kinetic.Animation
+
+      stopAnimation = ->
+        mainAnimation.stop()
+      
+      marble_in_play = (frame)=>
+        @piece = @computeCenter(@piece, frame)
+        nextAnimation = marble_in_play
+        if @detect_hole_collision()
+          @scoring_feedback()
+          hitHole.resolve this
+          nextAnimation = stopAnimation
+
+        @handle_obstacle_collision(frame)
+
+        @piece = @limitBounds(@piece)
+
+        @drawPiece()
+        nextAnimation
+
+      animFn = marble_in_play
+      mainAnimation = new Kinetic.Animation
         func: (frame)=>
-
-          @piece = @computeCenter(@piece, frame)
-          if @detect_hole_collision()
-            @scoring_feedback()
-            hitHole.resolve this
-
-          @handle_obstacle_collision(frame)
-
-          @piece = @limitBounds(@piece)
-
-          @drawPiece()
+          animFn = animFn(frame)
         node: @layer
-      .start()
+      mainAnimation.start()
 
       @detect_motion()
       hitHole.promise
@@ -87,7 +97,6 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
       @shape.remove()
       @label.remove()
       @layer.draw()
-      @mainAnimation?.stop()
       this
 
     detect_motion: ->
@@ -101,7 +110,9 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
 
     scoring_feedback: -> 
       mid_point = @piece.center.subtract($V([0,15+10]))
-      @setPosition( @score, mid_point )
+
+      newMidPoint = mid_point.subtract($V([@score.getTextWidth(), @score.getTextHeight()]).x(0.5))
+      @setPosition( @score, newMidPoint )
 
       fontSize = @score.getFontSize()
       @layer.add @score
@@ -112,8 +123,8 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
       expandScore = (frame)=> 
         fontSize += (frame.timeDiff/200)
         @score.setFontSize fontSize
-        newMidPoiint = mid_point.subtract($V([@score.getTextWidth(), @score.getTextHeight()]).x(0.5))
-        @setPosition( @score,  newMidPoiint )
+        newMidPoint = mid_point.subtract($V([@score.getTextWidth(), @score.getTextHeight()]).x(0.5))
+        @setPosition( @score,  newMidPoint )
 
         if( fontSize > 25)
           @score.remove()
@@ -128,7 +139,7 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
         node: @layer
       
       animation.start()
-      audio.ping.then (sound) -> sound.play()
+      # audio.ping.play()
 
 
     handle_obstacle_collision: (frame)->
@@ -173,15 +184,15 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
       nCenter = centerLine.toUnitVector()
 
       v1 = moveVec
-      v2 = @toVector @obstacle.delta
+      v2 = @obstacle.delta.x(u)
       a1 = v1.dot nCenter
       a2 = v2.dot nCenter
       optimisedP = (2.0*(a1-a2))/(1 + 100)
       v1_ = v1.subtract( nCenter.x(optimisedP).x(100))
       # v2_ = v2.add( nCenter.x(optimisedP).x(1))
 
-      newCenterA = movedCenterA.add v1_.x(3)
-      @piece.delta = v1_.x(1/u)
+      newCenterA = movedCenterA.add v1_.toUnitVector().x( sumRadii )
+      @piece.delta = v1_.x(2/u)
       @piece.center = newCenterA
 
       true
@@ -192,12 +203,13 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
       actualDistance < sumOfRadii
 
     computeCenter: (oldPiece, frame) ->
-      friction = Math.min(1.0, frame.timeDiff / 1000)
+      u = frame.timeDiff / 1000
+      friction = Math.min(1.0,u)
       delta = oldPiece.accel.add(oldPiece.delta).x(1-friction)
       newPiece = 
         accel: oldPiece.accel
         delta: delta
-        center: oldPiece.center.add(delta.x(frame.timeDiff/1000))
+        center: oldPiece.center.add(delta.x(u))
 
     limitBounds: (piece)->
       bound = (x,min,max) -> 

@@ -1,4 +1,4 @@
-define ['q','kinetic'], (Q,Kinetic)->
+define ['q','kinetic', 'sylvester'], (Q,Kinetic)->
   class Hole
     constructor: (opts)->
       @layer = opts.layer
@@ -22,10 +22,7 @@ define ['q','kinetic'], (Q,Kinetic)->
         fill: "red"
         x: @hole.getX()
         y: @hole.getY()
-      @obstacle.delta = 
-        x: 0
-        y: 0
-
+      @obstacle.delta = $V([0,0])
 
     play: ->
       @draw_hole()
@@ -51,10 +48,7 @@ define ['q','kinetic'], (Q,Kinetic)->
       @obstacle.setX @amplitude * Math.sin(frame.time * 2 * Math.PI / @period) + @hole.getX()
       @obstacle.setY @amplitude * Math.cos(frame.time * 2 * Math.PI / @period) + @hole.getY()
 
-      @obstacle.delta = 
-        x: @obstacle.getX() - start.x
-        y: @obstacle.getY() - start.y
-
+      @obstacle.delta = $V([@obstacle.getX() - start.x, @obstacle.getY() - start.y])
 
     draw_hole: ->
       @random_radius = @compute_random_radius()

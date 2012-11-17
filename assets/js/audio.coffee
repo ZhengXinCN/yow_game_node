@@ -1,4 +1,4 @@
-define ['jquery', 'q'], ($,Q)->
+define ['jquery', 'q', 'buzz'], ($,Q, buzz)->
 
   class Sound
     constructor: (context, buffer) ->
@@ -13,23 +13,12 @@ define ['jquery', 'q'], ($,Q)->
       this
 
 
-  sounds = 
-    ping: Q.defer()
+  ping = new buzz.sound '/ping.mp3',
+    formats: ["mp3"]
+    preload: true
+  ping.load()
+  ping
 
-  $ ->
-    context = new webkitAudioContext() 
-    request = new XMLHttpRequest()
-    request.open('GET', '/ping.aif', true)
-    request.responseType = 'arraybuffer'
-
-    # Decode asynchronously
-    request.onload = ->
-      context.decodeAudioData request.response, (buffer)->
-        sounds.ping.resolve new Sound(context, buffer)
-      , (err)-> console.log err
-    request.send()
-
-  promises = 
-    ping: sounds.ping.promise
+  ping: ping
 
   

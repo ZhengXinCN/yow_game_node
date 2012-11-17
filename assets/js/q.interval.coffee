@@ -13,12 +13,10 @@ define ['q'], (Q)->
       timerState.remaining -= tick
       timerState.progress = timerState.elapsed/timerState.duration
       d.notify timerState
+      if timerState.remaining <= 0
+        window.clearInterval intervalId
+        d.resolve resolution
     ,tick
-
-    window.setTimeout ->
-      window.clearInterval intervalId
-      d.resolve resolution
-    ,duration
 
     d.promise
   Q

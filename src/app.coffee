@@ -10,9 +10,13 @@ assetize_javascript_for_requirejs = (assets)->
       filePath
 
   asset_js_path = "#{process.cwd()}/assets/js/"
+  asset_css_path = "#{process.cwd()}/assets/css/"
 
   file.walkSync asset_js_path, (dirPath,dirs,files) ->
     files?.map _.compose(assets.instance.options.helperContext.js,stripExt)
+    true
+  file.walkSync asset_css_path, (dirPath,dirs,files) ->
+    files?.map _.compose(assets.instance.options.helperContext.css,stripExt)
     true
 
 server = (options)->
@@ -20,6 +24,8 @@ server = (options)->
   stylus = require 'stylus'
   assets = require 'connect-assets'
   resource = require 'express-resource'
+  timestamp = Date.now()
+
   # {db} = options
 
   app = express()
@@ -45,6 +51,10 @@ server = (options)->
     resp.set
       'Content-Type': 'text/json'
     resp.send json
+
+  app.get '/game.appcache', (req,resp) ->
+    resp.render 'appcache'
+      now: timestamp
 
   app.resource('punters', require('./punter').resource(options))
   app

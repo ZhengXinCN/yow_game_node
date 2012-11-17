@@ -52,8 +52,7 @@ define ['q.interval', 'kinetic'], (Q, Kinetic) ->
           @timer_bar.setHeight(@startingHeight * (1-progress))
           draw
 
-      animFunc = draw
-      draw()
+      animFunc = draw()
       animation = new Kinetic.Animation
         func: (frame)->
           animFunc = animFunc(frame)
