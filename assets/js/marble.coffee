@@ -22,7 +22,7 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
       @piece =
         accel: $V([0,0])
         center: @toVector
-          x: if Math.random() < 0.5 then (@board.width / 8) else (@board.width * 7 / 8)
+          x: if Math.random() < 0.5 then 50 else @board.width-50
           y: @board.height/2
         delta: $V([0,0])
       @marble_radius = 15
