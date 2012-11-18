@@ -70,7 +70,17 @@ block content
 
     .tw .hero-unit {
       padding-bottom: 20px;
+      padding-top: 20px;
     }
+
+    .tw .hero-unit .well {
+      color: black
+    }
+
+    .tw #result .hero-unit {
+      text-align: center;
+    }
+
     .tw a .obstacle {
       color: red;
       text-decoration: none
@@ -90,44 +100,44 @@ block content
       .row
         .hero-unit
           h1 ThoughtWorks Technology Radar Game
-          p The 
-            strong ThoughtWorks 
+          p The
+            strong ThoughtWorks
             | Technology Radar is published every six months and helps developers understand emerging technologies and trends.
           p There are four qudrants:
             strong Techniques, Tools, Languages and Platforms.
-          p We further group these items in four rings to reflect our current position on them: 
+          p We further group these items in four rings to reflect our current position on them:
             strong Adopt, Trial, Assess and Hold
           p To celebrate this summer's edition we invite you to show your grasp of current trends in technology adoption.
 
       .row
         .span6.offset1
-          p Every game wins! Play to receive 
-            strong ThoughtWorks 
+          p Every game wins! Play to receive
+            strong ThoughtWorks
             | Technology Radar T-shirt.
           p One T-shirt per player while stock lasts.
 
-          p You can also get into the draw to win 
+          p You can also get into the draw to win
             i.icon-headphones
-            strong Bose QuietComfort® 15 Acoustic Noise Cancelling® headphones 
-            | by signing up for the 
-            strong ThoughtWorks 
+            strong Bose QuietComfort® 15 Acoustic Noise Cancelling® headphones
+            | by signing up for the
+            strong ThoughtWorks
             | Technology Radar Publication.
 
           h2 How to play?
           ul#instructions.unstyled
             li
               i.icon-star
-              a(href="#") Move the 
-                span.marble green marble 
-                | to its nominated 
-                span.hole black spot 
+              a(href="#") Move the
+                span.marble green marble
+                | to its nominated
+                span.hole black spot
                 | on the radar
             li
               i.icon-move
               a(href="#") Tilt the ipad to move
             li
               i.icon-asterisk
-              a(href="#") Avoid the 
+              a(href="#") Avoid the
                 span.obstacle obstacles
             li
               i.icon-time
@@ -136,47 +146,40 @@ block content
               i.icon-play
               a(href="#") Press "Play!" to start
         .span4.offset1
-          button#play.btn.btn-info.btn-large.hidden(type="submit")
+          button#play.btn.btn-info.btn-large.hidden(type="submit",data-loading-text="Scanning...")
             | Play!
 
     li#game.hidden
       #radar
 
     li#result.hidden
-      .offset2
-        .row.retro
-          h1 Game Over!
-        .row.retro
-          p.span2 Your Score: 
-          p.span1.score#score 0
-        .row.retro
-          p.span2 Your Rating: 
-          p.span1 Novice
-        .row.retro
-          p.span2 You win: 
-          p.span1 
-            img(src="tshirt.jpg")
+      .hero-unit
+        h1 Game Over!
+        p.well You scored:
+          span.score#score 0
+      .offset1.span4
         .row
-          p 
-            | To claim your prize, and a 
-            b free 
-            | subscription to the ThoughtWorks Technology Radar publication:
+          .well.well-large
+            p.span2 You win:
+            p.span1
+              img(src="tshirt.jpg")
+        .row
+          .well.well-small
+            p
+              | You can also get into the draw to win&nbsp;
+              i.icon-headphones
+              strong &nbsp;Bose QuietComfort® 15 Acoustic Noise Cancelling®&nbsp;
+              | headphones by subscribing to the
+              strong &nbsp;ThoughtWorks&nbsp;
+              | Technology Radar (free of charge)
+          .well.well-small
+            p
+              | To claim your T-shirt and get into the draw please contact ThoughtWorks staff
 
         .row
-          p.span2 
-            i.icon-eye-open
-            | Find Natalie
-          p.span2 
-            i.icon-qrcode
-            | Scan your QR code
-          p.span2 
-            i.icon-retweet
-            | Tweet your score on #twradargame
-        .row
-          p.retro This page will self-destruct in 
-            span.countdown ... 
-            |  seconds...
+          p This page will self-destruct in&nbsp;
             button#restart.btn.btn-info.btn-large(type="submit") Restart Now!
+            | &nbsp;seconds...
 
 
       //- #form
@@ -200,7 +203,7 @@ block content
 
 block javascript_content
   script(type="text/javascript",src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.1/require.min.js")
-  script(type="text/javascript",src="/js/main.js")  
+  script(type="text/javascript",src="/js/main.js")
   script
     require(['jquery.bootstrap']);
 

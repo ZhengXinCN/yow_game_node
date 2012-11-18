@@ -3,15 +3,15 @@ define [
   ,'q.interval'
   ,'radar'
   ,'signup']
-  , ($, Q, Radar, Signup) -> 
-    game = -> 
-      game_countdown = 25;
-      replay_countdown = 5;
+  , ($, Q, Radar, Signup) ->
+    game = ->
+      game_countdown = 30;
+      replay_countdown = 45;
 
 
       normalise_for_radar = (data) ->
         data.technologies = data.radar_data.map (input) ->
-          tech = 
+          tech =
             label: input.name
             pc: input.pc
             quadrant: if input.pc.t < 90
@@ -28,17 +28,19 @@ define [
               "Trial"
             else if input.pc.r < 340
               "Assess"
-            else 
+            else
               "Hold"
         data
 
       intro_phase = (data) ->
         defer = Q.defer()
-        $('#play').click -> 
+        $('#play').click ->
           defer.resolve(data);
         defer.promise
 
-      play_phase = (data)-> 
+
+
+      play_phase = (data)->
         radar = new Radar
           width: 864
           height: 694
@@ -52,14 +54,14 @@ define [
         $(selectors).toggleClass('hidden')
         return data;
 
-      signup_phase = -> 
-        new Signup({containerId: 'form'}).capture()      
+      signup_phase = ->
+        new Signup({containerId: 'form'}).capture()
 
       replay_phase = (options) ->
         restart = Q.defer()
         restartDone = -> restart.resolve true
 
-        duration = options.replay_countdown || 15
+        duration = options.duration || 15
 
         updateCountdown = (seconds) ->
           $(options.countdownSelector || '.countdown').text( seconds + ' ')
@@ -70,7 +72,7 @@ define [
         $(options.restartSelector).click restartDone
 
         updateCountdown duration
-        restart.promise 
+        restart.promise
 
       update_score = (score) ->
         $("#score").text(score)
@@ -88,8 +90,9 @@ define [
       .then( transition('#intro,#game'), trace(4))
       .then( play_phase, trace(5))
       .then( transition('#game,#result'), (=> abort_game(arguments...)), update_score)
+      # .then( transition( '#intro,#result'))
       .then( => replay_phase
         duration: replay_countdown
-        countdownSelector:'#result .countdown'
+        countdownSelector:'#result #restart'
         restartSelector: '#result #restart'
       ).then( => abort_game(arguments...) )
