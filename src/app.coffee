@@ -45,6 +45,9 @@ server = (options)->
   # Get root_path return index view
   app.get '/', (req, resp) ->
     resp.render 'index'
+ 
+  app.get '/about', (req, resp) ->
+    resp.render 'about'
 
   app.get '/data', (req,resp) ->
     json = require '../data/techradar.json'

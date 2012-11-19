@@ -45,6 +45,9 @@ server = function(options) {
   app.get('/', function(req, resp) {
     return resp.render('index');
   });
+  app.get('/about', function(req, resp) {
+    return resp.render('about');
+  });
   app.get('/data', function(req, resp) {
     var json;
     json = require('../data/techradar.json');

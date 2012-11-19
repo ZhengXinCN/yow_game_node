@@ -1,0 +1,92 @@
+extends layout
+
+block content
+  style
+    html, body {
+      width:  100%;
+      height: 100%;
+    }
+    body {
+      margin: 0px;
+      padding: 0px;
+    }
+    .content > li {
+      position: fixed;
+      width: 1024px;
+      height: 740px;
+    }
+
+    .content{
+      margin-top: 40px;
+    }
+
+    .hidden{
+      display: none;
+    }
+
+    .hero-unit {
+      color: white;
+      background-color: #49AFCD;
+      border-radius: 0;
+    }
+
+    .hero-unit h1 {
+      font-family: marydale;
+      margin-bottom: 10px;
+    }
+
+    .emphasised {
+      font-size: 16px;
+      line-height: 28px;
+      color: #009;
+    }
+
+  //- canvas#background
+  ul.tw.content.unstyled
+    li#intro
+      .row-fluid
+        .hero-unit
+          .icon-caret-left
+          h1 About the Radar
+
+      .row-fluid
+
+        .span5.offset1
+          p.emphasised
+            | ThoughtWorkers are passionate about technology. We build it, research it, test it, open source it, write about it, and 
+            | constantly aim to improve it – for everyone. Our mission is to champion software excellence and revolutionize IT. We 
+            | create and share the ThoughtWorks Technology Radar in support of that mission. The ThoughtWorks Technology Advisory 
+            | Board, a group of senior technology leaders in ThoughtWorks, creates the radar. They meet regularly to discuss the 
+            | global technology strategy for ThoughtWorks and the technology trends that significantly impact our industry.
+
+        .span5
+          p
+            | The ThoughtWorks Technology Radar is published every six months and helps developers understand emerging technologies and trends.
+
+          p
+            | The radar captures the output of the Technology Advisory Board’s discussions in a format that provides value to a wide range of 
+            | stakeholders, from CIOs to developers. The content is intended as a concise summary. We encourage you to explore these technologies 
+            | for more detail. The radar is graphical in nature, grouping items into techniques, tools, platforms, and languages & frameworks. When 
+            | radar items could appear in multiple quadrants, we chose the one that seemed most appropriate. We further group these items in four 
+            | rings to reflect our current position on them. The rings are:
+
+          ul
+            li
+              strong Adopt
+              p We feel strongly that the industry should be adopting these items. We use them when appropriate on our projects
+            li
+              strong Trial
+              p 
+                | Worth pursuing. It is important to understand how to build up this capability. Enterprises should try this technology 
+                | on a project that can handle the risk
+            li 
+              strong Assess
+              p Worth exploring with the goal of understanding how it will affect your enterprise
+            li
+              strong Hold
+              p Proceed with caution
+
+          a(href="/").btn.btn-large.btn-info
+            | Return to Game
+
+
