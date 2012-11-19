@@ -13,7 +13,7 @@ define ['jquery', 'q', 'buzz'], ($,Q, buzz)->
       this
 
 
-  ping = new buzz.sound '/ping.mp3',
+  ping = new buzz.sound '/ping',
     formats: ["mp3"]
     preload: true
   ping.load()
@@ -21,4 +21,4 @@ define ['jquery', 'q', 'buzz'], ($,Q, buzz)->
 
   ping: ping
 
-  
+

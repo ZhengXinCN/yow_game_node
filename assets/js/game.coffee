@@ -1,9 +1,11 @@
 define [
   'jquery'
   ,'q.interval'
+  ,'underscore'
   ,'radar'
+  ,'games'
   ,'signup']
-  , ($, Q, Radar, Signup) ->
+  , ($, Q, _, Radar, games, Signup) ->
     game = ->
       game_countdown = 30;
       replay_countdown = 45;
@@ -74,10 +76,22 @@ define [
         updateCountdown duration
         restart.promise
 
-      update_score = (score) ->
-        $("#score").text(score)
+      sync_scores = (game) ->
+        $("#score").text(game.score)
+        topScores = _.take(games.topScores(), 3).join(' ')
+        latestScores = _.take(games.latestScores(), 3).join(' ')
+
+        $("#top_scores").text(topScores)
+        $("#latest_scores").text(latestScores)
+        game
+
+      record_game = (game) ->
+        game.timestamp = Date.now()
+        games.addGame(game)
+        game
 
       abort_game = (message)->
+        window.localStorage.setItem("lasterror", JSON.stringify(message))
         window.location.reload()
 
       trace = (message) =>
@@ -89,10 +103,12 @@ define [
       .then( intro_phase, trace(3) )
       .then( transition('#intro,#game'), trace(4))
       .then( play_phase, trace(5))
-      .then( transition('#game,#result'), (=> abort_game(arguments...)), update_score)
+      .then( record_game )
+      .then( sync_scores )
+      .then( transition('#game,#result'), (=> abort_game(arguments...)))
       # .then( transition( '#intro,#result'))
       .then( => replay_phase
         duration: replay_countdown
         countdownSelector:'#result #restart'
-        restartSelector: '#result #restart'
+        restartSelector: '#result button'
       ).then( => abort_game(arguments...) )

@@ -59,45 +59,15 @@ block content
       margin-right: 5px;
     }
 
-    .retro {
-      font-family: delusion;
-      text-transform: uppercase;
-    }
     #replay{
       margin-left: 300px;
       padding-top: 20px;
     }
 
-    .tw .hero-unit {
-      padding-bottom: 20px;
-      padding-top: 20px;
-    }
-
-    .tw .hero-unit .well {
-      color: black
-    }
-
-    .tw #result .hero-unit {
-      text-align: center;
-    }
-
-    .tw a .obstacle {
-      color: red;
-      text-decoration: none
-    }
-    a .marble {
-      color: green;
-      text-decoration: none
-    }
-    a .hole {
-      color: black;
-      text-decoration: none
-    }
-
   //- canvas#background
   ul.tw.content.unstyled
     li#intro
-      .row
+      .row-fluid
         .hero-unit
           h1 ThoughtWorks Technology Radar Game
           p The
@@ -109,7 +79,7 @@ block content
             strong Adopt, Trial, Assess and Hold
           p To celebrate this summer's edition we invite you to show your grasp of current trends in technology adoption.
 
-      .row
+      .row-fluid
         .span6.offset1
           p Every game wins! Play to receive
             strong ThoughtWorks
@@ -155,31 +125,59 @@ block content
     li#result.hidden
       .hero-unit
         h1 Game Over!
-        p.well You scored:
-          span.score#score 0
-      .offset1.span4
-        .row
+        .row-fluid
+          .span2.offset2
+            .well
+              table
+                thead
+                  tr
+                    th Your Score
+                tbody
+                  tr
+                    td#score 0
+          .span2.offset1
+            .well
+              table
+                thead
+                  tr
+                    th Latest Scores
+                tbody
+                  tr
+                    td#latest_scores 0 0 3
+
+          .span2.offset1
+            .well
+              table
+                thead
+                  tr
+                    th Highest Scores
+                tbody
+                  tr
+                    td#top_scores 10 7 6
+      .offset1.span11
+        .row-fluid
           .well.well-large
-            p.span2 You win:
-            p.span1
+            p You win:
               img(src="tshirt.jpg")
-        .row
+        .row-fluid
           .well.well-small
             p
-              | You can also get into the draw to win&nbsp;
+              | You can also get into the draw to win
               i.icon-headphones
-              strong &nbsp;Bose QuietComfort® 15 Acoustic Noise Cancelling®&nbsp;
+              strong Bose QuietComfort® 15 Acoustic Noise Cancelling®
               | headphones by subscribing to the
-              strong &nbsp;ThoughtWorks&nbsp;
+              strong ThoughtWorks
               | Technology Radar (free of charge)
-          .well.well-small
             p
               | To claim your T-shirt and get into the draw please contact ThoughtWorks staff
-
-        .row
-          p This page will self-destruct in&nbsp;
-            button#restart.btn.btn-info.btn-large(type="submit") Restart Now!
-            | &nbsp;seconds...
+        .row-fluid
+          .span6
+            p This page will self-destruct in
+              button#restart.btn.btn-info.btn-large(type="submit") Restart Now!
+              | seconds...
+          .span5
+            p Or you can
+              button#playagain.btn.btn-info.btn-large(type="submit") Play again
 
 
       //- #form

@@ -12,21 +12,22 @@ define [
 
     Q.union = (promises)->
       union = Q.defer()
-      promises.map (arg) -> 
-        Q.when arg, (value)-> 
+      promises.map (arg) ->
+        Q.when arg, (value)->
           union.resolve(value)
       union.promise
 
     class Round
       constructor: (options) ->
         @cast = options.cast || []
-      
-      play:(score)->
-        # wake up all the actors - 
+
+      play:(game_state)->
+        # wake up all the actors -
         Q.union(@cast.map (c)-> c.play())
-        .then (value)=> 
+        .then (value)=>
           Q.all(@cast.map (c)-> c.complete())
-        .then -> score+1
+        .then ->
+          _.extend({}, game_state, {score: game_state.score+1})
 
     class Radar
       constructor: (options)->
@@ -46,7 +47,7 @@ define [
 
         @backgroundLayer = new Kinetic.Layer
         @stage.add @backgroundLayer
-            
+
 
         @boardLayer = new Kinetic.Layer
         @stage.add @boardLayer
@@ -60,7 +61,7 @@ define [
         @debugLayer = new Kinetic.Layer
         @stage.add @debugLayer
 
-        @board = 
+        @board =
           layer: @boardLayer
           width: options.width
           height: options.height
@@ -97,7 +98,7 @@ define [
           "Platforms":
             quadrant: 1.5
 
-        @radar_centre = 
+        @radar_centre =
           x: @x-12
           y: @y
 
@@ -115,15 +116,18 @@ define [
         @techLayer.draw()
 
       play: ->
+        state =
+          score: 0
+
         endGamePromise = Q.defer()
         @game_timer.startTimer().then ->
           console.log("Game Over!")
-          endGamePromise.resolve(0)
-        
+          endGamePromise.resolve(state)
+
         # @decorateWithRealRadarPositions()
 
-        chainPromises =(memo,fn) -> 
-          memo.then(fn).then (score) -> 
+        chainPromises =(memo,fn) ->
+          memo.then(fn).then (score) ->
             endGamePromise.notify score
             score
 
@@ -131,12 +135,13 @@ define [
         .map (tech) =>
           new Round
             cast: @create_cast_for_round(tech)
-        .map (round) -> 
+        .map (round) ->
           round.play.bind(round)
-        .reduce(chainPromises, Q.resolve(0))
+        .reduce(chainPromises, Q.resolve(state))
         .value()
 
-        endGamePromise.promise
+        endGamePromise.promise.progress (new_state)->
+          state = new_state
 
       create_cast_for_round: (technology) ->
         hole = new Hole
