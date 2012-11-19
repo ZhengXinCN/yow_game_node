@@ -144,12 +144,13 @@ define [
           state = new_state
 
       create_cast_for_round: (technology) ->
+        # console.log JSON.stringify(technology)
         hole = new Hole
           layer: @foregroundLayer
           quadrant: @quadrants[technology.quadrant].quadrant
           ring: @rings[technology.ring]
-          center_x: @radar_centre.x
-          center_y: @radar_centre.y
+          x: @radar_centre.x + (0.75 * technology.pc.r * Math.cos(technology.pc.t))
+          y: @radar_centre.y + (0.75 * technology.pc.r * Math.sin(technology.pc.t))
           hole_radius: 15
 
         marble = new Marble
