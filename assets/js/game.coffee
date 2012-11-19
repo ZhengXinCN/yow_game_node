@@ -40,8 +40,6 @@ define [
           defer.resolve(data);
         defer.promise
 
-
-
       play_phase = (data)->
         radar = new Radar
           width: 864

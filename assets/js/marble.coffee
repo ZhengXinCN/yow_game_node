@@ -63,9 +63,10 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
       @layer.add @shape
       @layer.add @label
 
+      drawLabel = @drawLabel(@label)
       stopAnimation = ->
         mainAnimation.stop()
-      
+
       marble_in_play = (frame)=>
         @piece = @computeCenter(@piece, frame)
         nextAnimation = marble_in_play
@@ -79,6 +80,7 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
         @piece = @limitBounds(@piece)
 
         @drawPiece()
+        drawLabel()
         nextAnimation
 
       animFn = marble_in_play
@@ -114,7 +116,7 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
     keyboard_motion: ->
       @keyDownHandler = (event) =>
         accel = (
-          switch event.keyCode 
+          switch event.keyCode
             when 37 then $V([-3, 0])
             when 38 then $V([0, -3])
             when 39 then $V([3, 0])
@@ -124,12 +126,12 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
       window.addEventListener "keydown", @keyDownHandler
 
       @keyUpHandler = (event) =>
-        if event.keyCode in [37,38,39,40] 
+        if event.keyCode in [37,38,39,40]
           accel = $V([0,0])
           @piece.accel = accel.x(kAccelerationSensitivity)
       window.addEventListener "keyup", @keyUpHandler
 
-    scoring_feedback: -> 
+    scoring_feedback: ->
       mid_point = @piece.center.subtract($V([0,15+10]))
 
       newMidPoint = mid_point.subtract($V([@score.getTextWidth(), @score.getTextHeight()]).x(0.5))
@@ -138,10 +140,10 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
       fontSize = @score.getFontSize()
       @layer.add @score
 
-      stopAnimation = -> 
+      stopAnimation = ->
         animation.stop()
 
-      expandScore = (frame)=> 
+      expandScore = (frame)=>
         fontSize += (frame.timeDiff/200)
         @score.setFontSize fontSize
         newMidPoint = mid_point.subtract($V([@score.getTextWidth(), @score.getTextHeight()]).x(0.5))
@@ -158,7 +160,7 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
         func: (frame) =>
           nextFunc = nextFunc(frame)
         node: @layer
-      
+
       animation.start()
       # audio.ping.play()
 
@@ -227,31 +229,50 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
       u = frame.timeDiff / 1000
       friction = Math.min(1.0,u)
       delta = oldPiece.accel.add(oldPiece.delta).x(1-friction)
-      newPiece = 
+      newPiece =
         accel: oldPiece.accel
         delta: delta
         center: oldPiece.center.add(delta.x(u))
 
-    limitBounds: (piece)->
-      bound = (x,min,max) -> 
+    boundVectorTo: ( topLeft, bottomRight, position, delta)->
+      bound = (x,min,max) ->
         if min < x < max
           [false,x]
         else
           [true, Math.max(min, Math.min(max, x))]
 
-      # do not go outside the boundaries of the canvas
-      [boundedX, newX] = bound((piece.center.e 1), kCircleRadius, @board.width - kCircleRadius)
-      [boundedY, newY] = bound((piece.center.e 2), kCircleRadius, @board.height - kCircleRadius)
+      [boundedX, newX] = bound((position.e 1), topLeft.e(1), bottomRight.e(1))
+      [boundedY, newY] = bound((position.e 2), topLeft.e(2), bottomRight.e(2))
 
-      piece.center = $V([newX,newY])
-      piece.delta = $V([
-        if boundedX then 0 else piece.delta.e 1,
-        if boundedY then 0 else piece.delta.e 2
+      newPosition = $V([newX,newY])
+      newDelta = $V([
+        if boundedX then 0 else delta.e 1,
+        if boundedY then 0 else delta.e 2
       ])
+      [newPosition, newDelta]
 
+    limitBounds: (piece)->
+      margin = $V([kCircleRadius, kCircleRadius])
+      [newCenter, newDelta] = @boundVectorTo( margin, $V([@board.width, @board.height]).subtract(margin), piece.center, piece.delta)
+      piece.center = newCenter
+      piece.delta = newDelta
       piece
 
     drawPiece: ->
       @setPosition(@shape, @piece.center)
-      textOffset = $V([(@label.getTextWidth() / -2), (-kCircleRadius - @label.getTextHeight() - 5)])
-      @setPosition(@label, @piece.center.add(textOffset))
+
+    drawLabel: (label)->
+      textWidth = label.getTextWidth()
+      textHeight = label.getTextHeight()
+      heightOffset = kCircleRadius + textHeight + 5
+
+      textOffset = $V([( textWidth/ 2), heightOffset])
+
+      topLeft = $V([0, heightOffset])
+      topRight = $V([@board.width, @board.height]).subtract( $V([textWidth, textHeight]))
+
+      =>
+        textLocation = @piece.center.subtract(textOffset)
+
+        [newTextLocation, newDelta] = @boundVectorTo( topLeft, topRight, textLocation, $V([0,0]))
+        @setPosition(label, newTextLocation)
