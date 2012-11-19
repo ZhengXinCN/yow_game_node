@@ -52,8 +52,7 @@ define [
         @boardLayer = new Kinetic.Layer
         @stage.add @boardLayer
 
-        @x = @stage.getWidth() / 2
-        @y = @stage.getHeight() / 2
+        @xy = $V([@stage.getWidth(), @stage.getHeight()]).x(0.5)
 
         @foregroundLayer = new Kinetic.Layer
         @stage.add @foregroundLayer
@@ -98,9 +97,7 @@ define [
           "Platforms":
             quadrant: 1.5
 
-        @radar_centre =
-          x: @x-12
-          y: @y
+        @radar_centre = @xy.add($V([-12,0]))
 
       decorateWithRealRadarPositions: ->
         @generator.randomSequence().map (tech)=>
@@ -145,12 +142,14 @@ define [
 
       create_cast_for_round: (technology) ->
         # console.log JSON.stringify(technology)
+        theta = -Math.PI * technology.pc.t/180.0
+
+        offsetFromCenter = $V([Math.cos(theta), Math.sin(theta)]).x(0.75).x(technology.pc.r)
+        holeCenter = offsetFromCenter.add(@radar_centre)
         hole = new Hole
           layer: @foregroundLayer
-          quadrant: @quadrants[technology.quadrant].quadrant
-          ring: @rings[technology.ring]
-          x: @radar_centre.x + (0.75 * technology.pc.r * Math.cos(technology.pc.t))
-          y: @radar_centre.y + (0.75 * technology.pc.r * Math.sin(technology.pc.t))
+          x: holeCenter.e(1)
+          y: holeCenter.e(2)
           hole_radius: 15
 
         marble = new Marble
