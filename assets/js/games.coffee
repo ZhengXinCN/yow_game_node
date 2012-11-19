@@ -24,13 +24,13 @@ define [], ->
         .filter (s)->
           s>0
         .sortBy (s)->
-          s
+          -s
         .value()
 
     latestScores: ->
       with_model (games)->
         _.chain(games)
         .sortBy (s) ->
-          s.timestamp
+          -(s.timestamp)
         .pluck("score")
         .value()
