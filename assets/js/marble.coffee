@@ -89,10 +89,13 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
       mainAnimation.start()
 
       @detect_motion()
+      @keyboard_motion()
       hitHole.promise
 
     complete: ->
       window.removeEventListener "devicemotion", @handler if @handler
+      window.removeEventListener "keydown", @keyDownHandler if @keyDownHandler
+      window.removeEventListener "keyup", @keyUpHandler if @keyUpHandler
       @handler = null
       @shape.remove()
       @label.remove()
@@ -107,6 +110,24 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
         @piece.accel = accel.x(kAccelerationSensitivity).add(offset)
 
       window.addEventListener "devicemotion", @handler
+
+    keyboard_motion: ->
+      @keyDownHandler = (event) =>
+        accel = (
+          switch event.keyCode 
+            when 37 then $V([-3, 0])
+            when 38 then $V([0, -3])
+            when 39 then $V([3, 0])
+            when 40 then $V([0, 3])
+          )
+        @piece.accel = accel.x(kAccelerationSensitivity)
+      window.addEventListener "keydown", @keyDownHandler
+
+      @keyUpHandler = (event) =>
+        if event.keyCode in [37,38,39,40] 
+          accel = $V([0,0])
+          @piece.accel = accel.x(kAccelerationSensitivity)
+      window.addEventListener "keyup", @keyUpHandler
 
     scoring_feedback: -> 
       mid_point = @piece.center.subtract($V([0,15+10]))
