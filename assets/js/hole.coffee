@@ -31,9 +31,16 @@ define ['q','kinetic', 'sylvester'], (Q,Kinetic)->
       Q.defer().promise
 
     complete: ->
-      @hole.remove()
       @obstacle.remove()
       @anim?.stop()
+
+      # @hole.setFill ("blue")
+      @hole.moveToBottom()
+      @hole.transitionTo
+        opacity: 0.2
+        radius: @hole_radius - 5
+        duration: 0.5
+
       this
 
     update: (frame) ->
