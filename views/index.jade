@@ -6,8 +6,10 @@ block content
     li#intro
       .row-fluid
         .hero-unit
-          h1 ThoughtWorks Technology Radar
-          a.btn.btn-info(href="/about", style='position: absolute; right: 20px; top: 45px') Learn more
+          h1
+            .logo 
+            | Technology Radar
+          a.btn.btn-info(href="javascript: window.location='/about';", style='position: absolute; right: 20px; top: 45px') Learn more
 
       .row-fluid
         .span6
@@ -32,7 +34,7 @@ block content
             p Score at least three in the game and sign up for the Technology Radar Publication to enter the draw to win a pair of limited edition blue <b>Bose QuietComfort® 15 Acoustic Noise Cancelling® Headphones</b>
           .headphones-image
 
-          a#terms.btn.btn-info(href="/terms") Terms and Conditions
+          a#terms.btn.btn-info(href="javascript: window.location='/terms';") Terms and Conditions
 
 
         .span6
