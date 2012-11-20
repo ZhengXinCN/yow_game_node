@@ -51,12 +51,11 @@ server = function(options) {
   app.get('/data', function(req, resp) {
     var json;
     json = require('../data/techradar.json');
-    resp.set({
-      'Content-Type': 'text/json'
-    });
+    resp.contentType('text/json');
     return resp.send(json);
   });
   app.get('/game.appcache', function(req, resp) {
+    resp.contentType("text/cache-manifest");
     return resp.render('appcache', {
       now: timestamp
     });

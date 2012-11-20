@@ -2,57 +2,89 @@ define [
   'jquery'
   ,'q.interval'
   ,'underscore'
+  ,'statemachine'
   ,'radar'
   ,'games'
   ,'signup']
-  , ($, Q, _, Radar, games, Signup) ->
+  , ($, Q, _, StateMachine, Radar, games, Signup) ->
     game = ->
       game_countdown = 30;
       replay_countdown = 45;
 
+      fsm = StateMachine.create
+        initial: 'starting'
+        events: [
+          { name: 'dataLoaded', from: 'starting', to: 'introduction' }
+          { name: 'requestPlay', from: 'introduction', to: 'playing'    },
+          { name: 'gameOver',  from: 'playing',    to: 'played' },
+          { name: 'timeout', from: 'played', to: 'ended'}
+        ]
+        callbacks:
+          onenterintroduction: ->
+            $("#intro").toggleClass('hidden')
+            true
+          onleaveintroduction: ->
+            $("#intro").toggleClass('hidden')
+            true
+
+          onenterplaying: ->
+            $("#game").toggleClass('hidden')
+            true
+          onleaveplaying: ->
+            $("#game").toggleClass('hidden')
+            true
+
+          onenterplayed: ->
+            $("#result").toggleClass('hidden')
+            replay_phase
+              duration: replay_countdown
+              countdownSelector:'#result #restart'
+              restartSelector: '#result button'
+            .then ->
+              fsm.timeout()
+            true
+
+          onleaveplayed: ->
+            $("#result").toggleClass('hidden')
+            true
+
+          onenterended: ->
+            window.location.reload()
+
+          ondataLoaded: (evt, from, to, data) ->
+            data = normalise_for_radar(data)
+
+            $('#play').removeClass('hidden').click ->
+              fsm.requestPlay(data)
+            true
+
+          onrequestPlay: (evt, from, to, data) ->
+            radar = new Radar
+              width: 864
+              height: 694
+              data: data
+              containerId: 'radar'
+              background_svg : 'radar.svg'
+              duration: game_countdown
+            radar.play().then (game_state)->
+              fsm.gameOver(game_state)
+            true
+
+          ongameOver: (evt, from, to, game_state) ->
+            game = record_game(game_state)
+            game = sync_scores(game)
+            true
+
+      Q.when($.getJSON('/data'))
+      .then (data)->
+        fsm.dataLoaded(data)
 
       normalise_for_radar = (data) ->
         data.technologies = data.radar_data.map (input) ->
           tech =
             label: input.name
             pc: input.pc
-            quadrant: if input.pc.t < 90
-              "Tools"
-            else if input.pc.t < 180
-              "Techniques"
-            else if input.pc.t < 270
-              "Platforms"
-            else
-              "Languages & Frameworks"
-            ring: if input.pc.r < 150
-              "Adopt"
-            else if input.pc.r < 270
-              "Trial"
-            else if input.pc.r < 340
-              "Assess"
-            else
-              "Hold"
         data
-
-      intro_phase = (data) ->
-        defer = Q.defer()
-        $('#play').click ->
-          defer.resolve(data);
-        defer.promise
-
-      play_phase = (data)->
-        radar = new Radar
-          width: 864
-          height: 694
-          data: data
-          containerId: 'radar'
-          background_svg : 'radar.svg'
-          duration: game_countdown
-        radar.play()
-
-      transition = (selectors) -> (data) ->
-        $(selectors).toggleClass('hidden')
-        return data;
 
       signup_phase = ->
         new Signup({containerId: 'form'}).capture()
@@ -91,22 +123,3 @@ define [
       abort_game = (message)->
         window.localStorage.setItem("lasterror", JSON.stringify(message))
         window.location.reload()
-
-      trace = (message) =>
-        (err) -> err
-
-      Q.when($.getJSON('/data'))
-      .then( normalise_for_radar,trace(1) )
-      .then( transition('#intro #play'), trace(2))
-      .then( intro_phase, trace(3) )
-      .then( transition('#intro,#game'), trace(4))
-      .then( play_phase, trace(5))
-      .then( record_game )
-      .then( sync_scores )
-      .then( transition('#game,#result'), (=> abort_game(arguments...)))
-      # .then( transition( '#intro,#result'))
-      .then( => replay_phase
-        duration: replay_countdown
-        countdownSelector:'#result #restart'
-        restartSelector: '#result button'
-      ).then( => abort_game(arguments...) )

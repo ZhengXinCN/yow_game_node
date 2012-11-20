@@ -9,20 +9,23 @@ require.config
     "q": "/q-0.8.10/q.min"
     "sylvester": "/sylvester-0-1-3/sylvester"
     "buzz": "/buzz-1.0.5/buzz"
+    "statemachine": "/javascript-state-machine-1180b8ab3f0c23becf66899909a9163969be24f3/state-machine"
   shim:
     jquery:
       exports: "$"
     kinetic:
       exports: "Kinetic"
-    canvg: 
+    canvg:
       deps: ["../canvg-1.2/rgbcolor"]
       exports: "canvg"
     underscore:
       exports: "_"
-    'jquery.timeout': 
+    'jquery.timeout':
       deps: ["jquery"]
       exports: "$"
-    'jquery.bootstrap': 
+    'jquery.bootstrap':
       deps: ['jquery']
     buzz:
-      exports: "buzz" 
+      exports: "buzz"
+    statemachine:
+      exports: "StateMachine"
