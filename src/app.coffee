@@ -49,6 +49,9 @@ server = (options)->
   app.get '/about', (req, resp) ->
     resp.render 'about'
 
+  app.get '/terms', (req, resp) ->
+    resp.render 'terms'
+
   app.get '/data', (req,resp) ->
     json = require '../data/techradar.json'
     resp.set

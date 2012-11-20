@@ -1,0 +1,54 @@
+extends layout
+
+block content
+
+
+  //- canvas#background
+  ul.tw.content.unstyled
+    li#intro
+      .row-fluid
+        .hero-unit
+          .icon-caret-left
+          h1 Terms &amp; Conditions
+
+      .row-fluid
+        .span5.offset1
+          p.emphasised
+            | ThoughtWorkers are passionate about technology. We build it, research it, test it, open source it, write about it, and 
+            | constantly aim to improve it – for everyone. Our mission is to champion software excellence and revolutionize IT. We 
+            | create and share the ThoughtWorks Technology Radar in support of that mission. The ThoughtWorks Technology Advisory 
+            | Board, a group of senior technology leaders in ThoughtWorks, creates the radar. They meet regularly to discuss the 
+            | global technology strategy for ThoughtWorks and the technology trends that significantly impact our industry.
+
+        .span5
+          p
+            | The radar captures the output of the boards discussions in a format that provides value to a wide range of 
+            | stakeholders, from CIOs to developers. The content is intended as a concise summary. We encourage you to explore these technologies 
+            | for more detail. The radar is graphical in nature, grouping items into techniques, tools, platforms, and languages & frameworks. When 
+            | radar items could appear in multiple quadrants, we chose the one that seemed most appropriate. We further group these items in four 
+            | rings to reflect our current position on them. The rings are:
+
+
+
+          ul
+            li
+              strong Adopt&nbsp;
+              | - We feel strongly that the industry should be adopting these items. We use them when appropriate on our projects
+            li
+              strong Trial&nbsp;
+              | - Worth pursuing. It is important to understand how to build up this capability. Enterprises should try this technology 
+              | on a project that can handle the risk
+            li 
+              strong Assess&nbsp;
+              | - Worth exploring with the goal of understanding how it will affect your enterprise
+            li
+              strong Hold&nbsp;
+              | - Proceed with caution
+
+            br
+            br
+
+          a(href="/").btn.btn-large.btn-info
+            | Return to Game
+
+
