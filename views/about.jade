@@ -1,46 +1,6 @@
 extends layout
 
 block content
-  style
-    html, body {
-      width:  100%;
-      height: 100%;
-    }
-    body {
-      margin: 0px;
-      padding: 0px;
-    }
-    .content > li {
-      position: fixed;
-      width: 1024px;
-      height: 740px;
-    }
-
-    .content{
-      margin-top: 40px;
-    }
-
-    .hidden{
-      display: none;
-    }
-
-    .hero-unit {
-      color: white;
-      background-color: #49AFCD;
-      border-radius: 0;
-    }
-
-    .hero-unit h1 {
-      font-family: marydale;
-      margin-bottom: 10px;
-    }
-
-    .emphasised {
-      font-size: 16px;
-      line-height: 28px;
-      color: #009;
-    }
-
 
 
   //- canvas#background
@@ -52,10 +12,7 @@ block content
           h1 About the Radar
 
       .row-fluid
-
         .span5.offset1
-
-
           p.emphasised
             | ThoughtWorkers are passionate about technology. We build it, research it, test it, open source it, write about it, and 
             | constantly aim to improve it – for everyone. Our mission is to champion software excellence and revolutionize IT. We 
@@ -86,6 +43,7 @@ block content
               strong Hold&nbsp;
               | - Proceed with caution
 
+            br
             br
 
           a(href="/").btn.btn-large.btn-info
