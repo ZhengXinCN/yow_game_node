@@ -35,9 +35,13 @@ define [
         data
 
       intro_phase = (data) ->
+        $('#play').attr('disabled', null)
         defer = Q.defer()
         $('#play').click ->
-          defer.resolve(data);
+          $('#play').attr('disabled', 'disabled')
+          setTimeout ->
+            defer.resolve(data)
+          , 100
         defer.promise
 
       play_phase = (data)->
