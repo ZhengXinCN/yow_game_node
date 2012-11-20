@@ -2,81 +2,81 @@
 
 h2
   smooth-button()
-  width: 90%
-  font-size: 2em
+  width 90%
+  font-size 2em
 
 h3
-  margin-top: 20px
+  margin-top 20px
 
 pre
-  font-family: couriera.brand
-    font-family: marydale
-  background-color: rgba(0,0,0,.8)
-  color: yellow
-  width: 100%
-  margin-bottom: 20px
-  padding: 10px
-  border: 1px solid black
+  font-family couriera.brand
+    font-family marydale
+  background-color rgba(0,0,0,.8)
+  color yellow
+  width 100%
+  margin-bottom 20px
+  padding 10px
+  border 1px solid black
 
 game-menu
 
 .navbar .brand.logo
-  background: transparent url('/40pxsq%20TR-thumb.png') 0 0 no-repeat
-  padding-left: 45px
+  background transparent url('/40pxsq%20TR-thumb.png') 0 0 no-repeat
+  padding-left 45px
 
 @font-face
-  font-family: delusion
-  src: url('/jonathan-paterson_delusion/DELUSION.TTF')
+  font-family delusion
+  src url('/jonathan-paterson_delusion/DELUSION.TTF')
 
 @font-face
-  font-family: marydale
-  src: url('/Marydale-Regular.otf')
+  font-family marydale
+  src url('/Marydale-Regular.otf')
 
 @font-face
-  font-family: marydale
-  font-weight: bold
-  src: url('/Marydale-Bold.otf')
+  font-family marydale
+  font-weight bold
+  src url('/Marydale-Bold.otf')
 
 @font-face
-  font-family: franklin-gothic
-  src: url('/Franklin Gothic Book.ttf')
+  font-family franklin-gothic
+  src url('/Franklin Gothic Book.ttf')
 
 @font-face
-  font-family: Franklin Gothic
-  src: url('/Franklin Gothic Book.ttf')
+  font-family Franklin Gothic
+  src url('/Franklin Gothic Book.ttf')
 
 @font-face
-  font-family: franklin-gothic
-  font-weight: bold
-  src: url('/Franklin Gothic Medium.ttf')
+  font-family franklin-gothic
+  font-weight bold
+  src url('/Franklin Gothic Medium.ttf')
 
 #result #description
-  font-family: delusion
-  text-transform: uppercase
+  font-family delusion
+  text-transform uppercase
 
 a.brand
-  font-family: marydale
+  font-family marydale
 
 .tw
-  font-family: franklin-gothic
+  font-family franklin-gothic
 
 .tw .hero-unit
-  padding-bottom: 20px
-  padding-top: 20px
+  padding-bottom 20px
+  padding-top 20px
 
 .tw .hero-unit .well
-  color: black
+  color black
 
 .tw #result .hero-unit
-  text-align: center
+  text-align center
 
 padded_span()
-  margin-left: 0.5em
-  margin-right: 0.5em
+  margin-left 0.5em
+  margin-right 0.5em
 
 color_hint(c)
-  color: c
-  text-decoration: none
+  color c
+  text-decoration none
   padded_span()
 
 .tw p strong
@@ -93,3 +93,152 @@ color_hint(c)
 
 .tw a .hole
   color_hint(black)
+
+
+
+
+@-webkit-keyframes sweep-animation {
+  from {
+    -webkit-transform rotate(0deg)
+  }
+  to { 
+    -webkit-transform rotate(360deg)
+  }
+}
+
+#play
+  margin-top 30px;
+
+.css-radar
+  width 300px
+  height 300px
+  position relative
+  background-image -webkit-linear-gradient(top, #5BC0DE, #2F96B4)
+  border-radius 150px
+  box-shadow inset  0px  0px 2px rgba(  0,  0,  0,0.8),
+             inset  2px  2px 4px rgba(255,255,255,0.5),
+             inset -2px -2px 4px rgba(  0,  0,  0,0.3)
+
+  .c1 { width: 33%; height: 33%; margin-top: 33%; margin-left: 33%; }
+  .c2 { width: 66%; height: 66%; margin-top: 17%; margin-left: 17%; }
+  .c3 { width: 80%; height: 80%; margin-top: 10%; margin-left: 10%; }
+  .c4 { width: 82%; height: 82%; margin-top:  9%; margin-left:  9%; }
+  .axis-v { height: 100%; width:  0px; margin-left: 50%; }
+  .axis-h { height:  0px; width: 100%; margin-top:  50%; }
+
+  .c1, .c2, .c3, .c4, .c5
+    border 1px solid rgba(255,255,255,0.5)
+    border-radius 150px
+    position absolute
+
+  .axis-v, .axis-h 
+    border 1px solid rgba(#78D0E5,0.7)
+    position absolute
+
+  .radar-label
+    position absolute
+    line-height 300px
+    text-align center
+    width 300px
+    font-size 50px
+    font-family "Helvetica Neue"
+    font-weight bold
+    color white
+
+
+  .radar-sweep
+    position absolute
+    width 100%
+    height 100%
+    top 0
+    left 0
+    border-radius 150px
+    overflow hidden
+    opacity 0.4
+    -webkit-animation sweep-animation 8s linear infinite
+    -webkit-transform-origin 50% 50%
+
+    .sweep
+      position absolute
+      top 140px
+      left 85px
+      width 100px
+      height 20px
+      background-image -webkit-linear-gradient(top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))
+      @css {
+        -webkit-transform: perspective( 45px ) rotateY( 45deg );
+      }
+
+
+
+
+.callout
+  background-color #D9DC4A
+  position relative
+  height 180px
+  width 400px
+  padding 30px 20px
+  box-sizing border-box
+
+  .t, .b, .r, .l
+    position absolute
+    border-bottom 0 solid transparent
+    border-right 0 solid transparent
+    border-left 0 solid transparent
+    border-top 0 solid transparent
+
+  .t
+    top 0
+    border-right 400px solid white
+    border-bottom 14px solid transparent
+
+  .b
+    bottom 0
+    border-right 400px solid white
+    border-top 10px solid transparent
+
+  .r
+    left 0
+    border-right 10px solid transparent
+    border-bottom 180px solid white
+
+  .l
+    right 0
+    border-left 10px solid transparent
+    border-bottom 180px solid white
+
+  .title
+    font-size 24px
+    font-weight bold
+
+.headphones-image 
+  width 200px
+  height 160px
+  background-image url(/images/bose.png)
+  background-size 100%
+  background-repeat no-repeat
+  position relative
+  top -70px
+  left 90px
+  margin-bottom -80px
+
+.tshirt-image 
+  width 300px
+  height 200px
+  background-image url(/images/TShirtsFrontBack.png)
+  background-size 100%
+  background-repeat no-repeat
+  position relative
+  top -60px
+  left 50px
+  margin-bottom -160px
+
+#instructions p
+  margin-top 10px
+  font-size 17px
+
+#terms
+  background white
+  color #49AFCD
+  text-shadow none
+  width 360px

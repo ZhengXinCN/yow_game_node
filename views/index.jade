@@ -14,6 +14,7 @@ block content
       position: fixed;
       width: 1024px;
       height: 740px;
+      background: #EEEEEE;
     }
 
     #radar {
@@ -35,28 +36,13 @@ block content
 
     .hero-unit {
       color: white;
+      border-radius: 0;
       background-color: #49AFCD;
     }
 
     .hero-unit h1 {
       font-family: marydale;
       margin-bottom: 10px;
-    }
-
-    //- #intro {
-    //-   padding-top: 50px;
-    //- }
-    #intro #play {
-      padding: 30px;
-      font-size: 100pt;
-    }
-    //- #intro #instructions {
-    //-   padding-top: 50px;
-    //- }
-
-    #intro #instructions i {
-      margin-left: -5px;
-      margin-right: 5px;
     }
 
     #replay{
@@ -69,51 +55,55 @@ block content
     li#intro
       .row-fluid
         .hero-unit
-          h1 ThoughtWorks Technology Radar Game
+          h1 ThoughtWorks Technology Radar
+          a.btn.btn-info(href="/about", style='position: absolute; right: 20px; top: 45px') Learn more
 
       .row-fluid
-        .span6.offset1
-          p Every game wins! Play to receive
-            strong ThoughtWorks
-            | Technology Radar T-shirt.
-          p One T-shirt per player while stock lasts.
+        .span5.offset1
+          .callout
+            .t
+            .l
+            .r
+            .b
+            p.title Every game wins! 
+            p Play to receive ThoughtWorks Technology Radar t-shirt
+            p <em>* one t-shirt per player while stock lasts</em>
+          .tshirt-image
 
-          p You can also get into the draw to win&nbsp;
-            i.icon-headphones
-            strong Bose QuietComfort® 15 Acoustic Noise Cancelling® headphones
-            | by signing up for the
-            strong ThoughtWorks
-            | Technology Radar Publication.
-
-          h2 How to play?
-          ul#instructions.unstyled
-            li
-              i.icon-star
-              a(href="#") Move the
-                span.marble green marble
-                | to its nominated
-                span.hole black spot
-                | on the radar
-            li
-              i.icon-move
-              a(href="#") Tilt the ipad to move
-            li
-              i.icon-asterisk
-              a(href="#") Avoid the
-                span.obstacle obstacles
-            li
-              i.icon-time
-              a(href="#") You have 30 seconds!
-            li
-              i.icon-play
-              a(href="#") Press "Play!" to start
-        .span4.offset1
-          button#play.btn.btn-info.btn-large.hidden(type="submit",data-loading-text="Scanning...")
-            | Play!
           br
           br
-          a(href="/about").btn.btn-large.btn-info
-            | Learn about the Technology Radar
+
+          .callout
+            .t
+            .l
+            .r
+            .b
+            p.title Sign-up for the Technology Radar
+            p to get into the draw to win <b>Bose QuietComfort® 15 Acoustic Noise Cancelling® Headphones</b>
+          .headphones-image
+
+          a#terms.btn.btn-info(href="/terms") Terms and Conditions
+
+
+        .span5
+          h2(style='margin:0; padding:0; width: auto; text-align:center') How to Play?
+          #instructions(style='text-align:center')
+            p Move the green marble to its nominated<br/> black spot on the radar
+            p Tilt the iPad to move
+            p Avoid the obstacles
+            p You have 30 seconds!
+            button#play.hidden(type="submit",data-loading-text="Scanning...", style="background:none; -webkit-appearance:none; border: none")
+              .css-radar
+                .c1
+                .c2
+                .c3
+                .c4
+                .c5
+                .axis-v
+                .axis-h
+                .radar-sweep
+                  .sweep
+                .radar-label Play!
 
     li#game.hidden
       #radar
