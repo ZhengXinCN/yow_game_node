@@ -147,3 +147,9 @@ block javascript_content
     require(['jquery', 'game'], function($, Game){
       $(Game);
     });
+
+    function blockMove(){
+       event.preventDefault();
+    }
+    window.addEventListener('touchmove', blockMove);
+    

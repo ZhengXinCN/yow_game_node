@@ -48,3 +48,10 @@ block content
             | Return to Game
 
 
+block javascript_content
+  script
+    function blockMove(){
+       event.preventDefault();
+    }
+    window.addEventListener('touchmove', blockMove);
+    
