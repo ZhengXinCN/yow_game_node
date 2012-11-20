@@ -1,5 +1,5 @@
 
-assetize_javascript_for_requirejs = (assets)-> 
+assetize_javascript_for_requirejs = (assets)->
   file = require "file"
   _ = require "underscore"
 
@@ -29,7 +29,7 @@ server = (options)->
   # {db} = options
 
   app = express()
-  
+
   # Add Connect Assets
   app.use assets()
 
@@ -45,7 +45,7 @@ server = (options)->
   # Get root_path return index view
   app.get '/', (req, resp) ->
     resp.render 'index'
- 
+
   app.get '/about', (req, resp) ->
     resp.render 'about'
 
@@ -54,11 +54,11 @@ server = (options)->
 
   app.get '/data', (req,resp) ->
     json = require '../data/techradar.json'
-    resp.set
-      'Content-Type': 'text/json'
+    resp.contentType 'text/json'
     resp.send json
 
   app.get '/game.appcache', (req,resp) ->
+    resp.contentType "text/cache-manifest"
     resp.render 'appcache'
       now: timestamp
 
