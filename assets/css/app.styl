@@ -74,6 +74,12 @@ a.brand
   font-family franklin-gothic
   margin 0
 
+.tw .page
+  display none
+
+.tw .page.active
+  display block
+
 .tw .hero-unit
   padding-bottom 20px
   padding-top 20px
@@ -244,6 +250,8 @@ color_hint(c)
       }
 
 
+.page:not(.active) .css-radar .radar-sweep
+    -webkit-animation sweep-animation none;
 
 
 .callout

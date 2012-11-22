@@ -22,21 +22,21 @@ define [
         callbacks:
           onenterintroduction: ->
             $('#play').attr('disabled', null)
-            $("#intro").removeClass('hidden')
+            $("#intro").addClass('active')
             true
           onleaveintroduction: ->
-            $("#intro").addClass('hidden')
+            $("#intro").removeClass('active')
             true
 
           onenterplaying: ->
-            $("#game").removeClass('hidden')
+            $("#game").addClass('active')
             true
           onleaveplaying: ->
-            $("#game").addClass('hidden')
+            $("#game").removeClass('active')
             true
 
           onenterplayed: ->
-            $("#result").removeClass('hidden')
+            $("#result").addClass('active')
             replay_phase
               duration: replay_countdown
               countdownSelector:'#result #restart'
@@ -46,7 +46,7 @@ define [
             true
 
           onleaveplayed: ->
-            $("#result").addClass('hidden')
+            $("#result").removeClass('active')
             true
 
           onenterended: ->
