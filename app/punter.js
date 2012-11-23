@@ -21,8 +21,10 @@ resource = function(options) {
   var NoModelFound, PunterModel, PunterSchema, create, db, firstModel, hasInvalidModelKey, invalidModelKey, load, show;
   db = options.db;
   if (!db) {
+    console.log("Skipping punters");
     return {};
   }
+  console.log("Constructing schema");
   PunterSchema = new Schema({
     fullName: {
       type: String,

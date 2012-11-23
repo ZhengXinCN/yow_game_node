@@ -4,7 +4,7 @@ require 'express-mongoose'
 require './mongoose-pipe'
 _ = require('underscore')
 
-RegExp::bindMember = (name) -> 
+RegExp::bindMember = (name) ->
   @[name].bind @
 
 Schema = mongoose.Schema
@@ -12,14 +12,16 @@ Schema = mongoose.Schema
 resource = ( options ) ->
   {db} = options
 
-  unless db 
+  unless db
+    console.log("Skipping punters")
     return {}
-    
+
+  console.log("Constructing schema")
   PunterSchema = new Schema
-    fullName: 
+    fullName:
       type: String
       required: true
-    company: 
+    company:
       type: String
       required: true
 
@@ -29,7 +31,7 @@ resource = ( options ) ->
 
   NoModelFound = new Promise().error('No model found')
 
-  firstModel = (arr) -> 
+  firstModel = (arr) ->
     arr?[0] || NoModelFound
 
   invalidModelKey = /^_/.bindMember 'test'
@@ -53,11 +55,11 @@ resource = ( options ) ->
       resp.send 200, req.punter
     else
       resp.send 404, { message: "No model found" }
-    
+
   create = (req, resp) ->
     unless req.body
       return resp.send 400, 'No content'
-    
+
     if hasInvalidModelKey req.body
       return resp.send 400, 'Invalid model'
 
@@ -65,14 +67,14 @@ resource = ( options ) ->
 
     promise = new Promise()
 
-    promise.pipe (p) -> 
+    promise.pipe (p) ->
       resp.redirect "#{req.url}/#{p._id}"
-    , (err) -> 
+    , (err) ->
         resp.send 400, err
 
     punter.save promise.resolver()
 
-  resource = 
+  resource =
     load: load
     show: show
     create: create
