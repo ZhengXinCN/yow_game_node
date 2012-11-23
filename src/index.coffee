@@ -14,6 +14,9 @@ with_db = (db) ->
 
 db = mongoose.connect db_url
 
-with_db db
+db.connections[0].once 'open', ->
+  with_db db
+db.connections[0].on 'error', ->
+  with_db null
 
 
