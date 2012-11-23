@@ -33,6 +33,7 @@ define [
         callbacks:
           onenterstarting: ->
             state.game = null
+            true
 
           onenterintroduction: ->
             $('#play').attr('disabled', null)
