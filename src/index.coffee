@@ -12,6 +12,6 @@ with_db = (db) ->
   # Start Server
   require('./app').server(options).listen port, -> console.log "Listening on #{port}\nPress CTRL-C to stop server."
 
-db = mongoose.connect db_url
+db = mongoose.createConnection db_url
 with_db db
 

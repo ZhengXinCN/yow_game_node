@@ -18,6 +18,6 @@ with_db = function(db) {
   });
 };
 
-db = mongoose.connect(db_url);
+db = mongoose.createConnection(db_url);
 
 with_db(db);
