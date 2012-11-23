@@ -2,7 +2,7 @@ mongoose = require 'mongoose'
 
 port = process.env.PORT or process.env.VMC_APP_PORT or 3000
 
-db_url = process.env.MONGOLAB_URL || "mongodb://localhost//yow_game"
+db_url = process.env.MONGOLAB_URI || "mongodb://localhost//yow_game"
 
 with_db = (db) ->
   options =
