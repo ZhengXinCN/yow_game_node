@@ -7,7 +7,9 @@ port = process.env.PORT || process.env.VMC_APP_PORT || 3000;
 
 db_url = process.env.MONGOLAB_URL || "mongodb://localhost//yow_game";
 
-options = {};
+options = {
+  db: mongoose.connect(db_url)
+};
 
 require('./app').server(options).listen(port, function() {
   return console.log("Listening on " + port + "\nPress CTRL-C to stop server.");

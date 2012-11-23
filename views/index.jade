@@ -7,7 +7,7 @@ block content
       .row-fluid
         .hero-unit
           h1
-            .logo 
+            .logo
             | Technology Radar
           a.btn.btn-info.btn-large(href="javascript: window.location='/about';", style='position: absolute; right: 20px; top: 45px') Learn more
 
@@ -18,7 +18,7 @@ block content
             .l
             .r
             .b
-            p.title Every game wins! 
+            p.title Every game wins!
             p Every player will receive a cool ThoughtWorks Technology Radar t-shirt <em>(one t-shirt per player while stock last)</em>
           .tshirt-image
 
@@ -96,22 +96,41 @@ block content
                   tr
                     td#top_scores 10 7 6
       .offset1.span11
-        .row-fluid
+        .row-fluid.winner
           .well.well-large
             p You win:
               img(src="tshirt.jpg")
-        .row-fluid
+        .row-fluid.winner
+          .span6
+            .well.well-small
+              p
+                | You can also get into the draw to win
+                i.icon-headphones
+                strong Bose QuietComfort® 15 Acoustic Noise Cancelling®
+                | headphones by subscribing to the
+                strong ThoughtWorks
+                | Technology Radar (free of charge)
+              p
+                | To claim your T-shirt and get into the draw please sign-up here:
+          .span6
+            form#signup(action="/punters", method="POST")
+              div.field
+                input#full-name(placeholder="Full Name", type="text",name="fullName", required="true")
+              div.field
+                input#company(placeholder="Company", type="text", name="company", required="true")
+              div.field
+                input#email(placeholder="Email", type="email", name="emailAddress", required="true")
+              button.btn.btn-success.btn-large(type="submit")
+                | Sign up
+            form#skip
+              button.btn.btn-warning.btn-large(type="submit")
+                | I don't want to sign up
+
+        .row-fluid.loser
           .well.well-small
             p
-              | You can also get into the draw to win
-              i.icon-headphones
-              strong Bose QuietComfort® 15 Acoustic Noise Cancelling®
-              | headphones by subscribing to the
-              strong ThoughtWorks
-              | Technology Radar (free of charge)
-            p
-              | To claim your T-shirt and get into the draw please contact ThoughtWorks staff
-        .row-fluid
+              | Bad luck!  Score 3 or more and you may enter the draw.
+        .row-fluid.loser.played
           .span6
             p This page will self-destruct in
               button#restart.btn.btn-info.btn-large(type="submit") Restart Now!
@@ -119,23 +138,6 @@ block content
           .span5
             p Or you can
               button#playagain.btn.btn-info.btn-large(type="submit") Play again
-
-
-      //- #form
-      //-   form#signup(action="/punters", method="POST")
-      //-     div.field
-      //-       input#full-name(placeholder="Full Name", type="text",name="fullName", required="true")
-      //-     div.field
-      //-       input#company(placeholder="Company", type="text", name="company", required="true")
-      //-     div.field
-      //-       input#email(placeholder="Email", type="email", name="emailAddress", required="true")
-      //-     button.btn.btn-success.btn-large(type="submit")
-      //-       | Sign up
-      //-   form#skip
-      //-     button.btn.btn-warning.btn-large(type="submit")
-      //-       | I don't want to sign up
-
-    li#replay.hidden
 
 
 

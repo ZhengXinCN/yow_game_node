@@ -1,14 +1,14 @@
-define ['jquery'], ($)-> 
+define ['jquery', 'q'], ($, Q)->
   class @Signup
     capture: ->
-      promise = new $.Deferred    
+      promise = Q.defer()
       $('#form form').submit (event)->
         event.preventDefault()
         if !!@action
           $.ajax
             url: @action
             type: 'POST'
-            data: 
+            data:
               fullName: 'Manny'
               company: 'cat'
               emailAddress: 'nick@test'
@@ -16,7 +16,7 @@ define ['jquery'], ($)->
               Accept: 'application/json'
           .success (res) ->
             promise.resolve res
-        else 
+        else
           promise.resolve()
-      promise
+      promise.promise
   Signup

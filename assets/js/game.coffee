@@ -7,19 +7,33 @@ define [
   ,'games'
   ,'signup']
   , ($, Q, _, StateMachine, Radar, games, Signup) ->
+
+    class Model
+      game: null
+      punter: null
+
     game = ->
-      game_countdown = 30;
-      replay_countdown = 45;
+      game_countdown = 30
+      replay_countdown = 45
+      winning_score = 3
+
+      model = new Model()
 
       fsm = StateMachine.create
         initial: 'starting'
         events: [
-          { name: 'dataLoaded', from: 'starting', to: 'introduction' }
-          { name: 'requestPlay', from: 'introduction', to: 'playing'    },
-          { name: 'gameOver',  from: 'playing',    to: 'played' },
-          { name: 'timeout', from: 'played', to: 'ended'}
+          { name: 'dataLoaded',    from: 'starting',            to: 'introduction' }
+          { name: 'requestPlay',   from: 'introduction',        to: 'playing' },
+          { name: 'gameOverWin',   from: 'playing',             to: 'playedAndWon' },
+          { name: 'gameOverLoss',  from: 'playing',             to: 'playedAndLost' }
+          { name: 'timeout',       from: ['playedAndLost'] ,    to: 'ended'}
         ]
+        error: (eventName, from, to, args, errorCode, errorMessage) ->
+          console.log('event ' + eventName + ' was naughty :- ' + errorMessage)
         callbacks:
+          onenterstarting: ->
+            state.game = null
+
           onenterintroduction: ->
             $('#play').attr('disabled', null)
             $("#intro").addClass('active')
@@ -35,8 +49,8 @@ define [
             $("#game").removeClass('active')
             true
 
-          onenterplayed: ->
-            $("#result").addClass('active')
+          onenterplayedAndLost: ->
+            $("#result, #result .loser").addClass('active')
             replay_phase
               duration: replay_countdown
               countdownSelector:'#result #restart'
@@ -44,10 +58,17 @@ define [
             .then ->
               fsm.timeout()
             true
-
-          onleaveplayed: ->
-            $("#result").removeClass('active')
+          onleaveplayedAndLost: ->
+            $("#result, #result .loser").removeClass('active')
             true
+
+          onenterplayedAndWon: ->
+            $("#result, #result .winner").addClass('active')
+            new Signup({containerId: 'form', data: model.game}).capture().then (punter)->
+              model.punter = punter
+
+          onleaveplayedAndWon: ->
+            $("#result, #result .winner").removeClass('active')
 
           onenterended: ->
             window.location.reload()
@@ -69,12 +90,13 @@ define [
               background_svg : 'radar.svg'
               duration: game_countdown
             radar.play().then (game_state)->
-              fsm.gameOver(game_state)
-            true
-
-          ongameOver: (evt, from, to, game_state) ->
-            game = record_game(game_state)
-            game = sync_scores(game)
+              game_state = record_game(game_state)
+              game_state = sync_scores(game_state)
+              model.game = game_state
+              if game_state.score >= winning_score
+                fsm.gameOverWin()
+              else
+                fsm.gameOverLoss()
             true
 
       Q.when($.getJSON('/data'))
@@ -89,7 +111,7 @@ define [
         data
 
       signup_phase = ->
-        new Signup({containerId: 'form'}).capture()
+
 
       replay_phase = (options) ->
         restart = Q.defer()
