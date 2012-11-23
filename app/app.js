@@ -31,11 +31,15 @@ assetize_javascript_for_requirejs = function(assets) {
 
 server = function(options) {
   var app, assets, express, resource, stylus, timestamp;
+  console.log("Configuring app dependencies");
   express = require('express');
+  console.log("Configuring express");
   stylus = require('stylus');
+  console.log("Configuring connect assets");
   assets = require('connect-assets');
   resource = require('express-resource');
   timestamp = Date.now();
+  console.log("Configuring app");
   app = express();
   app.use(assets());
   assetize_javascript_for_requirejs(assets);
@@ -63,6 +67,7 @@ server = function(options) {
       now: timestamp
     });
   });
+  console.log("configuring punters");
   app.resource('punters', require('./punter').resource(options));
   return app;
 };

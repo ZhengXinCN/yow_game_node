@@ -12,7 +12,7 @@
     , "nib": "0.4.1"
     , "markdown": "0.3.1"
     , "which": "*"
-    , "mongoose": "3.3.1"
+    , "mongoose": "3.4.0"
     , "express-mongoose": "0.1.0"
     , "express-resource": "1.0.0"
     , "underscore": "*"
