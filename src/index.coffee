@@ -8,7 +8,6 @@ with_db = (db) ->
   options =
     db: db
 
-  console.log options
   # Start Server
   require('./app').server(options).listen port, -> console.log "Listening on #{port}\nPress CTRL-C to stop server."
 
