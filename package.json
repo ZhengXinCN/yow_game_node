@@ -3,7 +3,7 @@
   , "version": "1.5.1"
   , "private": true
   , "dependencies": {
-    "express": "3.x" 
+    "express": "3.x"
     , "coffee-script": "1.3.3"
     , "jade": "0.26.0"
     , "connect-assets": "2.2.1"
@@ -12,7 +12,7 @@
     , "nib": "0.4.1"
     , "markdown": "0.3.1"
     , "which": "*"
-    , "mongoose": "3.3.1" 
+    , "mongoose": "3.3.1"
     , "express-mongoose": "0.1.0"
     , "express-resource": "1.0.0"
     , "underscore": "*"
@@ -31,9 +31,9 @@
     , "docco": "*"
     , "node-inspector": "*"
     , "supertest": "*"
-  }, 
+  },
   "engines": {
-    "node": "~0.8.x",
+    "node": "0.8.x",
     "npm": "1.1.x"
   }
 }

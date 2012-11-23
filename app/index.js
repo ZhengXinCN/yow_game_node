@@ -20,10 +20,4 @@ with_db = function(db) {
 
 db = mongoose.connect(db_url);
 
-db.connections[0].once('open', function() {
-  return with_db(db);
-});
-
-db.connections[0].on('error', function() {
-  return with_db(null);
-});
+with_db(db);
