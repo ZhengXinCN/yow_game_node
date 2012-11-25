@@ -20,18 +20,13 @@ assetize_javascript_for_requirejs = (assets)->
     true
 
 server = (options)->
-  console.log("Configuring app dependencies")
   express = require 'express'
-  console.log("Configuring express")
   stylus = require 'stylus'
-  console.log("Configuring connect assets")
   assets = require 'connect-assets'
   resource = require 'express-resource'
   timestamp = Date.now()
 
   # {db} = options
-
-  console.log("Configuring app")
 
   app = express()
 
@@ -68,7 +63,6 @@ server = (options)->
     resp.render 'appcache'
       now: timestamp
 
-  console.log("configuring punters")
   app.resource('punters', require('./punter').resource(options))
   app
 

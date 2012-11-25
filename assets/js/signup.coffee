@@ -1,22 +1,20 @@
-define ['jquery', 'q'], ($, Q)->
+define ['jquery', 'q', 'jquery.form'], ($, Q)->
+  $.fn.ajaxSubmit.debug = true
   class @Signup
+    constructor: (options) ->
+      @model = options.model || {}
+
     capture: ->
       promise = Q.defer()
-      $('#form form').submit (event)->
-        event.preventDefault()
-        if !!@action
-          $.ajax
-            url: @action
-            type: 'POST'
-            data:
-              fullName: 'Manny'
-              company: 'cat'
-              emailAddress: 'nick@test'
-            headers:
-              Accept: 'application/json'
-          .success (res) ->
-            promise.resolve res
-        else
-          promise.resolve()
+      $('form#signup').ajaxForm
+        dataType: 'json'
+        type: 'POST'
+        data: @model
+        headers:
+          Accept: 'application/json'
+        success: (res) ->
+          promise.resolve res
+        error: ->
+          promise.reject()
       promise.promise
   Signup

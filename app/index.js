@@ -5,14 +5,13 @@ mongoose = require('mongoose');
 
 port = process.env.PORT || process.env.VMC_APP_PORT || 3000;
 
-db_url = process.env.MONGOLAB_URL || "mongodb://localhost//yow_game";
+db_url = process.env.MONGOLAB_URI || "mongodb://localhost//yow_game";
 
 with_db = function(db) {
   var options;
   options = {
     db: db
   };
-  console.log(options);
   return require('./app').server(options).listen(port, function() {
     return console.log("Listening on " + port + "\nPress CTRL-C to stop server.");
   });

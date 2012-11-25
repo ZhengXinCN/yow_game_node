@@ -22,11 +22,12 @@ define [
       fsm = StateMachine.create
         initial: 'starting'
         events: [
-          { name: 'dataLoaded',    from: 'starting',            to: 'introduction' }
-          { name: 'requestPlay',   from: 'introduction',        to: 'playing' },
-          { name: 'gameOverWin',   from: 'playing',             to: 'playedAndWon' },
-          { name: 'gameOverLoss',  from: 'playing',             to: 'playedAndLost' }
-          { name: 'timeout',       from: ['playedAndLost'] ,    to: 'ended'}
+          { name: 'dataLoaded',    from: 'starting',                  to: 'introduction'   },
+          { name: 'requestPlay',   from: 'introduction',              to: 'playing'        },
+          { name: 'gameOverWin',   from: 'playing',                   to: 'playedAndWon'   },
+          { name: 'signedUp',      from: 'playedAndWon',              to: 'played'         },
+          { name: 'gameOverLoss',  from: 'playing',                   to: 'playedAndLost'  },
+          { name: 'timeout',       from: ['playedAndLost', 'played'], to: 'ended'          }
         ]
         error: (eventName, from, to, args, errorCode, errorMessage) ->
           console.log('event ' + eventName + ' was naughty :- ' + errorMessage)
@@ -67,9 +68,23 @@ define [
             $("#result, #result .winner").addClass('active')
             new Signup({containerId: 'form', data: model.game}).capture().then (punter)->
               model.punter = punter
+            .then (punter)->
+              fsm.signedUp(punter)
 
           onleaveplayedAndWon: ->
             $("#result, #result .winner").removeClass('active')
+
+          onenterplayed: ->
+            $("#result, #result .played").addClass('active')
+            replay_phase
+              duration: replay_countdown
+              countdownSelector:'#result #restart'
+              restartSelector: '#result button'
+            .then ->
+              fsm.timeout()
+
+          onleaveplayed: ->
+            $("#result, #result .played").removeClass('active')
 
           onenterended: ->
             window.location.reload()
