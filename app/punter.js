@@ -18,13 +18,23 @@ RegExp.prototype.bindMember = function(name) {
 Schema = mongoose.Schema;
 
 resource = function(options) {
-  var NoModelFound, PunterModel, PunterSchema, create, db, firstModel, hasInvalidModelKey, invalidModelKey, load, show;
+  var GameSchema, NoModelFound, PunterModel, PunterSchema, create, db, firstModel, hasInvalidModelKey, invalidModelKey, load, show;
   db = options.db;
   if (!db) {
     console.log("Skipping punters");
     return {};
   }
   console.log("Constructing schema");
+  GameSchema = new Schema({
+    score: {
+      type: Number,
+      "default": 0
+    },
+    timestamp: {
+      type: Date,
+      "default": Date.now
+    }
+  });
   PunterSchema = new Schema({
     fullName: {
       type: String,
@@ -34,7 +44,8 @@ resource = function(options) {
       type: String,
       required: true
     },
-    emailAddress: String
+    emailAddress: String,
+    game: [GameSchema]
   });
   PunterModel = db.model("punters", PunterSchema);
   NoModelFound = new Promise().error('No model found');

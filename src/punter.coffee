@@ -17,6 +17,13 @@ resource = ( options ) ->
     return {}
 
   console.log("Constructing schema")
+  GameSchema = new Schema
+    score:
+      type: Number
+      default: 0
+    timestamp:
+      type: Date
+      default: Date.now
   PunterSchema = new Schema
     fullName:
       type: String
@@ -24,8 +31,8 @@ resource = ( options ) ->
     company:
       type: String
       required: true
-
     emailAddress: String
+    game: [GameSchema]
 
   PunterModel = db.model "punters", PunterSchema
 

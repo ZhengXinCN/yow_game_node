@@ -66,7 +66,7 @@ define [
 
           onenterplayedAndWon: ->
             $("#result, #result .winner").addClass('active')
-            new Signup({containerId: 'form', data: model.game}).capture().then (punter)->
+            new Signup({containerId: 'form', data: { game: [model.game]}}).capture().then (punter)->
               model.punter = punter
             .then (punter)->
               fsm.signedUp(punter)
@@ -125,9 +125,6 @@ define [
             label: input.name
             pc: input.pc
         data
-
-      signup_phase = ->
-
 
       replay_phase = (options) ->
         restart = Q.defer()
