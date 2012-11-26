@@ -10,7 +10,8 @@ db_url = process.env.MONGOLAB_URI || "mongodb://localhost//yow_game";
 with_db = function(db) {
   var options;
   options = {
-    db: db
+    db: db,
+    app_hostname: process.env.APP_HOSTNAME || ("localhost:" + port)
   };
   return require('./app').server(options).listen(port, function() {
     return console.log("Listening on " + port + "\nPress CTRL-C to stop server.");

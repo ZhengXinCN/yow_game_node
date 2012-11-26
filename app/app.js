@@ -30,17 +30,41 @@ assetize_javascript_for_requirejs = function(assets) {
 };
 
 server = function(options) {
-  var app, assets, express, resource, stylus, timestamp;
+  var GoogleStrategy, app, assets, ensureAuthenticated, express, passport, resource, stylus, timestamp;
   express = require('express');
   stylus = require('stylus');
   assets = require('connect-assets');
+  passport = require('passport');
+  GoogleStrategy = require('passport-google').Strategy;
   resource = require('express-resource');
   timestamp = Date.now();
+  passport.serializeUser(function(user, done) {
+    return done(null, user);
+  });
+  passport.deserializeUser(function(obj, done) {
+    return done(null, obj);
+  });
+  passport.use(new GoogleStrategy({
+    returnURL: "https://" + options.app_hostname + "/auth/google/return",
+    realm: "https://" + options.app_hostname + "/"
+  }, function(identifier, profile, done) {
+    return process.nextTick(function() {
+      profile.identifier = identifier;
+      return done(null, profile);
+    });
+  }));
+  ensureAuthenticated = function(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    return res.redirect('/login');
+  };
   app = express();
   app.use(assets());
   assetize_javascript_for_requirejs(assets);
   app.use(express["static"](process.cwd() + '/public'));
   app.use(express.bodyParser());
+  app.use(passport.initialize());
   app.set('view engine', 'jade');
   app.get('/', function(req, resp) {
     return resp.render('index');
@@ -62,6 +86,22 @@ server = function(options) {
     return resp.render('appcache', {
       now: timestamp
     });
+  });
+  app.get('/auth/google', passport.authenticate('google', {
+    failureRedirect: '/login'
+  }), function(req, res) {
+    return res.redirect('/');
+  });
+  app.get('/auth/google/return', passport.authenticate('google', {
+    failureRedirect: '/login'
+  }), function(req, res) {
+    return res.redirect('/');
+  });
+  app.get('/me', ensureAuthenticated, function(req, res) {
+    return res.send("Hi me");
+  });
+  app.get('/login', function(req, res) {
+    return res.render('login');
   });
   app.resource('punters', require('./punter').resource(options));
   return app;
