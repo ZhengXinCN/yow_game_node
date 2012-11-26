@@ -16,5 +16,9 @@ define ['jquery', 'q', 'jquery.form'], ($, Q)->
           promise.resolve res
         error: ->
           promise.reject()
+      $('form#skip').submit (e)->
+        e.preventDefault()
+        promise.resolve()
+
       promise.promise
   Signup

@@ -31,6 +31,9 @@ resource = ( options ) ->
     company:
       type: String
       required: true
+    role:
+      type: String
+      required: true
     emailAddress: String
     game: [GameSchema]
 

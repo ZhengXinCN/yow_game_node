@@ -120,6 +120,18 @@ block content
                 input#company(placeholder="Company", type="text", name="company", required="true")
               div.field
                 input#email(placeholder="Email", type="email", name="emailAddress", required="true")
+              div.field
+                select#role(placeholder="Role", name="role", required=true)
+                  option(value="",disabled="disabled") Choose your role...
+                  option(value="CIO/CTO") CIO/CTO
+                  option(value="CxO Other") CxO Other
+                  option(value="VP") VP
+                  option(value="Director") Director
+                  option(value="Manager") Manager
+                  option(value="Technologist") Technologist
+                  option(value="Developer") Developer
+                  option(value="Consultant") Consultant
+                  option(value="Other") Other
               button.btn.btn-success.btn-large(type="submit")
                 | Sign up
             form#skip
