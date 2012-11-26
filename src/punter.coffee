@@ -36,6 +36,12 @@ resource = ( options ) ->
       required: true
     emailAddress: String
     game: [GameSchema]
+  PunterSchema.virtual('score')
+  .get ->
+    this.game?[0]?.score ? null
+  PunterSchema.virtual('scoreTime')
+  .get ->
+    this.game?[0]?.timestamp ? null
 
   PunterModel = db.model "punters", PunterSchema
 
@@ -70,8 +76,16 @@ resource = ( options ) ->
       resp.send 404, { message: "No model found" }
 
   index =
-    csv: (req,resp) ->
-      resp.send 200, "Email, Full Name, Company, Role, Score, Time"
+    csv: (req,res) ->
+      res.header 'content-type','text/csv'
+      res.header 'content-disposition', 'attachment; filename=report.csv'
+      res.write "Email, Full Name, Company, Role, Score, Time\r\n"
+      docStream = PunterModel.find().sort({scoreTime:-1}).stream()
+      docStream.on 'data', (doc) ->
+        res.write "#{doc.emailAddress},#{doc.fullName},#{doc.company},#{doc.role},#{doc.score},#{doc.scoreTime}\r\n"
+      docStream.on 'close', ->
+        res.end()
+
 
   create = (req, resp) ->
     unless req.body

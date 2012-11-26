@@ -1,0 +1,28 @@
+!!! 5
+html
+  head
+    meta(charset='utf-8')
+    title ThoughtWorks Technology Radar Game
+    meta(name='description', content='')
+    meta(name='author', content='')
+    meta(name="apple-mobile-web-app-capable", content="yes")
+    link(
+      rel="apple-touch-startup-image",
+      href="/technology-radar-october-2012-alt-postcard748x1024.png",
+      media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)")
+
+    // Mobile Specific
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
+    // CSS
+    link(href='/bootstrap/css/bootstrap.min.css',rel='stylesheet')
+    link(href='/bootstrap/css/bootstrap-responsive.min.css',rel='stylesheet')
+    != css('app')
+
+    block head_content
+  body
+
+    block content
+
+    //- != js('http://10.11.12.75:9000/target/target-script-min.js')
+    block javascript_content

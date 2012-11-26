@@ -1,0 +1,14 @@
+extends secure.layout
+
+block content
+  ul.tw.content.unstyled
+    li.active
+      .hero-unit
+        h1 Live Data 3
+        a(href="/punters.csv") /punters.csv
+
+block javascript_content
+  script(type="text/javascript",src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.1/require.min.js")
+  script(type="text/javascript",src="/js/main.js")
+  script
+    require(['jquery.bootstrap']);

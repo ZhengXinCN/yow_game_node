@@ -103,19 +103,24 @@ server = (options)->
       now: timestamp
 
   app.get '/auth/google', passport.authenticate('google', {failureRedirect: '/login'}), (req,res) ->
-    res.redirect '/~'
+    res.redirect '/home'
 
   app.get '/auth/google/return', passport.authenticate('google', {failureRedirect: '/login'}), (req,res)->
-    res.redirect '/~'
+    res.redirect '/home'
 
-  app.get '/~', ensureAuthenticated, (req,res)->
-    res.send "Hi me"
+  app.get '/home', ensureAuthenticated, (req,res)->
+    res.header('Cache-Control', 'private; max-age=0')
+    res.render "home"
+
 
   app.get '/login', (req,res)->
     res.render 'login'
 
   app.get '/punters.:format?', ensureAuthenticated
   app.get '/punters.:format?', ensureAdministrator
+  app.get '/punters*', (req, res, next) ->
+    res.header( 'Cache-Control', 'private; max-age=0')
+    next()
 
 
   app.resource 'punters', require('./punter').resource(options)

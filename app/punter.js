@@ -51,6 +51,14 @@ resource = function(options) {
     emailAddress: String,
     game: [GameSchema]
   });
+  PunterSchema.virtual('score').get(function() {
+    var _ref, _ref1, _ref2;
+    return (_ref = (_ref1 = this.game) != null ? (_ref2 = _ref1[0]) != null ? _ref2.score : void 0 : void 0) != null ? _ref : null;
+  });
+  PunterSchema.virtual('scoreTime').get(function() {
+    var _ref, _ref1, _ref2;
+    return (_ref = (_ref1 = this.game) != null ? (_ref2 = _ref1[0]) != null ? _ref2.timestamp : void 0 : void 0) != null ? _ref : null;
+  });
   PunterModel = db.model("punters", PunterSchema);
   NoModelFound = new Promise().error('No model found');
   firstModel = function(arr) {
@@ -78,8 +86,20 @@ resource = function(options) {
     }
   };
   index = {
-    csv: function(req, resp) {
-      return resp.send(200, "Email, Full Name, Company, Role, Score, Time");
+    csv: function(req, res) {
+      var docStream;
+      res.header('content-type', 'text/csv');
+      res.header('content-disposition', 'attachment; filename=report.csv');
+      res.write("Email, Full Name, Company, Role, Score, Time\r\n");
+      docStream = PunterModel.find().sort({
+        scoreTime: -1
+      }).stream();
+      docStream.on('data', function(doc) {
+        return res.write("" + doc.emailAddress + "," + doc.fullName + "," + doc.company + "," + doc.role + "," + doc.score + "," + doc.scoreTime + "\r\n");
+      });
+      return docStream.on('close', function() {
+        return res.end();
+      });
     }
   };
   create = function(req, resp) {

@@ -106,21 +106,26 @@ server = function(options) {
   app.get('/auth/google', passport.authenticate('google', {
     failureRedirect: '/login'
   }), function(req, res) {
-    return res.redirect('/~');
+    return res.redirect('/home');
   });
   app.get('/auth/google/return', passport.authenticate('google', {
     failureRedirect: '/login'
   }), function(req, res) {
-    return res.redirect('/~');
+    return res.redirect('/home');
   });
-  app.get('/~', ensureAuthenticated, function(req, res) {
-    return res.send("Hi me");
+  app.get('/home', ensureAuthenticated, function(req, res) {
+    res.header('Cache-Control', 'private; max-age=0');
+    return res.render("home");
   });
   app.get('/login', function(req, res) {
     return res.render('login');
   });
   app.get('/punters.:format?', ensureAuthenticated);
   app.get('/punters.:format?', ensureAdministrator);
+  app.get('/punters*', function(req, res, next) {
+    res.header('Cache-Control', 'private; max-age=0');
+    return next();
+  });
   app.resource('punters', require('./punter').resource(options));
   return app;
 };
