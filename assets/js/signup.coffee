@@ -14,6 +14,9 @@ define ['jquery', 'q', 'jquery.form'], ($, Q)->
           Accept: 'application/json'
         success: (res) ->
           promise.resolve res
+          $('.signup-thanks').show()
+          $('.signup-form').hide()
+          
         error: ->
           promise.reject()
       $('form#skip').submit (e)->

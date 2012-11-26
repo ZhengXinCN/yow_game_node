@@ -18,8 +18,9 @@ block content
             .l
             .r
             .b
-            p.title Every game wins!
-            p Every player will receive a cool ThoughtWorks Technology Radar t-shirt <em>(one t-shirt per player while stock last)</em>
+            .content
+              p.title Every game wins!
+              p Every player will receive a cool ThoughtWorks Technology Radar t-shirt <em>(one t-shirt per player while stock last)</em>
           .tshirt-image
 
           br
@@ -30,8 +31,9 @@ block content
             .l
             .r
             .b
-            p.title Enter the draw to win a pair of headphones!
-            p Score at least three in the game and sign up for the Technology Radar Publication to enter the draw to win a pair of limited edition blue <b>Bose QuietComfort® 15 Acoustic Noise Cancelling® Headphones</b>
+            .content
+              p.title Enter the draw to win a pair of headphones!
+              p Score at least three in the game and sign up for the Technology Radar Publication to enter the draw to win a pair of limited edition blue <b>Bose QuietComfort® 15 Acoustic Noise Cancelling® Headphones</b>
           .headphones-image
 
           a#terms.btn.btn-info(href="javascript: window.location='/terms';") Terms and Conditions
@@ -65,91 +67,114 @@ block content
 
     li#result.page
       .hero-unit
-        h1 Game Over!
-        .row-fluid
-          .span2.offset2
-            .well
-              table
-                thead
-                  tr
-                    th Your Score
-                tbody
-                  tr
-                    td#score 0
-          .span2.offset1
-            .well
-              table
-                thead
-                  tr
-                    th Latest Scores
-                tbody
-                  tr
-                    td#latest_scores 0 0 3
+        h1(style='text-align:left') Game Over!
+        .callout-square(style='position:absolute; top:10px; left:530px; background: white')
+          .t(style='border-right: 200px solid #49AFCD')
+          .l(style='border-bottom: 100px solid #49AFCD')
+          .r(style='border-bottom: 100px solid #49AFCD')
+          .b(style='border-right: 200px solid #49AFCD')
+          .content
+            h3(style='color:#000; margin: 0; margin-top: 7px; font-weight: normal') Your score
+            #score(style='color:#000; font-size: 60px; font-weight: bold; margin-top: 5px') 0
+        .callout-square(style='position:absolute; top:10px; left:730px; background: transparent; opacity:0.8')
+          .content
+            h3(style='color:#FFF; margin: 0; margin-top: 7px; font-weight: normal') High score
+            #score(style='color:#FFF; font-size: 60px; font-weight: bold; margin-top: 5px') 4
 
-          .span2.offset1
-            .well
-              table
-                thead
-                  tr
-                    th Highest Scores
-                tbody
-                  tr
-                    td#top_scores 10 7 6
-      .offset1.span11
-        .row-fluid.winner
-          .well.well-large
-            p You win:
-              img(src="tshirt.jpg")
-        .row-fluid.winner
-          .span6
-            .well.well-small
+      .row-fluid(style='margin-left: 50px;')
+        .span5
+          .callout-vertical(style='height:385px')
+            .t
+            .l
+            .r
+            .b
+            .content
+              h2(style='width:350px') Congratulations! 
+              h2(style='font-weight:normal; position: relative; margin-top: -10px') You've won...
+              p a cool ThoughtWorks Technology Radar t-shirt. 
+              .you-win-tshirt-image(style='top: 0; left: 20px; z-index:4; margin: 0; height:140px')
               p
-                | You can also get into the draw to win
-                i.icon-headphones
-                strong Bose QuietComfort® 15 Acoustic Noise Cancelling®
-                | headphones by subscribing to the
-                strong ThoughtWorks
-                | Technology Radar (free of charge)
-              p
-                | To claim your T-shirt and get into the draw please sign-up here:
-          .span6
-            form#signup(action="/punters", method="POST")
-              div.field
-                input#full-name(placeholder="Full Name", type="text",name="fullName", required="true")
-              div.field
-                input#company(placeholder="Company", type="text", name="company", required="true")
-              div.field
-                input#email(placeholder="Email", type="email", name="emailAddress", required="true")
-              div.field
-                select#role(placeholder="Role", name="role", required=true)
-                  option(value="",disabled="disabled") Choose your role...
-                  option(value="CIO/CTO") CIO/CTO
-                  option(value="CxO Other") CxO Other
-                  option(value="VP") VP
-                  option(value="Director") Director
-                  option(value="Manager") Manager
-                  option(value="Technologist") Technologist
-                  option(value="Developer") Developer
-                  option(value="Consultant") Consultant
-                  option(value="Other") Other
-              button.btn.btn-success.btn-large(type="submit")
-                | Sign up
-            form#skip
-              button.btn.btn-warning.btn-large(type="submit")
-                | I don't want to sign up
+                b Contact a ThoughtWorks staff member to collect your prize!&nbsp;
+                span(style='font-style:italic') (one t-shirt per player while stocks last)
 
-        .row-fluid.loser
-          .well.well-small
-            p
-              | Bad luck!  Score 3 or more and you may enter the draw.
-        .row-fluid.loser.played
-          .span6
+          div(style='text-align:center; padding-left: 80px')
+            br
             p This page will self-destruct in
-              button#restart.btn.btn-info.btn-large(type="submit") Restart Now!
-              | seconds...
-          .span5
-            p Or you can
-              button#playagain.btn.btn-info.btn-large(type="submit") Play again
+            p
+              button#restart.btn.btn-large(type="submit") Restart Now!
+            p seconds...
+
+
+
+        .span5
+          .callout-vertical.winner.signup-form
+            .t
+            .l
+            .r
+            .b
+            .form-background
+            .content
+              h2(style='width:350px') ...and you've qualified
+              p to enter the draw to win Bose QuietComfort® 15 Acoustic Noise Cancelling® headphones. 
+                span(style='font-weight:bold') Subscribe to the twice-yearly ThoughtWorks Technology Radar to be in the running.
+              .qualified-headphones-image
+
+              h2(style='font-weight:normal; margin-top: -140px; font-size: 20px; color:#666;') Subscribe to the Radar
+              div(style='text-align:center')
+                form#signup(action="/punters", method="POST")
+                  div.field
+                    input#full-name(placeholder="Full Name", type="text",name="fullName", required="true")
+                  div.field
+                    input#company(placeholder="Company", type="text", name="company", required="true")
+                  div.field
+                    input#email(placeholder="Email", type="email", name="emailAddress", required="true")
+                  div.field
+                    select(name="role", required="true")
+                      option(value='') Role...
+                      option(value='CIO/CTO') CIO/CTO
+                      option(value='CxO') CxO (Other)
+                      option(value='Consultant') Consultant
+                      option(value='Developer') Developer
+                      option(value='Director') Director
+                      option(value='Manager') Manager
+                      option(value='Technologist') Technologist
+                      option(value='VP') VP
+                      option(value='Other') Other...
+                  button.btn.btn-success.btn-large(type="submit", style='width:216px')
+                    strong Subscribe
+                    br
+                    | and enter the draw
+
+
+          .callout-vertical.signup-thanks(style='background:#DDD; display:none')
+            .t
+            .l
+            .r
+            .b
+            .content
+              h2(style='width:350px') Thanks for subscribing
+              h2(style='font-weight:normal; margin-top: -10px') to the Tech Radar!
+              .in-draw-headphones-image
+              p You are now in the draw to win the Bose QuietComfort® 15 Acoustic Noise Cancelling® headphones.&nbsp;
+                b The winner will be announced at 5pm on the closing day of the YOW! 2012 conference.
+              p(style='text-align:center; margin-top:20px')
+                a.btn.btn-info.btn-large.play-again(href="javascript: window.location='/';") Play again
+
+
+          .callout-vertical.loser(style='background:#DDD')
+            .t
+            .l
+            .r
+            .b
+            .content
+              h2 &nbsp;
+              h2(style='font-weight:normal; font-size:30px; margin-top: -10px') but no headphones :(
+              p 
+                | You need to score a <b>minimum of three marbles</b> in order to enter the draw to win the Bose QuietComfort® 15 Acoustic Noise Cancelling® headphones. 
+                | Play again to improve your score and enter the draw!
+              p(style='text-align:center; margin-top:140px')
+                a.btn.btn-info.btn-large.play-again(href="javascript: window.location='/';") Play again
+
 
 
 

@@ -265,18 +265,19 @@ color_hint(c)
 .page:not(.active) .css-radar .radar-sweep
     -webkit-animation sweep-animation none;
 
-
+.callout-vertical,
+.callout-square,
 .callout
   background-color #D9DC4A
   position relative
   height 180px
   width 500px
-  padding 30px 20px
   box-sizing border-box
   margin-left 40px
 
   .t, .b, .r, .l
     position absolute
+    z-index 3
     border-bottom 0 solid transparent
     border-right 0 solid transparent
     border-left 0 solid transparent
@@ -284,21 +285,25 @@ color_hint(c)
 
   .t
     top 0
+    left 0 
     border-right 500px solid white
     border-bottom 14px solid transparent
 
   .b
     bottom 0
+    left 0 
     border-right 500px solid white
     border-top 10px solid transparent
 
   .r
     left 0
+    top 0
     border-right 10px solid transparent
     border-bottom 180px solid white
 
   .l
     right 0
+    top 0
     border-left 10px solid transparent
     border-bottom 180px solid white
 
@@ -306,6 +311,48 @@ color_hint(c)
     font-size 24px
     font-weight bold
 
+  .content 
+    position absolute
+    top 30px
+    left 20px
+    right 20px
+    bottom 30px
+
+
+
+
+.callout-square
+  width 200px
+  height 100px
+
+  .t, .b { border-right-width: 200px; }
+  .r, .l { border-bottom-width: 100px; }
+
+  .content
+    top 0px
+    left 20px
+    right 20px
+    bottom 0px
+
+.callout-vertical
+  width 400px
+  height 530px
+  .t, .b { border-right-width: 400px; }
+  .r, .l { border-bottom-width: 530px; }
+
+  .content
+    font-size 17px
+    line-height 22px
+    z-index 2
+    top 20px
+    left 30px
+    right 30px
+    bottom 20px
+
+
+
+
+.you-win-tshirt-image,
 .tshirt-image
   width 300px
   height 200px
@@ -316,7 +363,10 @@ color_hint(c)
   top -70px
   left 130px
   margin-bottom -180px
+  z-index 5
 
+.qualified-headphones-image,
+.in-draw-headphones-image,
 .headphones-image
   width 240px
   height 180px
@@ -326,7 +376,33 @@ color_hint(c)
   position relative
   top -50px
   left 160px
+  z-index 5
   margin-bottom -60px
+
+.qualified-headphones-image
+  bottom 40px
+  width 150px
+  margin-bottom -100px
+  left 200px
+  top -10px
+  pointer-events none
+
+.in-draw-headphones-image
+  top 0
+  left 50px
+  margin-top 30px
+  margin-bottom 0
+
+.form-background
+  position absolute
+  background #DDD
+  height 330px
+  left 0
+  right 0 
+  bottom 0 
+  z-index 1
+  border-top 1px solid #CCC
+
 
 #instructions p
   margin-top 10px

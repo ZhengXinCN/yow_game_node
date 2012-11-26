@@ -95,6 +95,7 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
       hitHole.promise
 
     complete: ->
+      console.log "Completing"
       window.removeEventListener "devicemotion", @handler if @handler
       window.removeEventListener "keydown", @keyDownHandler if @keyDownHandler
       window.removeEventListener "keyup", @keyUpHandler if @keyUpHandler
@@ -121,7 +122,9 @@ define ['q', 'kinetic', 'underscore', 'audio', 'sylvester'], (Q, Kinetic, _, aud
             when 38 then $V([0, -3])
             when 39 then $V([3, 0])
             when 40 then $V([0, 3])
+            else null
           )
+        return unless accel? and @piece?
         @piece.accel = accel.x(kAccelerationSensitivity)
       window.addEventListener "keydown", @keyDownHandler
 
