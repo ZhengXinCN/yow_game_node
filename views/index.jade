@@ -92,7 +92,7 @@ block content
               h2(style='width:350px') Congratulations! 
               h2(style='font-weight:normal; position: relative; margin-top: -10px') You've won...
               p a cool ThoughtWorks Technology Radar t-shirt. 
-              .you-win-tshirt-image(style='top: 0; left: 20px; z-index:4; margin: 0; height:140px')
+              .you-win-tshirt-image(style='top: 0; left: 0px; z-index:4; margin: 0; height:170px; width: 350px')
               p
                 b Contact a ThoughtWorks staff member to collect your prize!&nbsp;
                 span(style='font-style:italic') (one t-shirt per player while stocks last)
@@ -116,10 +116,14 @@ block content
             .content
               h2(style='width:350px') ...and you've qualified
               p to enter the draw to win Bose QuietComfort® 15 Acoustic Noise Cancelling® headphones. 
-                span(style='font-weight:bold') Subscribe to the twice-yearly ThoughtWorks Technology Radar to be in the running.
+                span(style='font-weight:bold') 
+                  | Subscribe to the twice-yearly 
+                  br 
+                  | ThoughtWorks Technology Radar 
+                  br
+                  | to be in the running.
               .qualified-headphones-image
 
-              h2(style='font-weight:normal; margin-top: -140px; font-size: 20px; color:#666;') Subscribe to the Radar
               div(style='text-align:center')
                 form#signup(action="/punters", method="POST")
                   div.field
@@ -140,10 +144,14 @@ block content
                       option(value='Technologist') Technologist
                       option(value='VP') VP
                       option(value='Other') Other...
-                  button.btn.btn-success.btn-large(type="submit", style='width:216px')
+                  button.btn.btn-success.btn-large(type="submit", style='width:220px')
                     strong Subscribe
                     br
-                    | and enter the draw
+                    | and enter draw
+                  br
+                  br
+                  a.btn.play-again(href="javascript: window.location='/';") or skip and play again
+
 
 
           .callout-vertical.signup-thanks(style='background:#DDD; display:none')
