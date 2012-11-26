@@ -17,7 +17,8 @@
     , "express-resource": "1.0.0"
     , "underscore": "*"
     , "lazy": "1.0.8"
-
+    , "passport": "0.1.15"
+    , "passport-google": "0.2.0"
   }, "scripts": {
     "install": "node_modules/coffee-script/bin/cake build",
     "start": "node server.js",
