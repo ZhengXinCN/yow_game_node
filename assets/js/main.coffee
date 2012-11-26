@@ -4,7 +4,7 @@ require.config
     "jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min"
     "jquery.form": "//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.09/jquery.form"
     "underscore": "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min"
-    "kinetic": "//www.html5canvastutorials.com/libraries/kinetic-v4.0.3"
+    "kinetic": "/kineticjs-4.0.5/kinetic"
     "jquery.bootstrap": "/bootstrap/js/bootstrap"
     "canvg": "/canvg-1.2/canvg"
     "q": "/q-0.8.10/q.min"
