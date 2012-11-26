@@ -52,6 +52,9 @@ resource = ( options ) ->
     .any(invalidModelKey)
     .value()
 
+  allow = (req, res, next)->
+    next()
+
   load = (id, next)->
     PunterModel
     .find
@@ -65,6 +68,10 @@ resource = ( options ) ->
       resp.send 200, req.punter
     else
       resp.send 404, { message: "No model found" }
+
+  index =
+    csv: (req,resp) ->
+      resp.send 200, "Email, Full Name, Company, Role, Score, Time"
 
   create = (req, resp) ->
     unless req.body
@@ -80,7 +87,7 @@ resource = ( options ) ->
     promise.pipe (p) ->
       resp.redirect "#{req.url}/#{p._id}"
     , (err) ->
-        resp.send 400, err
+      resp.send 400, err
 
     punter.save promise.resolver()
 
@@ -88,5 +95,6 @@ resource = ( options ) ->
     load: load
     show: show
     create: create
+    index: index
 
 exports.resource = resource

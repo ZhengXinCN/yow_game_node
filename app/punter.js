@@ -18,7 +18,7 @@ RegExp.prototype.bindMember = function(name) {
 Schema = mongoose.Schema;
 
 resource = function(options) {
-  var GameSchema, NoModelFound, PunterModel, PunterSchema, create, db, firstModel, hasInvalidModelKey, invalidModelKey, load, show;
+  var GameSchema, NoModelFound, PunterModel, PunterSchema, allow, create, db, firstModel, hasInvalidModelKey, index, invalidModelKey, load, show;
   db = options.db;
   if (!db) {
     console.log("Skipping punters");
@@ -60,6 +60,9 @@ resource = function(options) {
   hasInvalidModelKey = function(body) {
     return _.chain(body).keys().any(invalidModelKey).value();
   };
+  allow = function(req, res, next) {
+    return next();
+  };
   load = function(id, next) {
     return PunterModel.find({
       _id: id
@@ -72,6 +75,11 @@ resource = function(options) {
       return resp.send(404, {
         message: "No model found"
       });
+    }
+  };
+  index = {
+    csv: function(req, resp) {
+      return resp.send(200, "Email, Full Name, Company, Role, Score, Time");
     }
   };
   create = function(req, resp) {
@@ -94,7 +102,8 @@ resource = function(options) {
   return resource = {
     load: load,
     show: show,
-    create: create
+    create: create,
+    index: index
   };
 };
 

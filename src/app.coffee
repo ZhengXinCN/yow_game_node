@@ -26,8 +26,9 @@ server = (options)->
   passport = require 'passport'
   GoogleStrategy = require('passport-google').Strategy
   resource = require 'express-resource'
-  timestamp = Date.now()
+  _ = require "underscore"
 
+  timestamp = Date.now()
 
   passport.serializeUser (user, done)->
     done(null, user)
@@ -36,22 +37,32 @@ server = (options)->
     done(null, obj)
 
   passport.use new GoogleStrategy
-    returnURL: "https://#{options.app_hostname}/auth/google/return"
-    realm: "https://#{options.app_hostname}/"
+    returnURL: "#{options.secure_realm}auth/google/return"
+    realm: "#{options.secure_realm}"
   , (identifier, profile, done)->
     process.nextTick ->
       profile.identifier = identifier
       done(null,profile)
 
-  # {db} = options
-
-
   ensureAuthenticated = (req, res, next) ->
     return next() if req.isAuthenticated()
-    res.redirect('/login')
+    res.send 401, 'Please authenticate <a href="' + options.secure_realm + 'auth/google">here</a>'
+
+  ensureAdministrator = (req,res,next)->
+    isThoughtWorker = _.chain( req.user?.emails || [])
+    .pluck( 'value')
+    .any (email) ->
+      /@thoughtworks.com$/.test(email)
+    .value()
+
+    return next() if isThoughtWorker
+    res.send 403, 'Please contact the administrator for access'
 
   app = express()
 
+  app.use express.cookieParser()
+  app.use express.session
+    secret: "wibble wobbly"
 
   # Add Connect Assets
   app.use assets()
@@ -61,9 +72,12 @@ server = (options)->
    # Set the public folder as static assets
   app.use express.static(process.cwd() + '/public')
 
+
+
   app.use express.bodyParser()
 
   app.use passport.initialize()
+  app.use passport.session()
 
 
   # Set View Engine
@@ -89,17 +103,23 @@ server = (options)->
       now: timestamp
 
   app.get '/auth/google', passport.authenticate('google', {failureRedirect: '/login'}), (req,res) ->
-    res.redirect '/'
+    res.redirect '/~'
 
   app.get '/auth/google/return', passport.authenticate('google', {failureRedirect: '/login'}), (req,res)->
-    res.redirect '/'
+    res.redirect '/~'
 
-  app.get '/me', ensureAuthenticated, (req,res)->
+  app.get '/~', ensureAuthenticated, (req,res)->
     res.send "Hi me"
+
   app.get '/login', (req,res)->
     res.render 'login'
 
-  app.resource('punters', require('./punter').resource(options))
+  app.get '/punters.:format?', ensureAuthenticated
+  app.get '/punters.:format?', ensureAdministrator
+
+
+  app.resource 'punters', require('./punter').resource(options)
+
   app
 
 exports.server = server

@@ -30,13 +30,14 @@ assetize_javascript_for_requirejs = function(assets) {
 };
 
 server = function(options) {
-  var GoogleStrategy, app, assets, ensureAuthenticated, express, passport, resource, stylus, timestamp;
+  var GoogleStrategy, app, assets, ensureAdministrator, ensureAuthenticated, express, passport, resource, stylus, timestamp, _;
   express = require('express');
   stylus = require('stylus');
   assets = require('connect-assets');
   passport = require('passport');
   GoogleStrategy = require('passport-google').Strategy;
   resource = require('express-resource');
+  _ = require("underscore");
   timestamp = Date.now();
   passport.serializeUser(function(user, done) {
     return done(null, user);
@@ -45,8 +46,8 @@ server = function(options) {
     return done(null, obj);
   });
   passport.use(new GoogleStrategy({
-    returnURL: "https://" + options.app_hostname + "/auth/google/return",
-    realm: "https://" + options.app_hostname + "/"
+    returnURL: "" + options.secure_realm + "auth/google/return",
+    realm: "" + options.secure_realm
   }, function(identifier, profile, done) {
     return process.nextTick(function() {
       profile.identifier = identifier;
@@ -57,14 +58,29 @@ server = function(options) {
     if (req.isAuthenticated()) {
       return next();
     }
-    return res.redirect('/login');
+    return res.send(401, 'Please authenticate <a href="' + options.secure_realm + 'auth/google">here</a>');
+  };
+  ensureAdministrator = function(req, res, next) {
+    var isThoughtWorker, _ref;
+    isThoughtWorker = _.chain(((_ref = req.user) != null ? _ref.emails : void 0) || []).pluck('value').any(function(email) {
+      return /@thoughtworks.com$/.test(email);
+    }).value();
+    if (isThoughtWorker) {
+      return next();
+    }
+    return res.send(403, 'Please contact the administrator for access');
   };
   app = express();
+  app.use(express.cookieParser());
+  app.use(express.session({
+    secret: "wibble wobbly"
+  }));
   app.use(assets());
   assetize_javascript_for_requirejs(assets);
   app.use(express["static"](process.cwd() + '/public'));
   app.use(express.bodyParser());
   app.use(passport.initialize());
+  app.use(passport.session());
   app.set('view engine', 'jade');
   app.get('/', function(req, resp) {
     return resp.render('index');
@@ -90,19 +106,21 @@ server = function(options) {
   app.get('/auth/google', passport.authenticate('google', {
     failureRedirect: '/login'
   }), function(req, res) {
-    return res.redirect('/');
+    return res.redirect('/~');
   });
   app.get('/auth/google/return', passport.authenticate('google', {
     failureRedirect: '/login'
   }), function(req, res) {
-    return res.redirect('/');
+    return res.redirect('/~');
   });
-  app.get('/me', ensureAuthenticated, function(req, res) {
+  app.get('/~', ensureAuthenticated, function(req, res) {
     return res.send("Hi me");
   });
   app.get('/login', function(req, res) {
     return res.render('login');
   });
+  app.get('/punters.:format?', ensureAuthenticated);
+  app.get('/punters.:format?', ensureAdministrator);
   app.resource('punters', require('./punter').resource(options));
   return app;
 };
