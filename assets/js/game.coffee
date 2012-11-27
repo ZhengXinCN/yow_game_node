@@ -147,9 +147,11 @@ define [
         $("#score").text(game.score)
         topScores = _.take(games.topScores(), 3).join(' ')
         latestScores = _.take(games.latestScores(), 3).join(' ')
+        highScore = _.take(games.topScores(), 1).join(' ')
 
         $("#top_scores").text(topScores)
         $("#latest_scores").text(latestScores)
+        $("#high_score").text(highScore)
         game
 
       record_game = (game) ->
