@@ -85,8 +85,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.85737426"
-     inkscape:cx="95.617474"
-     inkscape:cy="401.4007"
+     inkscape:cx="277.49752"
+     inkscape:cy="336.69331"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -227,20 +227,20 @@
        id="text3857"
        style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#4b4b4b;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
        xml:space="preserve"
-       x="150.62061"
-       y="266.07669"><tspan
+       x="102.16875"
+       y="290.07669"><tspan
          sodipodi:role="line"
          id="tspan4087"
-         x="150.62061"
-         y="266.07669">Techniques</tspan></text>
+         x="102.16875"
+         y="290.07669">Techniques</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:30.17603301999999843px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#4b4b4b;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+       style="font-size:30.17603302px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#4b4b4b;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
        id="text3872"
        sodipodi:linespacing="125%"
-       x="458.30167"
-       y="250.39024"
-       transform="scale(0.92788869,1.0777155)">Tools</text>
+       x="605.67896"
+       y="272.65955"
+       transform="scale(0.92788867,1.0777155)">Tools</text>
     <path
        transform="matrix(-1.3739929,0.96208015,0.96208015,1.3739929,338.38652,-761.74566)"
        d="m 582.85715,565.2193 c 0,114.40184 -92.74102,207.14285 -207.14286,207.14285 -114.40183,0 -207.14285,-92.74101 -207.14285,-207.14285 0,-114.40184 92.74102,-207.14285 207.14285,-207.14285 114.40184,0 207.14286,92.74101 207.14286,207.14285 z"
@@ -256,25 +256,25 @@
        style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#4b4b4b;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
        id="text3888"
        sodipodi:linespacing="125%"
-       x="167.33868"
-       y="491.4447">Platforms</text>
+       x="99.338676"
+       y="488.26559">Platforms</text>
     <text
        sodipodi:linespacing="125%"
        id="text3894"
        style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#4b4b4b;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
        xml:space="preserve"
-       x="428.84464"
-       y="491.77341"><tspan
+       x="462.84464"
+       y="473.77341"><tspan
          sodipodi:role="line"
          id="tspan3955"
-         x="428.84464"
-         y="491.77341"
-         style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#4b4b4b;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica">Languages </tspan><tspan
+         x="462.84464"
+         y="473.77341"
+         style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#4b4b4b;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica">Languages &amp;</tspan><tspan
          sodipodi:role="line"
          id="tspan3957"
-         x="428.84464"
-         y="526.77344"
-         style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#4b4b4b;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica">&amp; Frameworks</tspan></text>
+         x="462.84464"
+         y="508.77341"
+         style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#4b4b4b;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica">Frameworks</tspan></text>
     <text
        y="117.95879"
        x="722.85217"
